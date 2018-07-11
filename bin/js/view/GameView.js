@@ -13,13 +13,21 @@ var GameView = /** @class */ (function (_super) {
     __extends(GameView, _super);
     function GameView() {
         var _this = _super.call(this) || this;
-        _this._smallBall = new Ball(100, 343, 265, _this.smallBallView);
-        _this._arrow = new Arrow(_this.arrowView.getChildByName("left"), _this.arrowView.getChildByName("right"), Laya.Handler.create(_this, _this.onTouch));
+        //球的初始化
+        _this._smallBall = new Ball(50, 343, 265, _this.smallBallView);
+        //控制方向的箭头区域的初始化
+        _this._arrow = new Arrow(_this.arrowView.getChildByName("left"), _this.arrowView.getChildByName("right"), Laya.Handler.create(_this, _this.onTouch, null, false));
         return _this;
+        //
     }
     //当触摸结束时调用
     GameView.prototype.onTouch = function (lastingTime) {
         console.log("触摸结束,持续时间为" + lastingTime);
+    };
+    //碰撞检测与处理
+    GameView.prototype.collisionDetect = function () {
+        //分析当前球和其他物体的位置关系，并作出相应的处理
+        //碰撞检测方式：获取Laya.Image的getBounds(),然后调用intersect方法判断是否发生碰撞
     };
     return GameView;
 }(ui.GameViewUI));

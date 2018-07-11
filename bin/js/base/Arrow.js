@@ -5,12 +5,12 @@ var Arrow = /** @class */ (function () {
         this._arrows = new Array(2);
         this._arrows[0] = left;
         this._arrows[1] = right;
+        this._touchCalledBack = touchCalledBack;
         for (var i = 0; i < 2; i++) {
             this._arrows[i].visible = true;
-            this._arrows[i].on(Laya.Event.MOUSE_DOWN, this._arrows[i], this.onMouseDown, [i]);
-            this._arrows[i].on(Laya.Event.MOUSE_UP, this._arrows[i], this.onMouseUp, [i]);
+            this._arrows[i].on(Laya.Event.MOUSE_DOWN, this, this.onMouseDown, [i]);
+            this._arrows[i].on(Laya.Event.MOUSE_UP, this, this.onMouseUp, [i]);
         }
-        this._touchCalledBack = touchCalledBack;
     }
     //当触摸到箭头时触发
     Arrow.prototype.onMouseDown = function (type) {
