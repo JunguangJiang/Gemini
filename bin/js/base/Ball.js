@@ -56,7 +56,6 @@ var Ball = /** @class */ (function () {
             this._ax -= value.Fx;
             this._ay -= value.Fy;
             this._forces.remove(name);
-            console.log(this._ax);
         }
     };
     //碰撞会改变小球的速度分量，使原先的<Vx,Vy>变成<-Vx * xRatio, -Vy * yRatio>

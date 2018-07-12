@@ -56,7 +56,6 @@ class Ball{
             this._ax -= value.Fx;
             this._ay -= value.Fy;
             this._forces.remove(name);
-            console.log(this._ax);
         }
     }
 
