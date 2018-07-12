@@ -1,6 +1,6 @@
 //球类
 class Ball{
-    private _image: Laya.Image;//球的图片
+    public _image: Laya.Image;//球的图片
     private _radius: number;//小球半径
     private _forces: Laya.Dictionary;//施加在小球上的所有力
 
@@ -39,6 +39,9 @@ class Ball{
 
     //获取球的半径
     get radius():number{return this._radius;}
+
+    //获取球的图片
+    get image():Laya.Image{return this._image;}
 
     //对小球增加受力，Fx/Fy分别为水平和数值方向的分量,name为该力的种类
     //认为小球的质量均为1
