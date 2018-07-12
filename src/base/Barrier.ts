@@ -1,7 +1,7 @@
 //障碍物类
 class Barrier{
-    public _blackHoles:Laya.Animation[];//存黑洞的数组
-    public _stones:Laya.Image[];//存陨石的数组
+    public blackHoles:Laya.Animation[];//存黑洞的数组
+    public stones:Laya.Image[];//存陨石的数组
 
     private _blackHolesNum:number;//黑洞个数
     private _stonesNum:number;//陨石个数
@@ -13,8 +13,8 @@ class Barrier{
 
     constructor(backgroundImage:Laya.Image,blackHolesNum:number=5,stonesNum:number=5,blackHoleWidth:number=100,blackHoleHeight:number=100,stoneWidth:number=50,stoneHeight:number=100)
     {
-        this._blackHoles=[];
-        this._stones=[];
+        this.blackHoles=[];
+        this.stones=[];
 
         this._blackHolesNum=blackHolesNum;
         this._stonesNum=stonesNum;
@@ -31,8 +31,8 @@ class Barrier{
     public updateBarrier(backgroundImage:Laya.Image):void
     {
         //初始化
-        this._blackHoles.slice(0);
-        this._stones.slice(0);
+        this.blackHoles.slice(0);
+        this.stones.slice(0);
 
         //黑洞的位置
         const blackHoleDistance:number=backgroundImage.height/this._blackHolesNum;
@@ -45,7 +45,7 @@ class Barrier{
             blackhole.x=Math.min(backgroundImage.width-this._blackHoleWidth,Math.random()*backgroundImage.width);
             blackhole.y=(i+Math.random())*blackHoleDistance;//在y方向基本承均匀分布
 
-            this._blackHoles.push(blackhole);
+            this.blackHoles.push(blackhole);
             backgroundImage.addChild(blackhole);
         }
 
@@ -73,7 +73,7 @@ class Barrier{
                 y=(i+Math.random())*stoneDistance;
                 overlap=0;
 
-                this._blackHoles.forEach(element => {
+                this.blackHoles.forEach(element => {
                     testRec.x=element.x-this._stoneWidth;
                     testRec.y=element.y-this._stoneHeight;
                     if(testRec.hitTestPoint(x,y))
@@ -91,7 +91,7 @@ class Barrier{
             stone.x=x;
             stone.y=y;
 
-            this._stones.push(stone);
+            this.stones.push(stone);
             backgroundImage.addChild(stone);
         }     
 
@@ -101,12 +101,12 @@ class Barrier{
     //绘制各障碍物的动画或图像
     public drawBarriers():void
     {
-        this._blackHoles.forEach(element => {
+        this.blackHoles.forEach(element => {
             element.loadAnimation("GameAnimation/BlackHole.ani");
             element.play();
         });
 
-        this._stones.forEach(element => {
+        this.stones.forEach(element => {
             element.loadImage("res/atlas/ui/stone.png",null,null,element.width,element.height);
         });
     }
