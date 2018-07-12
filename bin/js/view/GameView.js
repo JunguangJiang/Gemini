@@ -91,7 +91,6 @@ var GameView = /** @class */ (function (_super) {
     };
     //当触摸开始时调用
     GameView.prototype.onTouchStart = function (data) {
-        // console.log("触摸开始，触摸键:"+data.type);
         //增加大球受力
         var force = Math.random() * 10 + 10; //每单位时间的触摸可以随机生成[10,20]范围内的力
         if (data.type === "left") {
@@ -100,7 +99,6 @@ var GameView = /** @class */ (function (_super) {
         this._bigBall.setForce(force, 0, "humanControl");
     };
     GameView.prototype.onTouchEnd = function (data) {
-        // console.log("触摸结束，触摸键:"+data.type);
         //移除大球受力
         this._bigBall.removeForce("humanControl");
     };

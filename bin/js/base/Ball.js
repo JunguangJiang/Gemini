@@ -41,6 +41,12 @@ var Ball = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(Ball.prototype, "image", {
+        //获取球的图片
+        get: function () { return this._image; },
+        enumerable: true,
+        configurable: true
+    });
     //对小球增加受力，Fx/Fy分别为水平和数值方向的分量,name为该力的种类
     //认为小球的质量均为1
     Ball.prototype.setForce = function (Fx, Fy, name) {
