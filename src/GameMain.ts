@@ -15,12 +15,13 @@ class GameMain{
             {url: "ui/background/BackGround.jpg", type:Laya.Loader.IMAGE},
             {url: "res/atlas/ui/blackhole.atlas", type:Laya.Loader.ATLAS},
             {url: "res/atlas/ui/star.atlas", type:Laya.Loader.ATLAS},
-            {url:"res/atlas/ui/arrow.atlas", type:Laya.Loader.ATLAS}
+            {url:"res/atlas/ui/arrow.atlas", type:Laya.Loader.ATLAS},
+            {url:"res/atlas/ui/stone.atlas", type:Laya.Loader.ATLAS}
         ];
-        Laya.loader.load(resArray, Laya.Handler.create(this, this.onLoaded));//当资源加载完毕时，调用onLoaded
+        Laya.loader.load(resArray, Laya.Handler.create(this, this.onLoaded));//当资源加载完毕时，调用onLoaded
     }
 
-    //加载资源完毕后，游戏的开始界面
+    //加载资源完毕后，游戏的开始界面
     onLoaded():void{
         //仅用于开发阶段
         GameMain.gameView = new GameView();//将游戏主界面作为游戏的开始界面

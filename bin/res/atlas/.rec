@@ -1,4 +1,5 @@
 D .
+R EAEBE2F6 .DS_Store
 D comp
 P D12221A9 bg.png
 P 9401CC40 blank.png
@@ -34,11 +35,13 @@ P 7E990267 vscroll.png
 P E466EB1C vslider$bar.png
 P 2BFF7046 vslider.png
 D ui
+R 9FF0ACA6 .DS_Store
 D ui/arrow
+R 6D88006A .DS_Store
 P F8355C0F left.png
 P 2FC92A05 right.png
 D ui/background
-R 59C528A4 BackGround .jpg
+P 59C528A4 BackGround .jpg
 D ui/blackhole
 P B96ED697 1.png
 P B6CA8861 10.png
@@ -97,5 +100,5 @@ P B5F55E9A 6.png
 P AC4085B6 7.png
 P 8578C30C 8.png
 P 8F5DC24B 9.png
-D ui/blackhole/Arrow
-R FBDC2CA1 left.jpg
+D ui/stone
+P F6CD4B33 stone.png

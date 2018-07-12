@@ -41,7 +41,7 @@ class Ball{
     get radius():number{return this._radius;}
 
     //对小球增加受力，Fx/Fy分别为水平和数值方向的分量,name为该力的种类
-    //认为小球的质量均为1
+    //认为小球的质量均为1
     setForce(Fx: number, Fy: number, name: string):void{
         this.removeForce(name);
         this._ax += Fx;
@@ -65,7 +65,7 @@ class Ball{
         this._vy = -this._vy * yRatio;
     }
 
-    //对小球的位置和速度进行更新
+    //对小球的位置和速度进行更新
     update():void{
         let deltaT: number = this._timer.get()/1000.0;
         this.x = this.x + this._vx * deltaT;

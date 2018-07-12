@@ -42,7 +42,7 @@ var Ball = /** @class */ (function () {
         configurable: true
     });
     //对小球增加受力，Fx/Fy分别为水平和数值方向的分量,name为该力的种类
-    //认为小球的质量均为1
+    //认为小球的质量均为1
     Ball.prototype.setForce = function (Fx, Fy, name) {
         this.removeForce(name);
         this._ax += Fx;
@@ -63,7 +63,7 @@ var Ball = /** @class */ (function () {
         this._vx = -this._vx * xRatio;
         this._vy = -this._vy * yRatio;
     };
-    //对小球的位置和速度进行更新
+    //对小球的位置和速度进行更新
     Ball.prototype.update = function () {
         var deltaT = this._timer.get() / 1000.0;
         this.x = this.x + this._vx * deltaT;

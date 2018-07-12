@@ -64,5 +64,13 @@
 + 函数名称：驼峰命名。<br>
 + 所有在UI视图中定义的变量名以View作为后缀，从而与自定义的变量名相区别。<br>
 
-## 已创建的文件与每个文件中已实现的功能
-...（等待填充ing）
+## 已创建的类与接口
+### Barriers（障碍物类）
+**public property**
++ `_blackholes:Laya.Animation[]`：存储背景中黑洞的数组，每个元素是一个动画类`Laya.Animation`。
++ `_stones:Laya.Image[]`：存储背景中陨石的数组，每个元素是一个图片类`Laya.Image`。
+
+**public method**
++ `Barriers()`：构造函数，函数参数见代码。
++ `updateBarrier(backgroundImage:Laya.Image)`：更新背景各障碍物的位置（在构造Barriers类对象的时候会先初始化一次）。
++ `drawBarriers()`：将障碍物的动画和图像绘制到背景上。

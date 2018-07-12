@@ -14,6 +14,7 @@ class GameView extends ui.GameViewUI{
     private _smallBall: Ball;//小球
     private _bigBall: Ball;//大球
     private _arrow: Arrow;//控制方向的箭头区域
+    private _barrier:Barrier;//障碍物
     
     private _loopCount: number;//记录刷新（循环）总次数
 
@@ -31,7 +32,15 @@ class GameView extends ui.GameViewUI{
             Laya.Handler.create(this, this.onTouchStart, null, false),
             Laya.Handler.create(this, this.onTouchEnd, null, false)
         );
+<<<<<<< HEAD
         this._loopCount = 0;
+=======
+        //障碍物初始化与绘制
+        this._barrier=new Barrier(this.backgroundView);
+        this._barrier.drawBarriers();
+
+        
+>>>>>>> 94863d822cf2ed74224c05c434df1194622d985f
     }
 
     //游戏开始
@@ -52,10 +61,10 @@ class GameView extends ui.GameViewUI{
 
     //需要每隔单位时间进行一次调用的函数请写入以下函数体
     onLoop():void{
-        this.detectCollisions();//碰撞检测与处理
+        this.detectCollisions();//碰撞检测与处理
         this.updateForces();//更新大小球的受力
         this._bigBall.update();//更新大球的位置和速度
-        this._smallBall.update();//更新小球的位置和速度
+        this._smallBall.update();//更新小球的位置和速度
         this.updateBackground();//根据当前球的位置更新背景
         this._loopCount++;
     }
@@ -65,20 +74,26 @@ class GameView extends ui.GameViewUI{
 
     }
 
-    //碰撞检测与处理
+    //碰撞检测与处理
     detectCollisions():void{
         //分析当前球和其他物体的位置关系，并作出相应的处理
         //碰撞检测方式：获取Laya.Image的getBounds(),然后调用intersect方法判断是否发生碰撞
     }   
 
-    //更新球的受力，主要是两个球之间的作用力
+    //更新球的受力，主要是两个球之间的作用力
     updateForces():void{
         let distance:number = Math.sqrt(
             Math.pow((this._bigBall.x - this._smallBall.x), 2)+
             Math.pow((this._bigBall.y - this._smallBall.y), 2)
+<<<<<<< HEAD
         );//球的距离平方
         let minDistance:number = this._bigBall.radius+this._smallBall.radius;//最近距离不能小于两球的半径之和
         let effectiveDistance = Math.max(distance, minDistance);//在计算受力时的有效距离
+=======
+        );//球的距离平方
+        let minDistance:number = this._bigBall.radius+this._smallBall.radius;
+        let effectiveDistance = Math.max(distance, minDistance);
+>>>>>>> 94863d822cf2ed74224c05c434df1194622d985f
 
         //首先处理球靠近产生的升力
         let lift:number = Game.liftCoefficient / (effectiveDistance);

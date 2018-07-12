@@ -46,28 +46,27 @@ var GameView = /** @class */ (function (_super) {
     };
     //需要每隔单位时间进行一次调用的函数请写入以下函数体
     GameView.prototype.onLoop = function () {
-        this.detectCollisions(); //碰撞检测与处理
+        this.detectCollisions(); //碰撞检测与处理
         this.updateForces(); //更新大小球的受力
         this._bigBall.update(); //更新大球的位置和速度
-        this._smallBall.update(); //更新小球的位置和速度
+        this._smallBall.update(); //更新小球的位置和速度
         this.updateBackground(); //根据当前球的位置更新背景
         this._loopCount++;
     };
     //根据当前球的位置更新背景
     GameView.prototype.updateBackground = function () {
     };
-    //碰撞检测与处理
+    //碰撞检测与处理
     GameView.prototype.detectCollisions = function () {
         //分析当前球和其他物体的位置关系，并作出相应的处理
         //碰撞检测方式：获取Laya.Image的getBounds(),然后调用intersect方法判断是否发生碰撞
     };
-    //更新球的受力，主要是两个球之间的作用力
+    //更新球的受力，主要是两个球之间的作用力
     GameView.prototype.updateForces = function () {
         var distance = Math.sqrt(Math.pow((this._bigBall.x - this._smallBall.x), 2) +
             Math.pow((this._bigBall.y - this._smallBall.y), 2)); //球的距离平方
         var minDistance = this._bigBall.radius + this._smallBall.radius; //最近距离不能小于两球的半径之和
         var effectiveDistance = Math.max(distance, minDistance); //在计算受力时的有效距离
-        //首先处理球靠近产生的升力
         var lift = Game.liftCoefficient / (effectiveDistance);
         this._bigBall.setForce(0, -lift, "lift");
         this._smallBall.setForce(0, -lift, "lift");
@@ -85,7 +84,6 @@ var GameView = /** @class */ (function (_super) {
             this._smallBall.setForce((Math.random() - 0.5) * Game.randomForce, (Math.random() - 0.5) * Game.randomForce * 0.3, "random");
             this._bigBall.setForce((Math.random() - 0.5) * Game.randomForce, (Math.random() - 0.5) * Game.randomForce * 0.3, "random");
         }
-        console.log("vx=" + this._bigBall.vx + ",vy=" + this._bigBall.vy);
     };
     //当触摸开始时调用
     GameView.prototype.onTouchStart = function (data) {
