@@ -4,6 +4,7 @@ class GameView extends ui.GameViewUI{
     private _smallBall: Ball;//小球
     private _bigBall: Ball;//大球
     private _arrow: Arrow;//控制方向的箭头区域
+    private _barrier:Barrier;//障碍物
     
     constructor(){
         super();
@@ -16,7 +17,10 @@ class GameView extends ui.GameViewUI{
             this.arrowView.getChildByName("right") as Laya.Image, 
             Laya.Handler.create(this, this.onTouch, null, false)
         );
-        //
+        //障碍物初始化与绘制
+        this._barrier=new Barrier(this.backgroundView);
+        this._barrier.drawBarriers();
+
 
     }
     
@@ -25,7 +29,7 @@ class GameView extends ui.GameViewUI{
         console.log("触摸结束,持续时间为"+lastingTime);
     }
     
-    //碰撞检测与处理
+    //碰撞检测与处理
     collisionDetect():void{
         //分析当前球和其他物体的位置关系，并作出相应的处理
         //碰撞检测方式：获取Laya.Image的getBounds(),然后调用intersect方法判断是否发生碰撞

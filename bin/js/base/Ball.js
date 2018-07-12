@@ -27,7 +27,7 @@ var Ball = /** @class */ (function () {
     //对小球施加冲量，x/y分别为水平和数值方向的分量
     Ball.prototype.momentum = function (x, y) {
     };
-    //每过单位时间，对小球的位置进行更新
+    //每过单位时间，对小球的位置进行更新
     Ball.prototype.updatePosition = function () {
     };
     return Ball;
