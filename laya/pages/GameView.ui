@@ -2,7 +2,7 @@
     "x":0,
     "type":"View",
     "selectedBox":1,
-    "selecteID":12,
+    "selecteID":15,
     "props":{"x":40,"width":800,"sceneColor":"#000000","height":600},
     "nodeParent":-1,
     "label":"View",
@@ -18,12 +18,15 @@
             "props":{"y":-2019,"x":-90,"width":909,"var":"backgroundView","skin":"ui/background/BackGround .jpg","height":2618},
             "nodeParent":1,
             "label":"Image(backgroundView)",
+            "isOpen":true,
             "isDirectory":false,
             "isAniNode":true,
             "hasChild":false,
             "compId":12,
             "child":[
-                ]
+                ],
+            "$LOCKED":true,
+            "$HIDDEN":false
         },
         {
             "x":15,
@@ -36,7 +39,8 @@
             "hasChild":false,
             "compId":5,
             "child":[
-                ]
+                ],
+            "$LOCKED":true
         },
         {
             "x":15,
@@ -77,6 +81,19 @@
                         ],
                     "$HIDDEN":false
                 }]
+        },
+        {
+            "x":15,
+            "type":"Image",
+            "props":{"y":351,"x":337,"var":"bigBallView","skin":"ui/star/10.png"},
+            "nodeParent":1,
+            "label":"Image(bigBallView)",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":15,
+            "child":[
+                ]
         }],
     "animations":[
         {
