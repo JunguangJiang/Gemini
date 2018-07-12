@@ -67,8 +67,8 @@
 ## 已创建的类与接口
 ### Barriers（障碍物类）
 **public property**
-+ `_blackholes:Laya.Animation[]`：存储背景中黑洞的数组，每个元素是一个动画类`Laya.Animation`。
-+ `_stones:Laya.Image[]`：存储背景中陨石的数组，每个元素是一个图片类`Laya.Image`。
++ `blackholes:Laya.Animation[]`：存储背景中黑洞的数组，每个元素是一个动画类`Laya.Animation`。
++ `stones:Laya.Image[]`：存储背景中陨石的数组，每个元素是一个图片类`Laya.Image`。
 
 **public method**
 + `Barriers()`：构造函数，函数参数见代码。
