@@ -29,6 +29,9 @@ var GameView = /** @class */ (function (_super) {
         //控制方向的箭头区域的初始化
         _this._arrow = new Arrow(_this.arrowView.getChildByName("left"), _this.arrowView.getChildByName("right"), Laya.Handler.create(_this, _this.onTouchStart, null, false), Laya.Handler.create(_this, _this.onTouchEnd, null, false));
         _this._loopCount = 0;
+        //障碍物初始化与绘制
+        _this._barrier = new Barrier(_this.backgroundView);
+        _this._barrier.drawBarriers();
         return _this;
     }
     //游戏开始
@@ -67,6 +70,7 @@ var GameView = /** @class */ (function (_super) {
             Math.pow((this._bigBall.y - this._smallBall.y), 2)); //球的距离平方
         var minDistance = this._bigBall.radius + this._smallBall.radius; //最近距离不能小于两球的半径之和
         var effectiveDistance = Math.max(distance, minDistance); //在计算受力时的有效距离
+        //首先处理球靠近产生的升力
         var lift = Game.liftCoefficient / (effectiveDistance);
         this._bigBall.setForce(0, -lift, "lift");
         this._smallBall.setForce(0, -lift, "lift");

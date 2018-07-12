@@ -32,15 +32,11 @@ class GameView extends ui.GameViewUI{
             Laya.Handler.create(this, this.onTouchStart, null, false),
             Laya.Handler.create(this, this.onTouchEnd, null, false)
         );
-<<<<<<< HEAD
         this._loopCount = 0;
-=======
         //障碍物初始化与绘制
         this._barrier=new Barrier(this.backgroundView);
         this._barrier.drawBarriers();
-
         
->>>>>>> 94863d822cf2ed74224c05c434df1194622d985f
     }
 
     //游戏开始
@@ -85,15 +81,9 @@ class GameView extends ui.GameViewUI{
         let distance:number = Math.sqrt(
             Math.pow((this._bigBall.x - this._smallBall.x), 2)+
             Math.pow((this._bigBall.y - this._smallBall.y), 2)
-<<<<<<< HEAD
         );//球的距离平方
         let minDistance:number = this._bigBall.radius+this._smallBall.radius;//最近距离不能小于两球的半径之和
         let effectiveDistance = Math.max(distance, minDistance);//在计算受力时的有效距离
-=======
-        );//球的距离平方
-        let minDistance:number = this._bigBall.radius+this._smallBall.radius;
-        let effectiveDistance = Math.max(distance, minDistance);
->>>>>>> 94863d822cf2ed74224c05c434df1194622d985f
 
         //首先处理球靠近产生的升力
         let lift:number = Game.liftCoefficient / (effectiveDistance);
