@@ -74,3 +74,16 @@
 + `Barriers()`：构造函数，函数参数见代码。
 + `updateBarrier(backgroundImage:Laya.Image)`：更新背景各障碍物的位置（在构造Barriers类对象的时候会先初始化一次）。
 + `drawBarriers()`：将障碍物的动画和图像绘制到背景上。
+
+### Ball(球类)
+**public property**
++ `x,y`:获取球的位置
++ `vx,vy`:获取球的速度
++ `radius`:获取球的半径
++ `image`:获取球的图片Laya.Image
+
+**public method**
++ `setForce(Fx: number, Fy: number, name: string)`:对小球增加受力，Fx/Fy分别为水平和数值方向的分量,name为该力的种类
++ `removeForce(name:string)`:移除小球名字为name的力
++ `collide(xRatio:number, yRatio:number)`:碰撞会改变小球的速度分量，使原先的<Vx,Vy>变成<-Vx * xRatio, -Vy * yRatio>
++ `update()`:对小球的位置和速度进行更新
