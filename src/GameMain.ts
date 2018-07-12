@@ -23,8 +23,11 @@ class GameMain{
 
     //加载资源完毕后，游戏的开始界面
     onLoaded():void{
-        GameMain.gameView = new GameView();//暂时将游戏主界面作为游戏的开始界面
+        //仅用于开发阶段
+        GameMain.gameView = new GameView();//将游戏主界面作为游戏的开始界面
         Laya.stage.addChild(GameMain.gameView);
+        GameMain.gameView.gameStart();//开始游戏
+        //仅用于开发阶段
     }
 }
 new GameMain();
