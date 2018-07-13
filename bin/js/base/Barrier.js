@@ -2,7 +2,7 @@
 var Barrier = /** @class */ (function () {
     function Barrier(backgroundImage, blackHolesNum, stonesNum, blackHoleWidth, blackHoleHeight, stoneWidth, stoneHeight) {
         if (blackHolesNum === void 0) { blackHolesNum = 5; }
-        if (stonesNum === void 0) { stonesNum = 5; }
+        if (stonesNum === void 0) { stonesNum = 15; }
         if (blackHoleWidth === void 0) { blackHoleWidth = 100; }
         if (blackHoleHeight === void 0) { blackHoleHeight = 100; }
         if (stoneWidth === void 0) { stoneWidth = 50; }
@@ -30,7 +30,7 @@ var Barrier = /** @class */ (function () {
             blackhole.width = this._blackHoleWidth;
             blackhole.height = this._blackHoleHeight;
             blackhole.x = Math.min(backgroundImage.width - this._blackHoleWidth, Math.random() * backgroundImage.width);
-            blackhole.y = (i + Math.random()) * blackHoleDistance; //在y方向基本承均匀分布
+            blackhole.y = Math.min((i + Math.random()) * blackHoleDistance, backgroundImage.height - this._blackHoleHeight - 100); //在y方向基本承均匀分布
             this.blackHoles.push(blackhole);
             backgroundImage.addChild(blackhole);
         }
@@ -47,7 +47,7 @@ var Barrier = /** @class */ (function () {
             testRec.height = this_1._blackHoleHeight + 2 * this_1._stoneHeight;
             while (true) {
                 x = Math.min(backgroundImage.width - this_1._stoneWidth, Math.random() * backgroundImage.width);
-                y = (i + Math.random()) * stoneDistance;
+                y = Math.min((i + Math.random()) * stoneDistance, backgroundImage.height - this_1._stoneHeight - 100);
                 overlap = 0;
                 this_1.blackHoles.forEach(function (element) {
                     testRec.x = element.x - _this._stoneWidth;
@@ -72,8 +72,11 @@ var Barrier = /** @class */ (function () {
     };
     //绘制各障碍物的动画或图像
     Barrier.prototype.drawBarriers = function () {
+        var _this = this;
         this.blackHoles.forEach(function (element) {
             element.loadAnimation("GameAnimation/BlackHole.ani");
+            element.scaleX = _this._blackHoleWidth / 100;
+            element.scaleY = _this._blackHoleHeight / 100;
             element.play();
         });
         this.stones.forEach(function (element) {

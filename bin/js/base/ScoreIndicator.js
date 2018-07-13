@@ -14,7 +14,7 @@ var ScoreIndicator = /** @class */ (function () {
         this._rewardNum = 0;
         this.updateUI();
     }
-    //根据高度的变化记录奖励
+    //根据高度的变化记录奖励
     ScoreIndicator.prototype.updateHeight = function (height) {
         // console.log("height="+height);
         var newRewardNum = Math.floor(height / this._totalHeight * Game.heightDivision);

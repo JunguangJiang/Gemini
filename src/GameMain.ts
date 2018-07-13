@@ -18,7 +18,6 @@ class GameMain{
             {url:"res/atlas/ui/arrow.atlas", type:Laya.Loader.ATLAS},
             {url:"res/atlas/ui/stone.atlas", type:Laya.Loader.ATLAS},
             {url:"res/atlas/ui/score.atlas", type:Laya.Loader.ATLAS},
-            // {url:"ui/music/level1.wav", type:Laya.Loader.SOUND}
         ];
         Laya.loader.load(resArray, Laya.Handler.create(this, this.onLoaded));//当资源加载完毕时，调用onLoaded
     }
@@ -28,7 +27,7 @@ class GameMain{
         //仅用于开发阶段
         GameMain.gameView = new GameView();//将游戏主界面作为游戏的开始界面
         Laya.stage.addChild(GameMain.gameView);
-        GameMain.gameView.gameStart();//开始游戏
+        GameMain.gameView.gameStart();//开始游戏
         //仅用于开发阶段
     }
 }

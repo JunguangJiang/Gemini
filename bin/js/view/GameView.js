@@ -27,8 +27,8 @@ var GameView = /** @class */ (function (_super) {
         //游戏的活动区域
         _this._activityArea = { up: _this.height - _this.backgroundView.height, down: 0 };
         //球的初始化
-        _this._bigBall = new Ball(25, 400, 2588, _this.bigBallView);
-        _this._smallBall = new Ball(15, 200, 2588, _this.smallBallView);
+        _this._bigBall = new Ball(25, 400, 2600, _this.bigBallView);
+        _this._smallBall = new Ball(15, 200, 2600, _this.smallBallView);
         //控制方向的箭头区域的初始化
         _this._arrow = new Arrow(_this.arrowView.getChildByName("left"), _this.arrowView.getChildByName("right"), Laya.Handler.create(_this, _this.onTouchStart, null, false), Laya.Handler.create(_this, _this.onTouchEnd, null, false));
         _this._loopCount = 0;
@@ -57,7 +57,7 @@ var GameView = /** @class */ (function (_super) {
     };
     //需要每隔单位时间进行一次调用的函数请写入以下函数体
     GameView.prototype.onLoop = function () {
-        this.detectCollisions(); //碰撞检测与处理
+        this.detectCollisions(this._bigBall); //大球碰撞检测与处理
         this.updateForces(); //更新大小球的受力
         this.detectBorder(this._bigBall); //检测与边缘的相对位置
         this.detectBorder(this._smallBall);
@@ -78,9 +78,83 @@ var GameView = /** @class */ (function (_super) {
         this.runningView.y = y;
     };
     //碰撞检测与处理
-    GameView.prototype.detectCollisions = function () {
+    GameView.prototype.detectCollisions = function (ball) {
         //分析当前球和其他物体的位置关系，并作出相应的处理
-        //碰撞检测方式：获取Laya.Image的getBounds(),然后调用intersect方法判断是否发生碰撞
+        var _this = this;
+        var ballRec = new Laya.Rectangle(ball.x, ball.y, ball.radius * 2, ball.radius * 2);
+        console.log(ball.vx, ball.vy);
+        //判断球是否进入黑洞
+        var inBlackhole = false;
+        this._barrier.blackHoles.forEach(function (element) {
+            var elementRec = element.getBounds();
+            elementRec = elementRec.setTo(elementRec.x + elementRec.width / 10, elementRec.y + elementRec.height / 10, elementRec.width * 4 / 5, elementRec.height * 4 / 5);
+            if (elementRec.intersects(ballRec)) {
+                inBlackhole = true;
+            }
+        });
+        if (inBlackhole) {
+            this.gameEnd();
+        }
+        //判断是否与障碍物碰撞反弹(先判断上下方向再判断左右方向)
+        this._barrier.stones.forEach(function (element) {
+            console.log("(" + element.width + "," + element.height + ")");
+            if ((ballRec.x >= element.x - ballRec.width) &&
+                (ballRec.right <= element.x + element.width + ballRec.width) &&
+                (ballRec.bottom >= element.y) &&
+                (ballRec.y < element.y) &&
+                (ball.vy > 0)) //向上反弹
+             {
+                ball.collide(1, -10 / ball.vy);
+                console.log("1:" + ball.vx + "," + ball.vy);
+                _this._scoreIndicator.getPenalty(2);
+                if (_this._scoreIndicator.data <= 0) {
+                    _this.gameEnd();
+                    return;
+                }
+            }
+            else if ((ballRec.x >= element.x - ballRec.width) &&
+                (ballRec.right <= element.x + element.width + ballRec.width) &&
+                (ballRec.y <= element.y + element.height) &&
+                (ballRec.bottom > element.y + element.height) &&
+                (ball.vy < 0)) //向下反弹
+             {
+                ball.collide(1, 10 / ball.vy);
+                console.log("2:" + ball.vx + "," + ball.vy);
+                _this._scoreIndicator.getPenalty(2);
+                if (_this._scoreIndicator.data <= 0) {
+                    _this.gameEnd();
+                    return;
+                }
+            }
+            else if ((ballRec.y >= element.y - ballRec.height) &&
+                (ballRec.bottom <= element.y + element.height + ballRec.height) &&
+                (ballRec.right >= element.x) &&
+                (ballRec.x < element.x) &&
+                (ball.vx > 0)) //向左反弹
+             {
+                ball.collide(-10 / ball.vx, 1);
+                console.log("3:" + ball.vx + "," + ball.vy);
+                _this._scoreIndicator.getPenalty(2);
+                if (_this._scoreIndicator.data <= 0) {
+                    _this.gameEnd();
+                    return;
+                }
+            }
+            else if ((ballRec.y >= element.y - ballRec.height) &&
+                (ballRec.bottom <= element.y + element.height + ballRec.height) &&
+                (ballRec.x <= element.x + element.width) &&
+                (ballRec.right > element.x + element.width) &&
+                (ball.vx < 0)) //向右反弹
+             {
+                ball.collide(10 / ball.vx, 1);
+                console.log("4:" + ball.vx + "," + ball.vy);
+                _this._scoreIndicator.getPenalty(2);
+                if (_this._scoreIndicator.data <= 0) {
+                    _this.gameEnd();
+                    return;
+                }
+            }
+        });
     };
     //球与边缘的相对位置的检测与处理
     GameView.prototype.detectBorder = function (ball) {
@@ -98,7 +172,7 @@ var GameView = /** @class */ (function (_super) {
     //更新球的受力，主要是两个球之间的作用力
     GameView.prototype.updateForces = function () {
         var distance = Math.sqrt(Math.pow((this._bigBall.x - this._smallBall.x), 2) +
-            Math.pow((this._bigBall.y - this._smallBall.y), 2)); //球的距离平方
+            Math.pow((this._bigBall.y - this._smallBall.y), 2)); //球的距离平方
         var minDistance = this._bigBall.radius + this._smallBall.radius; //最近距离不能小于两球的半径之和
         var effectiveDistance = Math.max(distance, minDistance); //在计算受力时的有效距离
         //首先处理球靠近产生的升力
@@ -123,7 +197,7 @@ var GameView = /** @class */ (function (_super) {
     //当触摸开始时调用
     GameView.prototype.onTouchStart = function (data) {
         //增加大球受力
-        var force = Math.random() * Game.humanForce; //每单位时间的触摸可以随机生成[10,20]范围内的力
+        var force = Math.random() * Game.humanForce;
         if (data.type === "left") {
             force = -force;
         }

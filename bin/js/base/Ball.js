@@ -1,27 +1,28 @@
 //球类
 var Ball = /** @class */ (function () {
-    function Ball(radius, x, y, image) {
-        this._image = image;
-        this._image.size(2 * radius, 2 * radius); //设置小球的半径
+    function Ball(radius, x, y, ballView) {
+        this._animation = ballView;
         this._radius = radius;
-        this._image.visible = true;
         this._vx = this._vy = this._ax = this._ay = 0;
         this._timer = new Timer();
         this._forces = new Laya.Dictionary(); //记录所有的受力
         this.x = x;
         this.y = y; //设置小球的位置
+        //绘制动画并加入背景中
+        this.drawNormalBall();
+        this.drawShinyBall();
     }
     Object.defineProperty(Ball.prototype, "x", {
         //获取球的当前位置（球心）
-        get: function () { return this._image.x + this.radius; },
+        get: function () { return this._animation.x + this.radius; },
         //设置球的当前位置(球心)
-        set: function (x) { this._image.x = x - this.radius; },
+        set: function (x) { this._animation.x = x - this.radius; },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(Ball.prototype, "y", {
-        get: function () { return this._image.y + this.radius; },
-        set: function (y) { this._image.y = y - this.radius; },
+        get: function () { return this._animation.y + this.radius; },
+        set: function (y) { this._animation.y = y - this.radius; },
         enumerable: true,
         configurable: true
     });
@@ -57,9 +58,9 @@ var Ball = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Ball.prototype, "image", {
-        //获取球的图片
-        get: function () { return this._image; },
+    Object.defineProperty(Ball.prototype, "animation", {
+        //获取球的动画
+        get: function () { return this._animation; },
         enumerable: true,
         configurable: true
     });
@@ -93,6 +94,18 @@ var Ball = /** @class */ (function () {
         this._vx = this._vx + this._ax * deltaT;
         this._vy = this._vy + this._ay * deltaT;
         this._timer.start();
+    };
+    //进行小球动画的加载和绘制
+    Ball.prototype.drawNormalBall = function () {
+        this._animation.clear();
+        this._animation.loadAnimation("GameAnimation/Ball.ani");
+        this._animation.scaleX = this._radius * 2 / 120;
+        this._animation.scaleY = this._radius * 2 / 120;
+        this._animation.play();
+    };
+    //触摸时大球发光
+    Ball.prototype.drawShinyBall = function () {
+        //发光滤镜实现
     };
     return Ball;
 }());
