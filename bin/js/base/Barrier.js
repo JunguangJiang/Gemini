@@ -72,8 +72,11 @@ var Barrier = /** @class */ (function () {
     };
     //绘制各障碍物的动画或图像
     Barrier.prototype.drawBarriers = function () {
+        var _this = this;
         this.blackHoles.forEach(function (element) {
             element.loadAnimation("GameAnimation/BlackHole.ani");
+            element.scaleX = _this._blackHoleWidth / 100;
+            element.scaleY = _this._blackHoleHeight / 100;
             element.play();
         });
         this.stones.forEach(function (element) {

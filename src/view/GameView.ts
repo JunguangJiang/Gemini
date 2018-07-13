@@ -28,8 +28,8 @@ class GameView extends ui.GameViewUI{
         this._activityArea = {up:this.height-this.backgroundView.height, down:0};
 
         //球的初始化
-        this._bigBall = new Ball(25, 403, 600, this.bigBallView);
-        this._smallBall = new Ball(15, 200, 600, this.smallBallView);
+        this._bigBall = new Ball(25, 400, 2600,this.bigBallView);
+        this._smallBall = new Ball(15, 200, 2600,this.smallBallView);
 
         //控制方向的箭头区域的初始化
         this._arrow = new Arrow(
@@ -86,6 +86,7 @@ class GameView extends ui.GameViewUI{
     detectCollisions():void{
         //分析当前球和其他物体的位置关系，并作出相应的处理
         //碰撞检测方式：获取Laya.Image的getBounds(),然后调用intersect方法判断是否发生碰撞
+
     }   
 
     //球与边缘的相对位置的检测与处理
@@ -108,7 +109,7 @@ class GameView extends ui.GameViewUI{
         let distance:number = Math.sqrt(
             Math.pow((this._bigBall.x - this._smallBall.x), 2)+
             Math.pow((this._bigBall.y - this._smallBall.y), 2)
-        );//球的距离平方
+        );//球的距离平方
         let minDistance:number = this._bigBall.radius+this._smallBall.radius;//最近距离不能小于两球的半径之和
         let effectiveDistance = Math.max(distance, minDistance);//在计算受力时的有效距离
 
@@ -160,11 +161,12 @@ class GameView extends ui.GameViewUI{
     //当触摸开始时调用
     onTouchStart(data:{type:string}):void{
         //增加大球受力
-        let force = Math.random() * Game.humanForce;//每单位时间的触摸可以随机生成[10,20]范围内的力
+        let force = Math.random() * Game.humanForce;//每单位时间的触摸可以随机生成[10,20]范围内的力
         if(data.type === "left"){
             force = -force;
         }
         this._bigBall.setForce(force, 0, "humanControl");
+        
     }
 
     onTouchEnd(data:{type:string}):void{

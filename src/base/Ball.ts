@@ -1,6 +1,6 @@
 //球类
 class Ball{
-    public _image: Laya.Image;//球的图片
+    public _animation: Laya.Animation;//球的动画
     private _radius: number;//小球半径
     private _forces: Laya.Dictionary;//施加在小球上的所有力
 
@@ -14,24 +14,25 @@ class Ball{
 
     private _timer: Timer;//时钟
 
-    constructor(radius: number, x:number, y:number, image: Laya.Image){
-        this._image = image;
-        this._image.size(2*radius, 2*radius);//设置小球的半径
+    constructor(radius: number, x:number, y:number,ballView:Laya.Animation){
+        this._animation=ballView;
         this._radius = radius;
-        this._image.visible = true;
         this._vx = this._vy = this._ax = this._ay = 0;
         this._timer = new Timer();
         this._forces = new Laya.Dictionary();
         this.x = x; this.y = y; //设置小球的位置
+
+        //绘制动画并加入背景中
+        this.drawNormalBall();       
     }
 
     //设置球的当前位置(球心)
-    set x(x:number){this._image.x = x-this.radius;}
-    set y(y:number){this._image.y = y-this.radius;}
+    set x(x:number){this._animation.x = x-this.radius;}
+    set y(y:number){this._animation.y = y-this.radius;}
 
     //获取球的当前位置（球心）
-    get x():number{return this._image.x+this.radius;}
-    get y():number{return this._image.y+this.radius;}
+    get x():number{return this._animation.x+this.radius;}
+    get y():number{return this._animation.y+this.radius;}
 
     //获取球的速度
     get vx():number{return this._vx;}
@@ -49,8 +50,8 @@ class Ball{
     //获取球的半径
     get radius():number{return this._radius;}
 
-    //获取球的图片
-    get image():Laya.Image{return this._image;}
+    //获取球的动画
+    get animation():Laya.Animation{return this._animation;}
 
     //对小球增加受力，Fx/Fy分别为水平和数值方向的分量,name为该力的种类
     //认为小球的质量均为1
@@ -87,5 +88,14 @@ class Ball{
         console.log("vy="+this._vy);
         this._vy =  this._vy + this._ay * deltaT;
         this._timer.start();
+    }
+
+    //进行小球动画的加载和绘制
+    public drawNormalBall()
+    {
+        this._animation.loadAnimation("GameAnimation/Ball.ani");
+        this._animation.scaleX=this._radius*2/120;
+        this._animation.scaleY=this._radius*2/120;
+        this._animation.play();
     }
 }

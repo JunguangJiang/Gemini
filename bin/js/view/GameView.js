@@ -27,10 +27,8 @@ var GameView = /** @class */ (function (_super) {
         //游戏的活动区域
         _this._activityArea = { up: _this.height - _this.backgroundView.height, down: 0 };
         //球的初始化
-        _this._bigBall = new Ball(25, 403, 600, _this.bigBallView);
-        _this._smallBall = new Ball(15, 200, 600, _this.smallBallView);
-        // this._bigBall.x = 200;
-        // this._smallBall.x = 300;
+        _this._bigBall = new Ball(25, 400, 2600, _this.bigBallView);
+        _this._smallBall = new Ball(15, 200, 2600, _this.smallBallView);
         //控制方向的箭头区域的初始化
         _this._arrow = new Arrow(_this.arrowView.getChildByName("left"), _this.arrowView.getChildByName("right"), Laya.Handler.create(_this, _this.onTouchStart, null, false), Laya.Handler.create(_this, _this.onTouchEnd, null, false));
         _this._loopCount = 0;
@@ -93,7 +91,7 @@ var GameView = /** @class */ (function (_super) {
     //更新球的受力，主要是两个球之间的作用力
     GameView.prototype.updateForces = function () {
         var distance = Math.sqrt(Math.pow((this._bigBall.x - this._smallBall.x), 2) +
-            Math.pow((this._bigBall.y - this._smallBall.y), 2)); //球的距离平方
+            Math.pow((this._bigBall.y - this._smallBall.y), 2)); //球的距离平方
         var minDistance = this._bigBall.radius + this._smallBall.radius; //最近距离不能小于两球的半径之和
         var effectiveDistance = Math.max(distance, minDistance); //在计算受力时的有效距离
         //首先处理球靠近产生的升力
@@ -122,7 +120,7 @@ var GameView = /** @class */ (function (_super) {
     //当触摸开始时调用
     GameView.prototype.onTouchStart = function (data) {
         //增加大球受力
-        var force = Math.random() * Game.humanForce; //每单位时间的触摸可以随机生成[10,20]范围内的力
+        var force = Math.random() * Game.humanForce; //每单位时间的触摸可以随机生成[10,20]范围内的力
         if (data.type === "left") {
             force = -force;
         }

@@ -21,7 +21,7 @@ var GameMain = /** @class */ (function () {
         //仅用于开发阶段
         GameMain.gameView = new GameView(); //将游戏主界面作为游戏的开始界面
         Laya.stage.addChild(GameMain.gameView);
-        GameMain.gameView.gameStart(); //开始游戏
+        GameMain.gameView.gameStart(); //开始游戏
         //仅用于开发阶段
     };
     return GameMain;
