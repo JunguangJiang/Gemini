@@ -35,7 +35,7 @@
 包括子类岩石类`Rock`和黑洞类`BlackHole`。<br>
 
 ### 游戏界面
-分配：前期：`江俊广`，后期：`程嘉梁`<br>
+分配：`江俊广`，`程嘉梁`<br>
 文件夹：`view`<br>
 游戏入口函数类`GameMain`。<br>
 1、游戏开始界面类`GameStart`：开始界面背景、游戏模式选择、排行榜查看、是否读入存档。<br>
@@ -85,5 +85,18 @@
 **public method**
 + `setForce(Fx: number, Fy: number, name: string)`:对小球增加受力，Fx/Fy分别为水平和数值方向的分量,name为该力的种类
 + `removeForce(name:string)`:移除小球名字为name的力
-+ `collide(xRatio:number, yRatio:number)`:碰撞会改变小球的速度分量，使原先的<Vx,Vy>变成<-Vx * xRatio, -Vy * yRatio>
++ `collide(xRatio:number, yRatio:number)`:碰撞会改变小球的速度分量，使原先的<Vx,Vy>变成<Vx * xRatio, Vy * yRatio>
 + `update()`:对小球的位置和速度进行更新
+
+### ScoreIndicator(计分器)
+**public property**
++ `data`:获取当前的分数
+**public method**
++ `updateHeight(height:number)`:根据高度的变化记录奖励
++ `getPenalty(penalty: number)`:接受惩罚
+
+### MusicManager(音乐管理器)
+**public property**
++ `data`:获取当前的分数
+**public method**
++ `onPlaySound(url:string)`:播放特殊音效，url可取值见包括Game.BlackHoleCollisionSound(和黑洞撞击)，Game.StoneCollisionSound(和岩石撞击的声音)

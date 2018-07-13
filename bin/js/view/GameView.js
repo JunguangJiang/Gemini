@@ -27,8 +27,8 @@ var GameView = /** @class */ (function (_super) {
         //游戏的活动区域
         _this._activityArea = { up: _this.height - _this.backgroundView.height, down: 0 };
         //球的初始化
-        _this._bigBall = new Ball(25, 403, 600, _this.bigBallView);
-        _this._smallBall = new Ball(15, 200, 600, _this.smallBallView);
+        _this._bigBall = new Ball(25, 400, 2588, _this.bigBallView);
+        _this._smallBall = new Ball(15, 200, 2588, _this.smallBallView);
         //控制方向的箭头区域的初始化
         _this._arrow = new Arrow(_this.arrowView.getChildByName("left"), _this.arrowView.getChildByName("right"), Laya.Handler.create(_this, _this.onTouchStart, null, false), Laya.Handler.create(_this, _this.onTouchEnd, null, false));
         _this._loopCount = 0;
@@ -37,6 +37,9 @@ var GameView = /** @class */ (function (_super) {
         _this._barrier.drawBarriers();
         //计分器的初始化
         _this._scoreIndicator = new ScoreIndicator(_this.scoreView, 3, _this.runningView.height, 0);
+        //音乐播放器
+        _this._musicManager = new MusicManager();
+        _this._musicManager.onPlayMusic(1); //播放等级1的音乐
         return _this;
     }
     //游戏开始
@@ -84,6 +87,7 @@ var GameView = /** @class */ (function (_super) {
         if ((((ball.x - ball.radius) <= 0) && ball.vx < 0) ||
             (((ball.x + ball.radius) >= this.runningView.width) && ball.vx > 0)) {
             // console.log("碰到水平边缘");
+            this._musicManager.onPlaySound(Game.BlackHoleCollisionSound); //播放和石头碰撞的声音，仅用于调试
             ball.collide(-0.8, 1);
         }
         else if ((((ball.y + ball.radius) >= this.runningView.height) && ball.vy > 0)) {
@@ -108,12 +112,8 @@ var GameView = /** @class */ (function (_super) {
         this._smallBall.setForce(-smallVSquare * this._smallBall.vx * Game.dragCoefficient, -smallVSquare * this._smallBall.vy * Game.dragCoefficient, "drag");
         //处理两个小球之间的引力(认为水平方向无引力)
         var attraction = Game.attractionCoefficient / (Math.pow(effectiveDistance, 3));
-        this._bigBall.setForce(
-        // 0,
-        (this._smallBall.x - this._bigBall.x) * attraction, (this._smallBall.y - this._bigBall.y) * attraction, "attraction");
-        this._smallBall.setForce(
-        // 0,
-        (this._bigBall.x - this._smallBall.x) * attraction, (this._bigBall.y - this._smallBall.y) * attraction, "attraction");
+        this._bigBall.setForce((this._smallBall.x - this._bigBall.x) * attraction, (this._smallBall.y - this._bigBall.y) * attraction, "attraction");
+        this._smallBall.setForce((this._bigBall.x - this._smallBall.x) * attraction, (this._bigBall.y - this._smallBall.y) * attraction, "attraction");
         //随机受力
         if (this._loopCount % 10 == 0) { //每隔1s，才会刷新一次随机受力
             this._smallBall.setForce((Math.random() - 0.5) * Game.randomForce, (Math.random() - 0.5) * Game.randomForce * 0.3, "random");

@@ -17,7 +17,8 @@ class GameMain{
             {url: "res/atlas/ui/star.atlas", type:Laya.Loader.ATLAS},
             {url:"res/atlas/ui/arrow.atlas", type:Laya.Loader.ATLAS},
             {url:"res/atlas/ui/stone.atlas", type:Laya.Loader.ATLAS},
-            {url:"res/atlas/ui/score.atlas", type:Laya.Loader.ATLAS}
+            {url:"res/atlas/ui/score.atlas", type:Laya.Loader.ATLAS},
+            // {url:"ui/music/level1.wav", type:Laya.Loader.SOUND}
         ];
         Laya.loader.load(resArray, Laya.Handler.create(this, this.onLoaded));//当资源加载完毕时，调用onLoaded
     }

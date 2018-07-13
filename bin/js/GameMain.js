@@ -13,7 +13,7 @@ var GameMain = /** @class */ (function () {
             { url: "res/atlas/ui/star.atlas", type: Laya.Loader.ATLAS },
             { url: "res/atlas/ui/arrow.atlas", type: Laya.Loader.ATLAS },
             { url: "res/atlas/ui/stone.atlas", type: Laya.Loader.ATLAS },
-            { url: "res/atlas/ui/score.atlas", type: Laya.Loader.ATLAS }
+            { url: "res/atlas/ui/score.atlas", type: Laya.Loader.ATLAS },
         ];
         Laya.loader.load(resArray, Laya.Handler.create(this, this.onLoaded)); //当资源加载完毕时，调用onLoaded
     }

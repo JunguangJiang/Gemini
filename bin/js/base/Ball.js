@@ -7,7 +7,7 @@ var Ball = /** @class */ (function () {
         this._image.visible = true;
         this._vx = this._vy = this._ax = this._ay = 0;
         this._timer = new Timer();
-        this._forces = new Laya.Dictionary();
+        this._forces = new Laya.Dictionary(); //记录所有的受力
         this.x = x;
         this.y = y; //设置小球的位置
     }
