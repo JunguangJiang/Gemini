@@ -29,14 +29,14 @@ var GameView = /** @class */ (function (_super) {
         //球的初始化
         _this._bigBall = new Ball(25, 403, 600, _this.bigBallView);
         _this._smallBall = new Ball(15, 200, 600, _this.smallBallView);
-        // this._bigBall.x = 200;
-        // this._smallBall.x = 300;
         //控制方向的箭头区域的初始化
         _this._arrow = new Arrow(_this.arrowView.getChildByName("left"), _this.arrowView.getChildByName("right"), Laya.Handler.create(_this, _this.onTouchStart, null, false), Laya.Handler.create(_this, _this.onTouchEnd, null, false));
         _this._loopCount = 0;
         //障碍物初始化与绘制
         _this._barrier = new Barrier(_this.backgroundView);
         _this._barrier.drawBarriers();
+        //计分器的初始化
+        _this._scoreIndicator = new ScoreIndicator(_this.scoreView, 3, _this.runningView.height, 0);
         return _this;
     }
     //游戏开始
@@ -62,7 +62,8 @@ var GameView = /** @class */ (function (_super) {
         this._smallBall.update(); //更新小球的位置和速度
         this.updateBackground(); //根据当前球的位置更新背景
         this._loopCount++;
-        this._bigBall.debug("大球");
+        this._scoreIndicator.updateHeight(-(this._bigBall.y - this.runningView.height + this._bigBall.radius));
+        // this._bigBall.debug("大球");
     };
     //根据当前球的位置更新背景
     GameView.prototype.updateBackground = function () {
@@ -82,11 +83,11 @@ var GameView = /** @class */ (function (_super) {
     GameView.prototype.detectBorder = function (ball) {
         if ((((ball.x - ball.radius) <= 0) && ball.vx < 0) ||
             (((ball.x + ball.radius) >= this.runningView.width) && ball.vx > 0)) {
-            console.log("碰到水平边缘");
+            // console.log("碰到水平边缘");
             ball.collide(-0.8, 1);
         }
         else if ((((ball.y + ball.radius) >= this.runningView.height) && ball.vy > 0)) {
-            console.log("碰到垂直边缘");
+            // console.log("碰到垂直边缘");
             ball.collide(1, -0.9);
         }
     };
@@ -107,12 +108,12 @@ var GameView = /** @class */ (function (_super) {
         this._smallBall.setForce(-smallVSquare * this._smallBall.vx * Game.dragCoefficient, -smallVSquare * this._smallBall.vy * Game.dragCoefficient, "drag");
         //处理两个小球之间的引力(认为水平方向无引力)
         var attraction = Game.attractionCoefficient / (Math.pow(effectiveDistance, 3));
-        this._bigBall.setForce(0, 
-        // (this._smallBall.x-this._bigBall.x)*attraction,
-        (this._smallBall.y - this._bigBall.y) * attraction, "attraction");
-        this._smallBall.setForce(0, 
-        // (this._bigBall.x-this._smallBall.x)*attraction,
-        (this._bigBall.y - this._smallBall.y) * attraction, "attraction");
+        this._bigBall.setForce(
+        // 0,
+        (this._smallBall.x - this._bigBall.x) * attraction, (this._smallBall.y - this._bigBall.y) * attraction, "attraction");
+        this._smallBall.setForce(
+        // 0,
+        (this._bigBall.x - this._smallBall.x) * attraction, (this._bigBall.y - this._smallBall.y) * attraction, "attraction");
         //随机受力
         if (this._loopCount % 10 == 0) { //每隔1s，才会刷新一次随机受力
             this._smallBall.setForce((Math.random() - 0.5) * Game.randomForce, (Math.random() - 0.5) * Game.randomForce * 0.3, "random");

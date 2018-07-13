@@ -17,6 +17,7 @@ class GameView extends ui.GameViewUI{
     private _arrow: Arrow;//控制方向的箭头区域
     private _barrier:Barrier;//障碍物
     private _backgroundView: Laya.Image;//背景视图
+    private _scoreIndicator: ScoreIndicator;//计分器
     
     private _loopCount: number;//记录刷新（循环）总次数
     private _activityArea:{up:number, down:number};//游戏的最大活动区域
@@ -39,10 +40,13 @@ class GameView extends ui.GameViewUI{
             Laya.Handler.create(this, this.onTouchEnd, null, false)
         );
         this._loopCount = 0;
+
         //障碍物初始化与绘制
         this._barrier=new Barrier(this.backgroundView);
         this._barrier.drawBarriers();
-        
+
+        //计分器的初始化
+        this._scoreIndicator = new ScoreIndicator(this.scoreView, 3, this.runningView.height, 0);
     }
 
     //游戏开始
@@ -71,7 +75,8 @@ class GameView extends ui.GameViewUI{
         this._smallBall.update();//更新小球的位置和速度
         this.updateBackground();//根据当前球的位置更新背景
         this._loopCount++;
-        this._bigBall.debug("大球");
+        this._scoreIndicator.updateHeight(-(this._bigBall.y-this.runningView.height+this._bigBall.radius));
+        // this._bigBall.debug("大球");
     }
 
     //根据当前球的位置更新背景
@@ -93,12 +98,12 @@ class GameView extends ui.GameViewUI{
         if( ( ((ball.x-ball.radius) <= 0) && ball.vx < 0 ) || 
             ( ((ball.x+ball.radius) >= this.runningView.width) && ball.vx > 0 )
             ){
-                console.log("碰到水平边缘");
+                // console.log("碰到水平边缘");
             ball.collide(-0.8,1);
         }else if(
             (((ball.y+ball.radius) >= this.runningView.height) && ball.vy > 0)
         ){
-            console.log("碰到垂直边缘");
+            // console.log("碰到垂直边缘");
             ball.collide(1, -0.9);
         }
     }
@@ -132,14 +137,12 @@ class GameView extends ui.GameViewUI{
         //处理两个小球之间的引力(认为水平方向无引力)
         let attraction:number = Game.attractionCoefficient / (Math.pow(effectiveDistance, 3));
         this._bigBall.setForce(
-            0,
-            // (this._smallBall.x-this._bigBall.x)*attraction,
+            (this._smallBall.x-this._bigBall.x)*attraction,
             (this._smallBall.y-this._bigBall.y)*attraction,
             "attraction"
         )
         this._smallBall.setForce(
-            0,
-            // (this._bigBall.x-this._smallBall.x)*attraction,
+            (this._bigBall.x-this._smallBall.x)*attraction,
             (this._bigBall.y-this._smallBall.y)*attraction,
             "attraction"
         )
