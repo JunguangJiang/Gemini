@@ -15,15 +15,19 @@ class GameView extends ui.GameViewUI{
     private _bigBall: Ball;//大球
     private _arrow: Arrow;//控制方向的箭头区域
     private _barrier:Barrier;//障碍物
+    private _backgroundView: Laya.Image;//背景视图
     
     private _loopCount: number;//记录刷新（循环）总次数
 
     constructor(){
         super();
 
+        this.x = 0;
+        this.y = 0;
+
         //球的初始化
-        this._bigBall = new Ball(25, 343, 265, this.bigBallView);
-        this._smallBall = new Ball(15, 200, 200, this.smallBallView);
+        this._bigBall = new Ball(25, 343, 600, this.bigBallView);
+        this._smallBall = new Ball(15, 200, 600, this.smallBallView);
 
         //控制方向的箭头区域的初始化
         this._arrow = new Arrow(
@@ -59,6 +63,8 @@ class GameView extends ui.GameViewUI{
     onLoop():void{
         this.detectCollisions();//碰撞检测与处理
         this.updateForces();//更新大小球的受力
+        this.detectBorder(this._bigBall);//检测与边缘的相对位置
+        this.detectBorder(this._smallBall);
         this._bigBall.update();//更新大球的位置和速度
         this._smallBall.update();//更新小球的位置和速度
         this.updateBackground();//根据当前球的位置更新背景
@@ -67,7 +73,10 @@ class GameView extends ui.GameViewUI{
 
     //根据当前球的位置更新背景
     updateBackground():void{
-
+        let y:number = -this._bigBall.y + this.height/2;
+        if(y > 0) y = 0;
+        else if(y<this.height-this.backgroundView.height) y = this.height-this.backgroundView.height;
+        this.runningView.y = y;
     }
 
     //碰撞检测与处理
@@ -75,6 +84,19 @@ class GameView extends ui.GameViewUI{
         //分析当前球和其他物体的位置关系，并作出相应的处理
         //碰撞检测方式：获取Laya.Image的getBounds(),然后调用intersect方法判断是否发生碰撞
     }   
+
+    //球与边缘的相对位置的检测与处理
+    detectBorder(ball:Ball):void{
+        if( ((ball.x-ball.radius) <= this.x && ball.vx < 0) || 
+            ((ball.x+ball.radius) >= this.x+this.width && ball.vx > 0)
+            ){
+            ball.collide(-0.8,1);
+        }else if(
+            ((ball.y+ball.radius) >= (this.y+this.height) && ball.vy > 0)
+        ){
+            ball.collide(1, -0.9);
+        }
+    }
 
     //更新球的受力，主要是两个球之间的作用力
     updateForces():void{
@@ -131,7 +153,7 @@ class GameView extends ui.GameViewUI{
     //当触摸开始时调用
     onTouchStart(data:{type:string}):void{
         //增加大球受力
-        let force = Math.random() * 10 + 10;//每单位时间的触摸可以随机生成[10,20]范围内的力
+        let force = Math.random() * 30 + 10;//每单位时间的触摸可以随机生成[10,20]范围内的力
         if(data.type === "left"){
             force = -force;
         }
