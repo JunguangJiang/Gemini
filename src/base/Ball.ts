@@ -37,6 +37,15 @@ class Ball{
     get vx():number{return this._vx;}
     get vy():number{return this._vy;}
 
+    //获取球的加速度
+    get ax():number{return this._ax;}
+    get ay():number{return this._ay;}
+
+    //调试小球信息
+    debug(name:string):void{
+        console.log(name+"\n\tax:"+this.ax+"\tay:"+this.ay+"\n\tvx:"+this.vx+"\tvy:"+this.vy+"\n\tx:"+this.x+"\ty:"+this.y);
+    }
+
     //获取球的半径
     get radius():number{return this._radius;}
 
@@ -62,7 +71,7 @@ class Ball{
         }
     }
 
-    //碰撞会改变小球的速度分量，使原先的<Vx,Vy>变成<-Vx * xRatio, -Vy * yRatio>
+    //碰撞会改变小球的速度分量，使原先的<Vx,Vy>变成<Vx * xRatio, Vy * yRatio>
     collide(xRatio:number, yRatio:number){
         this._vx = this._vx * xRatio;
         this._vy = this._vy * yRatio;
@@ -71,9 +80,11 @@ class Ball{
     //对小球的位置和速度进行更新
     update():void{
         let deltaT: number = this._timer.get()/1000.0;
+        console.log("deltaT="+deltaT);
         this.x = this.x + this._vx * deltaT;
         this.y = this.y + this._vy * deltaT;
         this._vx = this._vx + this._ax * deltaT;
+        console.log("vy="+this._vy);
         this._vy =  this._vy + this._ay * deltaT;
         this._timer.start();
     }

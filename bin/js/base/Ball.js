@@ -36,6 +36,21 @@ var Ball = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(Ball.prototype, "ax", {
+        //获取球的加速度
+        get: function () { return this._ax; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Ball.prototype, "ay", {
+        get: function () { return this._ay; },
+        enumerable: true,
+        configurable: true
+    });
+    //调试小球信息
+    Ball.prototype.debug = function (name) {
+        console.log(name + "\n\tax:" + this.ax + "\tay:" + this.ay + "\n\tvx:" + this.vx + "\tvy:" + this.vy + "\n\tx:" + this.x + "\ty:" + this.y);
+    };
     Object.defineProperty(Ball.prototype, "radius", {
         //获取球的半径
         get: function () { return this._radius; },
@@ -65,7 +80,7 @@ var Ball = /** @class */ (function () {
             this._forces.remove(name);
         }
     };
-    //碰撞会改变小球的速度分量，使原先的<Vx,Vy>变成<-Vx * xRatio, -Vy * yRatio>
+    //碰撞会改变小球的速度分量，使原先的<Vx,Vy>变成<Vx * xRatio, Vy * yRatio>
     Ball.prototype.collide = function (xRatio, yRatio) {
         this._vx = this._vx * xRatio;
         this._vy = this._vy * yRatio;
@@ -73,9 +88,11 @@ var Ball = /** @class */ (function () {
     //对小球的位置和速度进行更新
     Ball.prototype.update = function () {
         var deltaT = this._timer.get() / 1000.0;
+        console.log("deltaT=" + deltaT);
         this.x = this.x + this._vx * deltaT;
         this.y = this.y + this._vy * deltaT;
         this._vx = this._vx + this._ax * deltaT;
+        console.log("vy=" + this._vy);
         this._vy = this._vy + this._ay * deltaT;
         this._timer.start();
     };

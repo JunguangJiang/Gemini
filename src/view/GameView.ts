@@ -1,11 +1,12 @@
 //游戏的一些参数
 namespace Game{
     export const interval:number = 100;//刷新时间(单位：毫秒)
-    export const gravity:number = 10;//重力加速度
+    export const gravity:number = 12;//重力加速度
     export const liftCoefficient:number = 600;//升力系数,升力=liftCoefficient/(球心距离)
     export const dragCoefficient:number = 0.001;//阻力系数，阻力=-dragCoefficient*速度^3
     export const attractionCoefficient:number=8000;//球之间的引力系数
     export const randomForce = 20;//随机力的幅度
+    export const humanForce = 40;//人类施力的幅度
 }
 
 //游戏的主视图
@@ -18,15 +19,16 @@ class GameView extends ui.GameViewUI{
     private _backgroundView: Laya.Image;//背景视图
     
     private _loopCount: number;//记录刷新（循环）总次数
+    private _activityArea:{up:number, down:number};//游戏的最大活动区域
 
     constructor(){
         super();
 
-        this.x = 0;
-        this.y = 0;
+        //游戏的活动区域
+        this._activityArea = {up:this.height-this.backgroundView.height, down:0};
 
         //球的初始化
-        this._bigBall = new Ball(25, 343, 600, this.bigBallView);
+        this._bigBall = new Ball(25, 403, 600, this.bigBallView);
         this._smallBall = new Ball(15, 200, 600, this.smallBallView);
 
         //控制方向的箭头区域的初始化
@@ -69,13 +71,14 @@ class GameView extends ui.GameViewUI{
         this._smallBall.update();//更新小球的位置和速度
         this.updateBackground();//根据当前球的位置更新背景
         this._loopCount++;
+        this._bigBall.debug("大球");
     }
 
     //根据当前球的位置更新背景
     updateBackground():void{
         let y:number = -this._bigBall.y + this.height/2;
-        if(y > 0) y = 0;
-        else if(y<this.height-this.backgroundView.height) y = this.height-this.backgroundView.height;
+        if(y > this._activityArea.down) y = this._activityArea.down;
+        else if(y<this._activityArea.up) y = this._activityArea.up;
         this.runningView.y = y;
     }
 
@@ -87,13 +90,15 @@ class GameView extends ui.GameViewUI{
 
     //球与边缘的相对位置的检测与处理
     detectBorder(ball:Ball):void{
-        if( ((ball.x-ball.radius) <= this.x && ball.vx < 0) || 
-            ((ball.x+ball.radius) >= this.x+this.width && ball.vx > 0)
+        if( ( ((ball.x-ball.radius) <= 0) && ball.vx < 0 ) || 
+            ( ((ball.x+ball.radius) >= this.runningView.width) && ball.vx > 0 )
             ){
+                console.log("碰到水平边缘");
             ball.collide(-0.8,1);
         }else if(
-            ((ball.y+ball.radius) >= (this.y+this.height) && ball.vy > 0)
+            (((ball.y+ball.radius) >= this.runningView.height) && ball.vy > 0)
         ){
+            console.log("碰到垂直边缘");
             ball.collide(1, -0.9);
         }
     }
@@ -124,15 +129,17 @@ class GameView extends ui.GameViewUI{
             -smallVSquare * this._smallBall.vy * Game.dragCoefficient, 
             "drag");
 
-        //处理两个小球之间的引力
+        //处理两个小球之间的引力(认为水平方向无引力)
         let attraction:number = Game.attractionCoefficient / (Math.pow(effectiveDistance, 3));
         this._bigBall.setForce(
-            (this._smallBall.x-this._bigBall.x)*attraction,
+            0,
+            // (this._smallBall.x-this._bigBall.x)*attraction,
             (this._smallBall.y-this._bigBall.y)*attraction,
             "attraction"
         )
         this._smallBall.setForce(
-            (this._bigBall.x-this._smallBall.x)*attraction,
+            0,
+            // (this._bigBall.x-this._smallBall.x)*attraction,
             (this._bigBall.y-this._smallBall.y)*attraction,
             "attraction"
         )
@@ -153,7 +160,7 @@ class GameView extends ui.GameViewUI{
     //当触摸开始时调用
     onTouchStart(data:{type:string}):void{
         //增加大球受力
-        let force = Math.random() * 30 + 10;//每单位时间的触摸可以随机生成[10,20]范围内的力
+        let force = Math.random() * Game.humanForce;//每单位时间的触摸可以随机生成[10,20]范围内的力
         if(data.type === "left"){
             force = -force;
         }
