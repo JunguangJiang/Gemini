@@ -9,7 +9,7 @@ var Ball = /** @class */ (function () {
         this.x = x;
         this.y = y; //设置小球的位置
         //绘制动画并加入背景中
-        this.drawBall();
+        this.drawNormalBall();
     }
     Object.defineProperty(Ball.prototype, "x", {
         //获取球的当前位置（球心）
@@ -88,16 +88,14 @@ var Ball = /** @class */ (function () {
     //对小球的位置和速度进行更新
     Ball.prototype.update = function () {
         var deltaT = this._timer.get() / 1000.0;
-        console.log("deltaT=" + deltaT);
         this.x = this.x + this._vx * deltaT;
         this.y = this.y + this._vy * deltaT;
         this._vx = this._vx + this._ax * deltaT;
-        console.log("vy=" + this._vy);
         this._vy = this._vy + this._ay * deltaT;
         this._timer.start();
     };
     //进行小球动画的加载和绘制
-    Ball.prototype.drawBall = function () {
+    Ball.prototype.drawNormalBall = function () {
         this._animation.loadAnimation("GameAnimation/Ball.ani");
         this._animation.scaleX = this._radius * 2 / 120;
         this._animation.scaleY = this._radius * 2 / 120;

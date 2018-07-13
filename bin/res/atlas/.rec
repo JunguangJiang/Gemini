@@ -35,7 +35,7 @@ P 7E990267 vscroll.png
 P E466EB1C vslider$bar.png
 P 2BFF7046 vslider.png
 D ui
-R 9FF0ACA6 .DS_Store
+R 1296F392 .DS_Store
 D ui/arrow
 R 6D88006A .DS_Store
 P F8355C0F left.png
@@ -83,6 +83,8 @@ P 831D299F 6.png
 P A6007A08 7.png
 P E66F4719 8.png
 P 91CAA9D2 9.png
+D ui/score
+P 60053BEA clip_number.png
 D ui/star
 P 24190EA6 1.png
 P DA9AD77D 10.png

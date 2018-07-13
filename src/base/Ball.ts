@@ -81,11 +81,9 @@ class Ball{
     //对小球的位置和速度进行更新
     update():void{
         let deltaT: number = this._timer.get()/1000.0;
-        console.log("deltaT="+deltaT);
         this.x = this.x + this._vx * deltaT;
         this.y = this.y + this._vy * deltaT;
         this._vx = this._vx + this._ax * deltaT;
-        console.log("vy="+this._vy);
         this._vy =  this._vy + this._ay * deltaT;
         this._timer.start();
     }
