@@ -23,7 +23,8 @@ class Ball{
         this.x = x; this.y = y; //设置小球的位置
 
         //绘制动画并加入背景中
-        this.drawNormalBall();       
+        this.drawNormalBall();
+        this.drawShinyBall();       
     }
 
     //设置球的当前位置(球心)
@@ -91,9 +92,16 @@ class Ball{
     //进行小球动画的加载和绘制
     public drawNormalBall()
     {
+        this._animation.clear();
         this._animation.loadAnimation("GameAnimation/Ball.ani");
         this._animation.scaleX=this._radius*2/120;
         this._animation.scaleY=this._radius*2/120;
         this._animation.play();
     }
+
+    //触摸时大球发光
+    public drawShinyBall()
+    {
+        //发光滤镜实现
+    }    
 }

@@ -11,7 +11,7 @@ class Barrier{
     private _stoneHeight:number;//陨石高度  
 
 
-    constructor(backgroundImage:Laya.Image,blackHolesNum:number=5,stonesNum:number=5,blackHoleWidth:number=100,blackHoleHeight:number=100,stoneWidth:number=50,stoneHeight:number=100)
+    constructor(backgroundImage:Laya.Image,blackHolesNum:number=5,stonesNum:number=15,blackHoleWidth:number=100,blackHoleHeight:number=100,stoneWidth:number=50,stoneHeight:number=100)
     {
         this.blackHoles=[];
         this.stones=[];
@@ -43,7 +43,7 @@ class Barrier{
             blackhole.height=this._blackHoleHeight;
 
             blackhole.x=Math.min(backgroundImage.width-this._blackHoleWidth,Math.random()*backgroundImage.width);
-            blackhole.y=(i+Math.random())*blackHoleDistance;//在y方向基本承均匀分布
+            blackhole.y=Math.min((i+Math.random())*blackHoleDistance,backgroundImage.height-this._blackHoleHeight-100);//在y方向基本承均匀分布
 
             this.blackHoles.push(blackhole);
             backgroundImage.addChild(blackhole);
@@ -70,7 +70,7 @@ class Barrier{
             while(true)
             {
                 x=Math.min(backgroundImage.width-this._stoneWidth,Math.random()*backgroundImage.width);
-                y=(i+Math.random())*stoneDistance;
+                y=Math.min((i+Math.random())*stoneDistance,backgroundImage.height-this._stoneHeight-100);
                 overlap=0;
 
                 this.blackHoles.forEach(element => {
