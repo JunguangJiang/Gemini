@@ -122,8 +122,7 @@ class GameView extends ui.GameViewUI{
     detectCollisions(ball:Ball):void{
         //分析当前球和其他物体的位置关系，并作出相应的处理
 
-        let ballRec=new Laya.Rectangle(ball.x,ball.y,ball.radius*2,ball.radius*2);
-        // console.log(ball.vx,ball.vy);
+        let ballRec=new Laya.Rectangle(ball.x-ball.radius,ball.y-ball.radius,ball.radius*2,ball.radius*2);
    
         //判断球是否进入黑洞
         let inBlackhole:boolean=false;
@@ -143,15 +142,15 @@ class GameView extends ui.GameViewUI{
 
         //判断是否与障碍物碰撞反弹(先判断上下方向再判断左右方向)
         this._barrier.stones.forEach(element => {
-            // console.log(`(${element.width},${element.height})`);
-            if((ballRec.x>=element.x-ballRec.width)&&
-                (ballRec.right<=element.x+element.width+ballRec.width)&&
-                (ballRec.bottom>=element.y)&&
-                (ballRec.y<element.y)&&
+            let elementRec=element.getBounds();
+            //elementRec=elementRec.setTo(elementRec.x+elementRec.width/10,elementRec.y+elementRec.height/10,elementRec.width*4/5,elementRec.height*4/5);
+            if((ballRec.x>=elementRec.x-ballRec.width)&&
+                (ballRec.right<=elementRec.right+ballRec.width)&&
+                (ballRec.bottom>=elementRec.y)&&
+                (ballRec.y<elementRec.y)&&
                 (ball.vy>0))//向上反弹
                 {
-                    ball.collide(1, -10/ball.vy);
-                    // console.log(`1:${ball.vx},${ball.vy}`);
+                    ball.collide(1, -100/ball.vy);
                     this._scoreIndicator.getPenalty(2);
                     if(this._scoreIndicator.data<=0)
                     {
@@ -159,14 +158,13 @@ class GameView extends ui.GameViewUI{
                         return;
                     }
                 }
-            else if((ballRec.x>=element.x-ballRec.width)&&
-                (ballRec.right<=element.x+element.width+ballRec.width)&&
-                (ballRec.y<=element.y+element.height)&&
-                (ballRec.bottom>element.y+element.height)&&
+            else if((ballRec.x>=elementRec.x-ballRec.width)&&
+                (ballRec.right<=elementRec.right+ballRec.width)&&
+                (ballRec.y<=elementRec.bottom)&&
+                (ballRec.bottom>elementRec.bottom)&&
                 (ball.vy<0))//向下反弹
                 {
-                    ball.collide(1, 10/ball.vy);
-                                        // console.log(`2:${ball.vx},${ball.vy}`);
+                    ball.collide(1, 100/ball.vy);
                     this._scoreIndicator.getPenalty(2);
                     if(this._scoreIndicator.data<=0)
                     {
@@ -174,14 +172,13 @@ class GameView extends ui.GameViewUI{
                         return;
                     }
                 }
-            else if((ballRec.y>=element.y-ballRec.height)&&
-                (ballRec.bottom<=element.y+element.height+ballRec.height)&&
-                (ballRec.right>=element.x)&&
-                (ballRec.x<element.x)&&
+            else if((ballRec.y>=elementRec.y-ballRec.height)&&
+                (ballRec.bottom<=elementRec.bottom+ballRec.height)&&
+                (ballRec.right>=elementRec.x)&&
+                (ballRec.x<elementRec.x)&&
                 (ball.vx>0))//向左反弹
                 {
-                    ball.collide(-10/ball.vx,1);
-                                        // console.log(`3:${ball.vx},${ball.vy}`);
+                    ball.collide(-100/ball.vx,1);
                     this._scoreIndicator.getPenalty(2);
                     if(this._scoreIndicator.data<=0)
                     {
@@ -189,14 +186,13 @@ class GameView extends ui.GameViewUI{
                         return;
                     }
                 }
-            else if((ballRec.y>=element.y-ballRec.height)&&
-                (ballRec.bottom<=element.y+element.height+ballRec.height)&&
-                (ballRec.x<=element.x+element.width)&&
-                (ballRec.right>element.x+element.width)&&
+            else if((ballRec.y>=elementRec.y-ballRec.height)&&
+                (ballRec.bottom<=elementRec.bottom+ballRec.height)&&
+                (ballRec.x<=elementRec.right)&&
+                (ballRec.right>elementRec.right)&&
                 (ball.vx<0))//向右反弹
                 {
-                    ball.collide(10/ball.vx,1);
-                                        // console.log(`4:${ball.vx},${ball.vy}`);
+                    ball.collide(100/ball.vx,1);
                     this._scoreIndicator.getPenalty(2);
                     if(this._scoreIndicator.data<=0)
                     {
