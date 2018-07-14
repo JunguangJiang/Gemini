@@ -1,15 +1,16 @@
 //游戏的一些参数
 namespace Game{
+    export const debug: boolean = true;
     export const interval:number = 100;//刷新时间(单位：毫秒)
 
     export const gravity:number = 12;//重力加速度
-    export const liftCoefficient:number = 600;//升力系数,升力=liftCoefficient/(球心距离)
+    export const liftCoefficient:number = debug?1600:600;//升力系数,升力=liftCoefficient/(球心距离)
     export const dragCoefficient:number = 0.001;//阻力系数，阻力=-dragCoefficient*速度^3
     export let attractionCoefficient:number=8000;//球之间的引力系数
-    export let randomForce = 15;//随机力的幅度
+    export let randomForce = 10;//随机力的幅度
     export const humanForce = 40;//人类施力的幅度
-    export let smallBallRandomForcePeriod = 400;//小球受到随机力的周期
-    export let bigBallRandomForcePeriod = 1000;//大球受到随机力的周期
+    export let smallBallRandomForcePeriod = 100;//小球受到随机力的周期
+    export let bigBallRandomForcePeriod = 500;//大球受到随机力的周期
 
     export const initialY = 2600;//小球的初始高度
 }
@@ -58,29 +59,39 @@ class GameView extends ui.GameViewUI{
         //计分器的初始化
         this._scoreIndicator = new ScoreIndicator(this.scoreView, 3, this.runningView.height, 0);
 
+        //等级显示
+        this.levelView.visible = true;
+
         //音乐播放器
         this._musicManager = new MusicManager();
         this._musicManager.onPlayMusic(1);//播放等级1的音乐
+        // this.increaseDifficulty();
+
     }
 
     //进入新的一级
     enterNewLevel():void{
         this._level++;
-        this.levelView.text = "Level "+this._level;
-        console.info("进入new level "+this._level);
-        this._bigBall.y = this._smallBall.y = Game.initialY;//让大球和小球都回到起点
+        this.levelView.text = "level "+ this._level;
+
+        this.increaseDifficulty();//增加游戏难度
         
-        this._barrier.updateBarrier(this._backgroundView);//清除原先的障碍物
-        this._barrier.drawBarriers();//绘制新的障碍物
+        this._scoreIndicator.clearHeight();//计分器维护的高度归零
+
+        this._bigBall.y = this._smallBall.y = Game.initialY;//让大球和小球都回到起点
+        this._bigBall.stop(); 
+        this._smallBall.stop();
+
+        this._barrier.updateBarrier(this.backgroundView);//清除原先的障碍物
+        this._barrier.drawBarriers(); //绘制新的障碍物
         
         this._musicManager.onPlayMusic(this._level);//绘制新的音乐
     }
 
     //增加游戏难度
     increaseDifficulty():void{
-        console.log("增加游戏难度");
-        Game.randomForce = Game.randomForce * 1.1;//增加随机受力幅度
-        //增加游戏的障碍物
+        Game.randomForce = Game.randomForce * 1.1;
+        //增加障碍物的数量
     }
 
     //游戏开始
@@ -275,13 +286,15 @@ class GameView extends ui.GameViewUI{
             "attraction"
         )
 
-        // //随机受力
-        // if(this._loopCount % Game.smallBallRandomForcePeriod === 0){
-        //     this.setRandomForce(this._smallBall);
-        // }
-        // if(this._loopCount % Game.bigBallRandomForcePeriod === 0){
-        //     this.setRandomForce(this._bigBall);
-        // }
+        //随机受力
+        if(!Game.debug){
+            if(this._loopCount % Game.smallBallRandomForcePeriod === 0){
+                this.setRandomForce(this._smallBall);
+            }
+            if(this._loopCount % Game.bigBallRandomForcePeriod === 0){
+                this.setRandomForce(this._bigBall);
+            }   
+        }
     }
 
     //让球受到随机力

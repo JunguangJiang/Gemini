@@ -17,7 +17,7 @@ class Ball{
     constructor(radius: number, x:number, y:number,ballView:Laya.Animation){
         this._animation=ballView;
         this._radius = radius;
-        this._vx = this._vy = this._ax = this._ay = 0;
+        this.stop();
         this._timer = new Timer();
         this._forces = new Laya.Dictionary();//记录所有的受力
         this.x = x; this.y = y; //设置小球的位置
@@ -25,6 +25,11 @@ class Ball{
         //绘制动画并加入背景中
         this.drawNormalBall();
         this.drawShinyBall();       
+    }
+
+    //使小球静止
+    stop():void{
+        this._vx = this._vy = this._ax = this._ay = 0;
     }
 
     //设置球的当前位置(球心)
@@ -92,7 +97,7 @@ class Ball{
     //进行小球动画的加载和绘制
     public drawNormalBall()
     {
-        this._animation.clear();
+        // this._animation.clear();
         this._animation.loadAnimation("GameAnimation/Ball.ani");
         this._animation.scaleX=this._radius*2/120;
         this._animation.scaleY=this._radius*2/120;

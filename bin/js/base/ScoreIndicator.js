@@ -14,6 +14,10 @@ var ScoreIndicator = /** @class */ (function () {
         this._rewardNum = 0;
         this.updateUI();
     }
+    //清空此前的高度
+    ScoreIndicator.prototype.clearHeight = function () {
+        this._rewardNum = 0;
+    };
     //根据高度的变化记录奖励
     ScoreIndicator.prototype.updateHeight = function (height) {
         // console.log("height="+height);
@@ -24,6 +28,11 @@ var ScoreIndicator = /** @class */ (function () {
             this._rewardNum = newRewardNum;
             this.updateUI();
         }
+    };
+    //接受奖励
+    ScoreIndicator.prototype.getReward = function (reward) {
+        this._data += reward;
+        this.updateUI();
     };
     //接受惩罚
     ScoreIndicator.prototype.getPenalty = function (penalty) {

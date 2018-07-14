@@ -3,7 +3,7 @@ var Ball = /** @class */ (function () {
     function Ball(radius, x, y, ballView) {
         this._animation = ballView;
         this._radius = radius;
-        this._vx = this._vy = this._ax = this._ay = 0;
+        this.stop();
         this._timer = new Timer();
         this._forces = new Laya.Dictionary(); //记录所有的受力
         this.x = x;
@@ -12,6 +12,10 @@ var Ball = /** @class */ (function () {
         this.drawNormalBall();
         this.drawShinyBall();
     }
+    //使小球静止
+    Ball.prototype.stop = function () {
+        this._vx = this._vy = this._ax = this._ay = 0;
+    };
     Object.defineProperty(Ball.prototype, "x", {
         //获取球的当前位置（球心）
         get: function () { return this._animation.x + this.radius; },
@@ -97,7 +101,7 @@ var Ball = /** @class */ (function () {
     };
     //进行小球动画的加载和绘制
     Ball.prototype.drawNormalBall = function () {
-        this._animation.clear();
+        // this._animation.clear();
         this._animation.loadAnimation("GameAnimation/Ball.ani");
         this._animation.scaleX = this._radius * 2 / 120;
         this._animation.scaleY = this._radius * 2 / 120;
