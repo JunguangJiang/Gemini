@@ -23,12 +23,17 @@ var Barrier = /** @class */ (function () {
         //初始化
         this.blackHoles.slice(0);
         this.stones.slice(0);
+        while (backgroundImage.removeChildByName("blackhole"))
+            ;
+        while (backgroundImage.removeChildByName("stone"))
+            ;
         //黑洞的位置
         var blackHoleDistance = backgroundImage.height / this._blackHolesNum;
         for (var i = 0; i < this._blackHolesNum; i++) {
             var blackhole = new Laya.Animation();
             blackhole.width = this._blackHoleWidth;
             blackhole.height = this._blackHoleHeight;
+            blackhole.name = "blackhole";
             blackhole.x = Math.min(backgroundImage.width - this._blackHoleWidth, Math.random() * backgroundImage.width);
             blackhole.y = Math.min((i + Math.random()) * blackHoleDistance, backgroundImage.height - this._blackHoleHeight - 100); //在y方向基本承均匀分布
             this.blackHoles.push(blackhole);
@@ -40,6 +45,7 @@ var Barrier = /** @class */ (function () {
             var stone = new Laya.Image();
             stone.width = this_1._stoneWidth;
             stone.height = this_1._stoneHeight;
+            stone.name = "stone";
             //随机生成坐标并检测是否会与黑洞重叠
             var overlap, x, y, testRec; //用于测试的矩形范围
             testRec = new Laya.Sprite();
@@ -80,7 +86,9 @@ var Barrier = /** @class */ (function () {
             element.play();
         });
         this.stones.forEach(function (element) {
-            element.loadImage("res/atlas/ui/stone.png", null, null, element.width, element.height);
+            element.loadImage("res/atlas/ui/stone.png");
+            element.scaleX = _this._stoneWidth / 108;
+            element.scaleY = _this._stoneHeight / 191;
         });
     };
     return Barrier;

@@ -34,6 +34,9 @@ class Barrier{
         this.blackHoles.slice(0);
         this.stones.slice(0);
 
+        while(backgroundImage.removeChildByName("blackhole"));
+        while(backgroundImage.removeChildByName("stone"));
+
         //黑洞的位置
         const blackHoleDistance:number=backgroundImage.height/this._blackHolesNum;
         for(let i=0;i<this._blackHolesNum;i++)
@@ -41,6 +44,7 @@ class Barrier{
             const blackhole:Laya.Animation=new Laya.Animation();
             blackhole.width=this._blackHoleWidth;
             blackhole.height=this._blackHoleHeight;
+            blackhole.name="blackhole";
 
             blackhole.x=Math.min(backgroundImage.width-this._blackHoleWidth,Math.random()*backgroundImage.width);
             blackhole.y=Math.min((i+Math.random())*blackHoleDistance,backgroundImage.height-this._blackHoleHeight-100);//在y方向基本承均匀分布
@@ -56,6 +60,7 @@ class Barrier{
             const stone:Laya.Image=new Laya.Image();
             stone.width=this._stoneWidth;
             stone.height=this._stoneHeight;
+            stone.name="stone";
 
             //随机生成坐标并检测是否会与黑洞重叠
             let overlap:number,
@@ -109,7 +114,9 @@ class Barrier{
         });
 
         this.stones.forEach(element => {
-            element.loadImage("res/atlas/ui/stone.png",null,null,element.width,element.height);
+            element.loadImage("res/atlas/ui/stone.png");
+            element.scaleX=this._stoneWidth/108;
+            element.scaleY=this._stoneHeight/191;
         });
     }
 }
