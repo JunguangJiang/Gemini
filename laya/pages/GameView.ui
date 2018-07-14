@@ -38,7 +38,7 @@
                     "child":[
                         ],
                     "$LOCKED":false,
-                    "$HIDDEN":true
+                    "$HIDDEN":false
                 },
                 {
                     "x":30,
