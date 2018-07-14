@@ -97,15 +97,17 @@ var GameView = /** @class */ (function (_super) {
         //判断是否与障碍物碰撞反弹(先判断上下方向再判断左右方向)
         this._barrier.stones.forEach(function (element) {
             var elementRec = element.getBounds();
-            //elementRec=elementRec.setTo(elementRec.x+elementRec.width/10,elementRec.y+elementRec.height/10,elementRec.width*4/5,elementRec.height*4/5);
+            elementRec = elementRec.setTo(elementRec.x + elementRec.width / 10, elementRec.y + elementRec.height / 10, elementRec.width * 4 / 5, elementRec.height * 4 / 5);
             if ((ballRec.x >= elementRec.x - ballRec.width) &&
                 (ballRec.right <= elementRec.right + ballRec.width) &&
                 (ballRec.bottom >= elementRec.y) &&
                 (ballRec.y < elementRec.y) &&
                 (ball.vy > 0)) //向上反弹
              {
-                ball.collide(1, -100 / ball.vy);
+                ball.collide(1, -1);
                 _this._scoreIndicator.getPenalty(2);
+                _this.backgroundView.removeChild(element);
+                _this._barrier.stones.splice(_this._barrier.stones.indexOf(element), 1);
                 if (_this._scoreIndicator.data <= 0) {
                     _this.gameEnd();
                     return;
@@ -117,8 +119,10 @@ var GameView = /** @class */ (function (_super) {
                 (ballRec.bottom > elementRec.bottom) &&
                 (ball.vy < 0)) //向下反弹
              {
-                ball.collide(1, 100 / ball.vy);
+                ball.collide(1, -1);
                 _this._scoreIndicator.getPenalty(2);
+                _this.backgroundView.removeChild(element);
+                _this._barrier.stones.splice(_this._barrier.stones.indexOf(element), 1);
                 if (_this._scoreIndicator.data <= 0) {
                     _this.gameEnd();
                     return;
@@ -130,8 +134,10 @@ var GameView = /** @class */ (function (_super) {
                 (ballRec.x < elementRec.x) &&
                 (ball.vx > 0)) //向左反弹
              {
-                ball.collide(-100 / ball.vx, 1);
+                ball.collide(-1, 1);
                 _this._scoreIndicator.getPenalty(2);
+                _this.backgroundView.removeChild(element);
+                _this._barrier.stones.splice(_this._barrier.stones.indexOf(element), 1);
                 if (_this._scoreIndicator.data <= 0) {
                     _this.gameEnd();
                     return;
@@ -143,8 +149,10 @@ var GameView = /** @class */ (function (_super) {
                 (ballRec.right > elementRec.right) &&
                 (ball.vx < 0)) //向右反弹
              {
-                ball.collide(100 / ball.vx, 1);
+                ball.collide(-1, 1);
                 _this._scoreIndicator.getPenalty(2);
+                _this.backgroundView.removeChild(element);
+                _this._barrier.stones.splice(_this._barrier.stones.indexOf(element), 1);
                 if (_this._scoreIndicator.data <= 0) {
                     _this.gameEnd();
                     return;
