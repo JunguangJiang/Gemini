@@ -11,7 +11,7 @@ var __extends = (this && this.__extends) || (function () {
 //游戏的一些参数
 var Game;
 (function (Game) {
-    Game.debug = true; //是否处于调试模式
+    Game.debug = false; //是否处于调试模式
     Game.playerNum = 2; //玩家数目，可以取1或者2
     Game.interval = 100; //刷新时间(单位：毫秒)
     Game.gravity = 12; //重力加速度
@@ -23,6 +23,7 @@ var Game;
     Game.smallBallRandomForcePeriod = 100; //小球受到随机力的周期
     Game.bigBallRandomForcePeriod = 500; //大球受到随机力的周期
     Game.initialY = 2600; //小球的初始高度
+    Game.serverResURL = "http://jjg15.iterator-traits.com/res"; //服务器资源路径
 })(Game || (Game = {}));
 //游戏的主视图
 var GameView = /** @class */ (function (_super) {

@@ -1,6 +1,6 @@
 //游戏的一些参数
 namespace Game{
-    export const debug: boolean = true;//是否处于调试模式
+    export const debug: boolean = false;//是否处于调试模式
     export let playerNum: number = 2;//玩家数目，可以取1或者2
     export const interval:number = 100;//刷新时间(单位：毫秒)
 
@@ -14,6 +14,8 @@ namespace Game{
     export let bigBallRandomForcePeriod = 500;//大球受到随机力的周期
 
     export const initialY = 2600;//小球的初始高度
+
+    export const serverResURL = "http://jjg15.iterator-traits.com/res";//服务器资源路径
 }
 
 //游戏的主视图

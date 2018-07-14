@@ -107,7 +107,7 @@ class Barrier{
     public drawBarriers():void
     {
         this.blackHoles.forEach(element => {
-            element.loadAnimation("GameAnimation/BlackHole.ani");
+            element.loadAnimation(Game.serverResURL+"/GameAnimation/BlackHole.ani");
             element.scaleX=this._blackHoleWidth/100;
             element.scaleY=this._blackHoleHeight/100;
             element.play();
