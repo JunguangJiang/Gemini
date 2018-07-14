@@ -1,6 +1,7 @@
 //游戏的一些参数
 namespace Game{
-    export const debug: boolean = true;
+    export const debug: boolean = true;//是否处于调试模式
+    export const playerNum: number = 1;//玩家数目，可以取1或者2
     export const interval:number = 100;//刷新时间(单位：毫秒)
 
     export const gravity:number = 12;//重力加速度
@@ -65,8 +66,6 @@ class GameView extends ui.GameViewUI{
         //音乐播放器
         this._musicManager = new MusicManager();
         this._musicManager.onPlayMusic(1);//播放等级1的音乐
-        // this.increaseDifficulty();
-
     }
 
     //进入新的一级
@@ -85,6 +84,7 @@ class GameView extends ui.GameViewUI{
         this._barrier.updateBarrier(this.backgroundView);//清除原先的障碍物
         this._barrier.drawBarriers(); //绘制新的障碍物
         
+        this._musicManager.onPlaySound(Game.NewLevelSound);//播放过关音乐
         this._musicManager.onPlayMusic(this._level);//绘制新的音乐
     }
 
@@ -109,6 +109,7 @@ class GameView extends ui.GameViewUI{
         console.log("游戏结束");
         console.log("你的总分为"+this._scoreIndicator.data);
         Laya.timer.clear(this, this.onLoop);
+        this._musicManager.onPlaySound(Game.GameOverSound);
     }
 
     //需要每隔单位时间进行一次调用的函数请写入以下函数体
@@ -233,7 +234,7 @@ class GameView extends ui.GameViewUI{
             ( ((ball.x+ball.radius) >= this.runningView.width) && ball.vx > 0 )
             ){
                 // console.log("碰到水平边缘");
-                this._musicManager.onPlaySound(Game.BlackHoleCollisionSound);//播放和石头碰撞的声音，仅用于调试
+                this._musicManager.onPlaySound(Game.RewardSound);//播放和石头碰撞的声音，仅用于调试
             ball.collide(-0.8,1);
         }else if(
             (((ball.y+ball.radius) >= this.runningView.height) && ball.vy > 0)
@@ -321,7 +322,6 @@ class GameView extends ui.GameViewUI{
             force = -force;
         }
         this._bigBall.setForce(force, 0, "humanControl");
-        
     }
 
     onTouchEnd(data:{type:string}):void{

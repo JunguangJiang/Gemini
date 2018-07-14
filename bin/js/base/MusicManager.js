@@ -1,11 +1,14 @@
 //全局的音乐管理器
 var Game;
 (function (Game) {
-    Game.BlackHoleCollisionSound = "http://fjdx.sc.chinaz.com/files/download/sound/huang/cd9/wav/607.wav";
-    Game.StoneCollisionSound = "http://fjdx.sc.chinaz.com/files/download/sound1/201208/1939.wav";
-    //背景音乐暂时使用本地的文件，等服务器开始运行后，将其移到服务器上
+    Game.SoundURLPrefix = "http://jjg15.iterator-traits.com/res/music/"; //声音资源前缀
+    Game.BlackHoleCollisionSound = Game.SoundURLPrefix + "BlackHoleCollisionSound.wav";
+    Game.StoneCollisionSound = Game.SoundURLPrefix + "StoneCollisionSound.wav";
+    Game.NewLevelSound = Game.SoundURLPrefix + "NewLevelSound.wav";
+    Game.RewardSound = Game.SoundURLPrefix + "RewardSound.wav";
+    //背景音乐
     Game.BackgroundMusic = [
-        "ui/music/level1.wav"
+        "http://jjg15.iterator-traits.com/res/music/level1.wav"
     ];
 })(Game || (Game = {}));
 var MusicManager = /** @class */ (function () {

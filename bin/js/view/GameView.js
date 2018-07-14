@@ -11,7 +11,8 @@ var __extends = (this && this.__extends) || (function () {
 //游戏的一些参数
 var Game;
 (function (Game) {
-    Game.debug = true;
+    Game.debug = true; //是否处于调试模式
+    Game.playerNum = 1; //玩家数目，可以取1或者2
     Game.interval = 100; //刷新时间(单位：毫秒)
     Game.gravity = 12; //重力加速度
     Game.liftCoefficient = Game.debug ? 1600 : 600; //升力系数,升力=liftCoefficient/(球心距离)
@@ -48,7 +49,6 @@ var GameView = /** @class */ (function (_super) {
         _this._musicManager = new MusicManager();
         _this._musicManager.onPlayMusic(1); //播放等级1的音乐
         return _this;
-        // this.increaseDifficulty();
     }
     //进入新的一级
     GameView.prototype.enterNewLevel = function () {
@@ -61,6 +61,7 @@ var GameView = /** @class */ (function (_super) {
         this._smallBall.stop();
         this._barrier.updateBarrier(this.backgroundView); //清除原先的障碍物
         this._barrier.drawBarriers(); //绘制新的障碍物
+        this._musicManager.onPlaySound(Game.NewLevelSound); //播放过关音乐
         this._musicManager.onPlayMusic(this._level); //绘制新的音乐
     };
     //增加游戏难度
@@ -81,6 +82,7 @@ var GameView = /** @class */ (function (_super) {
         console.log("游戏结束");
         console.log("你的总分为" + this._scoreIndicator.data);
         Laya.timer.clear(this, this.onLoop);
+        this._musicManager.onPlaySound(Game.GameOverSound);
     };
     //需要每隔单位时间进行一次调用的函数请写入以下函数体
     GameView.prototype.onLoop = function () {
@@ -192,7 +194,7 @@ var GameView = /** @class */ (function (_super) {
         if ((((ball.x - ball.radius) <= 0) && ball.vx < 0) ||
             (((ball.x + ball.radius) >= this.runningView.width) && ball.vx > 0)) {
             // console.log("碰到水平边缘");
-            this._musicManager.onPlaySound(Game.BlackHoleCollisionSound); //播放和石头碰撞的声音，仅用于调试
+            this._musicManager.onPlaySound(Game.RewardSound); //播放和石头碰撞的声音，仅用于调试
             ball.collide(-0.8, 1);
         }
         else if ((((ball.y + ball.radius) >= this.runningView.height) && ball.vy > 0)) {

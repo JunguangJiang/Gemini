@@ -1,10 +1,13 @@
 //全局的音乐管理器
 namespace Game{
-    export const BlackHoleCollisionSound: string = "http://fjdx.sc.chinaz.com/files/download/sound/huang/cd9/wav/607.wav";
-    export const StoneCollisionSound: string = "http://fjdx.sc.chinaz.com/files/download/sound1/201208/1939.wav";
-    //背景音乐暂时使用本地的文件，等服务器开始运行后，将其移到服务器上
+    export const SoundURLPrefix: string = "http://jjg15.iterator-traits.com/res/music/" //声音资源前缀
+    export const BlackHoleCollisionSound: string = SoundURLPrefix + "BlackHoleCollisionSound.wav";
+    export const StoneCollisionSound: string = SoundURLPrefix+"StoneCollisionSound.wav";
+    export const NewLevelSound: string = SoundURLPrefix+"NewLevelSound.wav"
+    export const RewardSound: string = SoundURLPrefix+"RewardSound.wav";
+    //背景音乐
     export const BackgroundMusic : Array<string> = [
-        "ui/music/level1.wav"
+        "http://jjg15.iterator-traits.com/res/music/level1.wav"
     ];
 }
 

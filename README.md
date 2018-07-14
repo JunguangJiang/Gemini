@@ -93,6 +93,8 @@
 + `data`:获取当前的分数
 **public method**
 + `updateHeight(height:number)`:根据高度的变化记录奖励
++ `clearHeight()`:清空此前记录的高度
++ `gerReward(reward: number)`:接受奖励
 + `getPenalty(penalty: number)`:接受惩罚
 
 ### MusicManager(音乐管理器)
