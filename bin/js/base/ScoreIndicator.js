@@ -16,9 +16,9 @@ var ScoreIndicator = /** @class */ (function () {
     }
     //根据高度的变化记录奖励
     ScoreIndicator.prototype.updateHeight = function (height) {
-        console.log("height=" + height);
+        // console.log("height="+height);
         var newRewardNum = Math.floor(height / this._totalHeight * Game.heightDivision);
-        console.log("newRewardNum=" + newRewardNum);
+        // console.log("newRewardNum="+newRewardNum);
         if (newRewardNum > this._rewardNum) {
             this._data += Game.rewardPerUnitHeight * (newRewardNum - this._rewardNum);
             this._rewardNum = newRewardNum;
@@ -46,7 +46,7 @@ var ScoreIndicator = /** @class */ (function () {
             temp /= 10;
         }
         this._box.dataSource = data;
-        console.log("当前分数为" + this._data);
+        // console.log("当前分数为"+this._data);
     };
     return ScoreIndicator;
 }());

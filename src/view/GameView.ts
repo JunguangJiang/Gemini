@@ -22,6 +22,8 @@ class GameView extends ui.GameViewUI{
     private _loopCount: number;//记录刷新（循环）总次数
     private _activityArea:{up:number, down:number};//游戏的最大活动区域
 
+    private _musicManager: MusicManager;//音乐管理器
+
     constructor(){
         super();
 
@@ -47,6 +49,10 @@ class GameView extends ui.GameViewUI{
 
         //计分器的初始化
         this._scoreIndicator = new ScoreIndicator(this.scoreView, 3, this.runningView.height, 0);
+
+        //音乐播放器
+        this._musicManager = new MusicManager();
+        this._musicManager.onPlayMusic(1);//播放等级1的音乐
     }
 
     //游戏开始
@@ -179,6 +185,7 @@ class GameView extends ui.GameViewUI{
             ( ((ball.x+ball.radius) >= this.runningView.width) && ball.vx > 0 )
             ){
                 // console.log("碰到水平边缘");
+                this._musicManager.onPlaySound(Game.BlackHoleCollisionSound);//播放和石头碰撞的声音，仅用于调试
             ball.collide(-0.8,1);
         }else if(
             (((ball.y+ball.radius) >= this.runningView.height) && ball.vy > 0)
@@ -243,7 +250,7 @@ class GameView extends ui.GameViewUI{
     //当触摸开始时调用
     onTouchStart(data:{type:string}):void{
         //增加大球受力
-        let force = Math.random() * Game.humanForce;//每单位时间的触摸可以随机生成[10,20]范围内的力
+        let force = Math.random() * Game.humanForce;
         if(data.type === "left"){
             force = -force;
         }

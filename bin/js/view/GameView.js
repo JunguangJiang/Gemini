@@ -37,6 +37,9 @@ var GameView = /** @class */ (function (_super) {
         _this._barrier.drawBarriers();
         //计分器的初始化
         _this._scoreIndicator = new ScoreIndicator(_this.scoreView, 3, _this.runningView.height, 0);
+        //音乐播放器
+        _this._musicManager = new MusicManager();
+        _this._musicManager.onPlayMusic(1); //播放等级1的音乐
         return _this;
     }
     //游戏开始
@@ -51,8 +54,6 @@ var GameView = /** @class */ (function (_super) {
     GameView.prototype.gameEnd = function () {
         console.log("游戏结束");
         Laya.timer.clear(this, this.onLoop);
-        this._barrier.updateBarrier(this.backgroundView);
-        this._barrier.drawBarriers();
     };
     //需要每隔单位时间进行一次调用的函数请写入以下函数体
     GameView.prototype.onLoop = function () {
@@ -156,6 +157,7 @@ var GameView = /** @class */ (function (_super) {
         if ((((ball.x - ball.radius) <= 0) && ball.vx < 0) ||
             (((ball.x + ball.radius) >= this.runningView.width) && ball.vx > 0)) {
             // console.log("碰到水平边缘");
+            this._musicManager.onPlaySound(Game.BlackHoleCollisionSound); //播放和石头碰撞的声音，仅用于调试
             ball.collide(-0.8, 1);
         }
         else if ((((ball.y + ball.radius) >= this.runningView.height) && ball.vy > 0)) {
@@ -191,7 +193,7 @@ var GameView = /** @class */ (function (_super) {
     //当触摸开始时调用
     GameView.prototype.onTouchStart = function (data) {
         //增加大球受力
-        var force = Math.random() * Game.humanForce; //每单位时间的触摸可以随机生成[10,20]范围内的力
+        var force = Math.random() * Game.humanForce;
         if (data.type === "left") {
             force = -force;
         }
