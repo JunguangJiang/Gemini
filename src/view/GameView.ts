@@ -6,10 +6,10 @@ namespace Game{
     export const liftCoefficient:number = 600;//升力系数,升力=liftCoefficient/(球心距离)
     export const dragCoefficient:number = 0.001;//阻力系数，阻力=-dragCoefficient*速度^3
     export let attractionCoefficient:number=8000;//球之间的引力系数
-    export let randomForce = 10;//随机力的幅度
+    export let randomForce = 15;//随机力的幅度
     export const humanForce = 40;//人类施力的幅度
-    export let smallBallRandomForcePeriod = 100;//小球受到随机力的周期
-    export let bigBallRandomForcePeriod = 500;//大球受到随机力的周期
+    export let smallBallRandomForcePeriod = 400;//小球受到随机力的周期
+    export let bigBallRandomForcePeriod = 1000;//大球受到随机力的周期
 
     export const initialY = 2600;//小球的初始高度
 }
@@ -61,22 +61,26 @@ class GameView extends ui.GameViewUI{
         //音乐播放器
         this._musicManager = new MusicManager();
         this._musicManager.onPlayMusic(1);//播放等级1的音乐
-        this.increaseDifficulty();
     }
 
     //进入新的一级
     enterNewLevel():void{
         this._level++;
+        this.levelView.text = "Level "+this._level;
+        console.info("进入new level "+this._level);
         this._bigBall.y = this._smallBall.y = Game.initialY;//让大球和小球都回到起点
-        //清除原先的障碍物
-        //绘制新的障碍物
+        
+        this._barrier.updateBarrier(this._backgroundView);//清除原先的障碍物
+        this._barrier.drawBarriers();//绘制新的障碍物
+        
         this._musicManager.onPlayMusic(this._level);//绘制新的音乐
-
     }
 
+    //增加游戏难度
     increaseDifficulty():void{
-        Game.attractionCoefficient = Game.attractionCoefficient * 1;
-        Game.randomForce = Game.randomForce * 1.1;
+        console.log("增加游戏难度");
+        Game.randomForce = Game.randomForce * 1.1;//增加随机受力幅度
+        //增加游戏的障碍物
     }
 
     //游戏开始
@@ -263,29 +267,29 @@ class GameView extends ui.GameViewUI{
             "attraction"
         )
 
-        //随机受力
-        if(this._loopCount % Game.smallBallRandomForcePeriod === 0){
-            this.setRandomForce(this._smallBall);
-        }
-        if(this._loopCount % Game.bigBallRandomForcePeriod === 0){
-            this.setRandomForce(this._bigBall);
-        }
+        // //随机受力
+        // if(this._loopCount % Game.smallBallRandomForcePeriod === 0){
+        //     this.setRandomForce(this._smallBall);
+        // }
+        // if(this._loopCount % Game.bigBallRandomForcePeriod === 0){
+        //     this.setRandomForce(this._bigBall);
+        // }
     }
 
     //让球受到随机力
     setRandomForce(ball: Ball):void{
         if(Math.random()>0.2){
             let Fx:number = (Math.random()-0.5)*Game.randomForce/2+Game.randomForce;
-            // console.log("水平力Fx="+Fx);
+            console.log("水平力Fx="+Fx);
             ball.setForce(Fx, 0, "random");
         }else{
             let Fy:number = (Math.random()-0.5)*Game.randomForce/2+Game.randomForce;
-            // console.log("垂直力Fx="+Fy);
+            console.log("垂直力Fx="+Fy);
             ball.setForce(0,Fy, "random");
         }
         let forceTime:number = Math.random() * 3000 + 1000;//持续时间也是随机的
         Laya.timer.once(forceTime, ball, ball.removeForce, ["random"]);
-        // console.log(ball.radius+" ball get random force for "+forceTime+"s");
+        console.log(ball.radius+" ball get random force for "+forceTime+"s");
     }
 
     //当触摸开始时调用

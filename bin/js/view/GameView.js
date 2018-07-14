@@ -16,10 +16,10 @@ var Game;
     Game.liftCoefficient = 600; //升力系数,升力=liftCoefficient/(球心距离)
     Game.dragCoefficient = 0.001; //阻力系数，阻力=-dragCoefficient*速度^3
     Game.attractionCoefficient = 8000; //球之间的引力系数
-    Game.randomForce = 10; //随机力的幅度
+    Game.randomForce = 15; //随机力的幅度
     Game.humanForce = 40; //人类施力的幅度
-    Game.smallBallRandomForcePeriod = 100; //小球受到随机力的周期
-    Game.bigBallRandomForcePeriod = 500; //大球受到随机力的周期
+    Game.smallBallRandomForcePeriod = 400; //小球受到随机力的周期
+    Game.bigBallRandomForcePeriod = 1000; //大球受到随机力的周期
     Game.initialY = 2600; //小球的初始高度
 })(Game || (Game = {}));
 //游戏的主视图
@@ -44,20 +44,23 @@ var GameView = /** @class */ (function (_super) {
         //音乐播放器
         _this._musicManager = new MusicManager();
         _this._musicManager.onPlayMusic(1); //播放等级1的音乐
-        _this.increaseDifficulty();
         return _this;
     }
     //进入新的一级
     GameView.prototype.enterNewLevel = function () {
         this._level++;
+        this.levelView.text = "Level " + this._level;
+        console.info("进入new level " + this._level);
         this._bigBall.y = this._smallBall.y = Game.initialY; //让大球和小球都回到起点
-        //清除原先的障碍物
-        //绘制新的障碍物
+        this._barrier.updateBarrier(this._backgroundView); //清除原先的障碍物
+        this._barrier.drawBarriers(); //绘制新的障碍物
         this._musicManager.onPlayMusic(this._level); //绘制新的音乐
     };
+    //增加游戏难度
     GameView.prototype.increaseDifficulty = function () {
-        Game.attractionCoefficient = Game.attractionCoefficient * 1;
-        Game.randomForce = Game.randomForce * 1.1;
+        console.log("增加游戏难度");
+        Game.randomForce = Game.randomForce * 1.1; //增加随机受力幅度
+        //增加游戏的障碍物
     };
     //游戏开始
     GameView.prototype.gameStart = function () {
@@ -99,12 +102,7 @@ var GameView = /** @class */ (function (_super) {
     GameView.prototype.detectCollisions = function (ball) {
         //分析当前球和其他物体的位置关系，并作出相应的处理
         var _this = this;
-<<<<<<< HEAD
-        var ballRec = new Laya.Rectangle(ball.x, ball.y, ball.radius * 2, ball.radius * 2);
-        // console.log(ball.vx,ball.vy);
-=======
         var ballRec = new Laya.Rectangle(ball.x - ball.radius, ball.y - ball.radius, ball.radius * 2, ball.radius * 2);
->>>>>>> 96949c4ddd9e7de474aaa9e831ce4c9dd56735e5
         //判断球是否进入黑洞
         var inBlackhole = false;
         this._barrier.blackHoles.forEach(function (element) {
@@ -119,17 +117,6 @@ var GameView = /** @class */ (function (_super) {
         }
         //判断是否与障碍物碰撞反弹(先判断上下方向再判断左右方向)
         this._barrier.stones.forEach(function (element) {
-<<<<<<< HEAD
-            // console.log(`(${element.width},${element.height})`);
-            if ((ballRec.x >= element.x - ballRec.width) &&
-                (ballRec.right <= element.x + element.width + ballRec.width) &&
-                (ballRec.bottom >= element.y) &&
-                (ballRec.y < element.y) &&
-                (ball.vy > 0)) //向上反弹
-             {
-                ball.collide(1, -10 / ball.vy);
-                // console.log(`1:${ball.vx},${ball.vy}`);
-=======
             var elementRec = element.getBounds();
             //elementRec=elementRec.setTo(elementRec.x+elementRec.width/10,elementRec.y+elementRec.height/10,elementRec.width*4/5,elementRec.height*4/5);
             if ((ballRec.x >= elementRec.x - ballRec.width) &&
@@ -139,7 +126,6 @@ var GameView = /** @class */ (function (_super) {
                 (ball.vy > 0)) //向上反弹
              {
                 ball.collide(1, -100 / ball.vy);
->>>>>>> 96949c4ddd9e7de474aaa9e831ce4c9dd56735e5
                 _this._scoreIndicator.getPenalty(2);
                 if (_this._scoreIndicator.data <= 0) {
                     _this.gameEnd();
@@ -152,12 +138,7 @@ var GameView = /** @class */ (function (_super) {
                 (ballRec.bottom > elementRec.bottom) &&
                 (ball.vy < 0)) //向下反弹
              {
-<<<<<<< HEAD
-                ball.collide(1, 10 / ball.vy);
-                // console.log(`2:${ball.vx},${ball.vy}`);
-=======
                 ball.collide(1, 100 / ball.vy);
->>>>>>> 96949c4ddd9e7de474aaa9e831ce4c9dd56735e5
                 _this._scoreIndicator.getPenalty(2);
                 if (_this._scoreIndicator.data <= 0) {
                     _this.gameEnd();
@@ -170,12 +151,7 @@ var GameView = /** @class */ (function (_super) {
                 (ballRec.x < elementRec.x) &&
                 (ball.vx > 0)) //向左反弹
              {
-<<<<<<< HEAD
-                ball.collide(-10 / ball.vx, 1);
-                // console.log(`3:${ball.vx},${ball.vy}`);
-=======
                 ball.collide(-100 / ball.vx, 1);
->>>>>>> 96949c4ddd9e7de474aaa9e831ce4c9dd56735e5
                 _this._scoreIndicator.getPenalty(2);
                 if (_this._scoreIndicator.data <= 0) {
                     _this.gameEnd();
@@ -188,12 +164,7 @@ var GameView = /** @class */ (function (_super) {
                 (ballRec.right > elementRec.right) &&
                 (ball.vx < 0)) //向右反弹
              {
-<<<<<<< HEAD
-                ball.collide(10 / ball.vx, 1);
-                // console.log(`4:${ball.vx},${ball.vy}`);
-=======
                 ball.collide(100 / ball.vx, 1);
->>>>>>> 96949c4ddd9e7de474aaa9e831ce4c9dd56735e5
                 _this._scoreIndicator.getPenalty(2);
                 if (_this._scoreIndicator.data <= 0) {
                     _this.gameEnd();
@@ -237,23 +208,13 @@ var GameView = /** @class */ (function (_super) {
         var attraction = Game.attractionCoefficient / (Math.pow(effectiveDistance, 3));
         this._bigBall.setForce((this._smallBall.x - this._bigBall.x) * attraction, (this._smallBall.y - this._bigBall.y) * attraction, "attraction");
         this._smallBall.setForce((this._bigBall.x - this._smallBall.x) * attraction, (this._bigBall.y - this._smallBall.y) * attraction, "attraction");
-        //随机受力
-        // if(this._loopCount % 100 == 0){//每隔1s，才会刷新一次随机受力
-        //     this._smallBall.setForce(
-        //         (Math.random()-0.5)*Game.randomForce, 
-        //         (Math.random()-0.5)*Game.randomForce*0.3, 
-        //         "random");
-        //     this._bigBall.setForce(
-        //         (Math.random()-0.5)*Game.randomForce, 
-        //         (Math.random()-0.5)*Game.randomForce*0.3, 
-        //         "random");
+        // //随机受力
+        // if(this._loopCount % Game.smallBallRandomForcePeriod === 0){
+        //     this.setRandomForce(this._smallBall);
         // }
-        if (this._loopCount % Game.smallBallRandomForcePeriod === 0) {
-            this.setRandomForce(this._smallBall);
-        }
-        if (this._loopCount % Game.bigBallRandomForcePeriod === 0) {
-            this.setRandomForce(this._bigBall);
-        }
+        // if(this._loopCount % Game.bigBallRandomForcePeriod === 0){
+        //     this.setRandomForce(this._bigBall);
+        // }
     };
     //让球受到随机力
     GameView.prototype.setRandomForce = function (ball) {
