@@ -35,6 +35,7 @@ P 7E990267 vscroll.png
 P E466EB1C vslider$bar.png
 P 2BFF7046 vslider.png
 D music
+R 6D88006A .DS_Store
 R 97A333D0 level1.wav
 D ui
 R 1296F392 .DS_Store
@@ -44,6 +45,7 @@ P F8355C0F left.png
 P 2FC92A05 right.png
 D ui/background
 P 59C528A4 BackGround .jpg
+P E31D5A8F StartBackGround.png
 D ui/blackhole
 P B96ED697 1.png
 P B6CA8861 10.png
@@ -85,6 +87,8 @@ P 831D299F 6.png
 P A6007A08 7.png
 P E66F4719 8.png
 P 91CAA9D2 9.png
+D ui/button
+P C81C1259 1.png
 D ui/score
 P 60053BEA clip_number.png
 D ui/star
