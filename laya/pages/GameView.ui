@@ -38,7 +38,7 @@
                     "child":[
                         ],
                     "$LOCKED":false,
-                    "$HIDDEN":false
+                    "$HIDDEN":true
                 },
                 {
                     "x":30,
@@ -157,6 +157,19 @@
                     "isAniNode":true,
                     "hasChild":false,
                     "compId":28,
+                    "child":[
+                        ]
+                },
+                {
+                    "x":30,
+                    "type":"Text",
+                    "props":{"y":-21,"x":76,"width":92,"var":"levelView","text":"Level 1","strokeColor":"#16d225","italic":true,"height":25,"fontSize":25,"font":"SimHei","color":"#ee0d09","alpha":1,"align":"left"},
+                    "nodeParent":22,
+                    "label":"Text(levelView)",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":29,
                     "child":[
                         ]
                 }]

@@ -22,6 +22,11 @@ class ScoreIndicator{
         this.updateUI();
     }
 
+    //清空此前的高度
+    clearHeight():void{
+        this._rewardNum = 0;
+    }
+
     //根据高度的变化记录奖励
     updateHeight(height:number):void{
         // console.log("height="+height);
@@ -32,6 +37,12 @@ class ScoreIndicator{
             this._rewardNum = newRewardNum;
             this.updateUI();
         }
+    }
+
+    //接受奖励
+    getReward(reward: number){
+        this._data += reward;
+        this.updateUI();
     }
 
     //接受惩罚
