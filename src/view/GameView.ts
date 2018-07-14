@@ -1,7 +1,7 @@
 //游戏的一些参数
 namespace Game{
     export const debug: boolean = false;//是否处于调试模式
-    export let playerNum: number = 2;//玩家数目，可以取1或者2
+    export let playerNum: number = 1;//玩家数目，可以取1或者2
     export const interval:number = 100;//刷新时间(单位：毫秒)
 
     export const gravity:number = 12;//重力加速度
@@ -9,7 +9,7 @@ namespace Game{
     export const dragCoefficient:number = 0.001;//阻力系数，阻力=-dragCoefficient*速度^3
     export let attractionCoefficient:number=8000;//球之间的引力系数
     export let randomForce = 10;//随机力的幅度
-    export const humanForce = 40;//人类施力的幅度
+    export const humanForce = 60;//人类施力的幅度
     export let smallBallRandomForcePeriod = 100;//小球受到随机力的周期
     export let bigBallRandomForcePeriod = 500;//大球受到随机力的周期
 

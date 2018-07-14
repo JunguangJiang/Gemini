@@ -12,14 +12,14 @@ var __extends = (this && this.__extends) || (function () {
 var Game;
 (function (Game) {
     Game.debug = false; //是否处于调试模式
-    Game.playerNum = 2; //玩家数目，可以取1或者2
+    Game.playerNum = 1; //玩家数目，可以取1或者2
     Game.interval = 100; //刷新时间(单位：毫秒)
     Game.gravity = 12; //重力加速度
     Game.liftCoefficient = Game.debug ? 1600 : 600; //升力系数,升力=liftCoefficient/(球心距离)
     Game.dragCoefficient = 0.001; //阻力系数，阻力=-dragCoefficient*速度^3
     Game.attractionCoefficient = 8000; //球之间的引力系数
     Game.randomForce = 10; //随机力的幅度
-    Game.humanForce = 40; //人类施力的幅度
+    Game.humanForce = 60; //人类施力的幅度
     Game.smallBallRandomForcePeriod = 100; //小球受到随机力的周期
     Game.bigBallRandomForcePeriod = 500; //大球受到随机力的周期
     Game.initialY = 2600; //小球的初始高度
