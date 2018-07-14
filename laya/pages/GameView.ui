@@ -2,7 +2,7 @@
     "x":0,
     "type":"View",
     "selectedBox":1,
-    "selecteID":29,
+    "selecteID":30,
     "props":{"y":0,"x":0,"width":800,"sceneColor":"#000000","height":600},
     "nodeParent":-1,
     "label":"View",
@@ -43,26 +43,26 @@
                 {
                     "x":30,
                     "type":"Animation",
-                    "props":{"y":2582,"x":145,"var":"smallBallView","source":"GameAnimation/Ball.ani"},
+                    "props":{"y":2582,"x":145,"width":30,"var":"smallBallView","height":30},
                     "nodeParent":16,
                     "label":"Animation(smallBallView)",
                     "isDirectory":false,
                     "isAniNode":true,
                     "hasChild":false,
-                    "compId":30,
+                    "compId":29,
                     "child":[
                         ]
                 },
                 {
                     "x":30,
                     "type":"Animation",
-                    "props":{"var":"bigBallView","source":"GameAnimation/Ball.ani"},
+                    "props":{"y":2568,"x":369,"width":50,"var":"bigBallView","height":50},
                     "nodeParent":16,
                     "label":"Animation(bigBallView)",
                     "isDirectory":false,
                     "isAniNode":true,
                     "hasChild":false,
-                    "compId":31,
+                    "compId":30,
                     "child":[
                         ]
                 }],
@@ -182,5 +182,6 @@
             "id":1,
             "frameRate":24,
             "action":0
-        }]
+        }],
+    "$HIDDEN":true
 }
