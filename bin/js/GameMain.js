@@ -33,32 +33,42 @@ var GameMain = /** @class */ (function () {
     };
     //创建各种响应事件
     GameMain.prototype.createEvents = function () {
-        //开始界面的开始按钮
-        GameMain.startView.startButtonView.on(Laya.Event.MOUSE_MOVE, this, function () {
-            GameMain.startView.startButtonView.scale(1.1, 1.1);
+        //单人的开始按钮
+        GameMain.startView.onePlayerButton.on(Laya.Event.MOUSE_MOVE, this, function () {
+            GameMain.startView.onePlayerButton.scale(1.1, 1.1);
         });
-        GameMain.startView.startButtonView.on(Laya.Event.MOUSE_OUT, this, function () {
-            GameMain.startView.startButtonView.scale(1, 1);
+        GameMain.startView.onePlayerButton.on(Laya.Event.MOUSE_OUT, this, function () {
+            GameMain.startView.onePlayerButton.scale(1, 1);
         });
-        GameMain.startView.startButtonView.on(Laya.Event.CLICK, this, this.toGameView);
-        //开始界面的排行榜按钮
-        GameMain.startView.rankButtonView.on(Laya.Event.MOUSE_MOVE, this, function () {
-            GameMain.startView.rankButtonView.scale(1.1, 1.1);
+        GameMain.startView.onePlayerButton.on(Laya.Event.CLICK, this, this.toOnePlayerGameView);
+        //双人的开始按钮
+        GameMain.startView.twoPlayersButton.on(Laya.Event.MOUSE_MOVE, this, function () {
+            GameMain.startView.twoPlayersButton.scale(1.1, 1.1);
         });
-        GameMain.startView.rankButtonView.on(Laya.Event.MOUSE_OUT, this, function () {
-            GameMain.startView.rankButtonView.scale(1, 1);
+        GameMain.startView.twoPlayersButton.on(Laya.Event.MOUSE_OUT, this, function () {
+            GameMain.startView.twoPlayersButton.scale(1, 1);
         });
-        //开始界面的存储按钮
-        GameMain.startView.saveButtonView.on(Laya.Event.MOUSE_MOVE, this, function () {
-            GameMain.startView.saveButtonView.scale(1.1, 1.1);
+        GameMain.startView.twoPlayersButton.on(Laya.Event.CLICK, this, this.toTwoPlayersGameView);
+        //排行榜查看按钮
+        GameMain.startView.rankButton.on(Laya.Event.MOUSE_MOVE, this, function () {
+            GameMain.startView.rankButton.scale(1.1, 1.1);
         });
-        GameMain.startView.saveButtonView.on(Laya.Event.MOUSE_OUT, this, function () {
-            GameMain.startView.saveButtonView.scale(1, 1);
+        GameMain.startView.rankButton.on(Laya.Event.MOUSE_OUT, this, function () {
+            GameMain.startView.rankButton.scale(1, 1);
         });
     };
-    //到游戏界面
-    GameMain.prototype.toGameView = function () {
+    //到单人游戏界面
+    GameMain.prototype.toOnePlayerGameView = function () {
         GameMain.viewStack.selectedIndex = 1;
+        Game.playerNum = 1;
+        GameMain.gameView.init();
+        GameMain.gameView.gameStart(); //开始游戏
+    };
+    //到双人游戏界面
+    GameMain.prototype.toTwoPlayersGameView = function () {
+        GameMain.viewStack.selectedIndex = 1;
+        Game.playerNum = 2;
+        GameMain.gameView.init();
         GameMain.gameView.gameStart(); //开始游戏
     };
     return GameMain;

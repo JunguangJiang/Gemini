@@ -25,7 +25,7 @@ class GameView extends ui.GameViewUI{
     private _bigBall: Ball;//大球
     private _arrow: Arrow;//控制大球的箭头区域
     private _smallArrow: Arrow;//控制小球的箭头区域
-    private _barrier:Barrier;//障碍物
+    private _barriersManagement:BarriersManagement;//障碍物管理
     private _backgroundView: Laya.Image;//背景视图
     private _scoreIndicator: ScoreIndicator;//计分器
     private _musicManager: MusicManager;//音乐管理器
@@ -35,8 +35,15 @@ class GameView extends ui.GameViewUI{
 
     private _level: number;//当前游戏的等级
 
-    constructor(){
+    //构造函数
+    constructor()
+    {
         super();
+    }
+
+    //界面初始化
+    init():void
+    {
 
         //游戏的活动区域
         this._activityArea = {up:this.height-this.backgroundView.height, down:0};
@@ -66,9 +73,9 @@ class GameView extends ui.GameViewUI{
         this._loopCount = 0;
         this._level = 1;
 
-        //障碍物初始化与绘制
-        this._barrier=new Barrier(this.backgroundView);
-        this._barrier.drawBarriers();
+        //障碍物类初始化与障碍物绘制
+        this._barriersManagement=new BarriersManagement(this.backgroundView);
+        this._barriersManagement.drawBarriers();
 
         //计分器的初始化
         this._scoreIndicator = new ScoreIndicator(this.scoreView, 3, this.runningView.height, 0);
@@ -94,8 +101,8 @@ class GameView extends ui.GameViewUI{
         this._bigBall.stop(); 
         this._smallBall.stop();
 
-        this._barrier.updateBarrier(this.backgroundView);//清除原先的障碍物
-        this._barrier.drawBarriers(); //绘制新的障碍物
+        this._barriersManagement.updateBarrier(this.backgroundView);//清除原先的障碍物
+        this._barriersManagement.drawBarriers(); //绘制新的障碍物
         
         this._musicManager.onPlaySound(Game.NewLevelSound);//播放过关音乐
         this._musicManager.onPlayMusic(this._level);//绘制新的音乐
@@ -151,96 +158,49 @@ class GameView extends ui.GameViewUI{
 
     //碰撞检测与处理
     detectCollisions(ball:Ball):void{
-        //分析当前球和其他物体的位置关系，并作出相应的处理
-
-        let ballRec=new Laya.Rectangle(ball.x-ball.radius,ball.y-ball.radius,ball.radius*2,ball.radius*2);
-   
         //判断球是否进入黑洞
-        let inBlackhole:boolean=false;
-        this._barrier.blackHoles.forEach(element => {
-            let elementRec=element.getBounds();
-            elementRec=elementRec.setTo(elementRec.x+elementRec.width/10,elementRec.y+elementRec.height/10,elementRec.width*4/5,elementRec.height*4/5);
-            if(elementRec.intersects(ballRec))
+        let inBlackhole:number=0;
+        for(let item of this._barriersManagement.blackHoles)
+        {
+            if(item.detectCollisions(ball))
             {
-                inBlackhole=true;
+                inBlackhole=item.detectCollisions(ball);
+                break;
             }
-
-        });
+        }
         if(inBlackhole)
         {
             this.gameEnd();
         }
 
-        //判断是否与障碍物碰撞反弹(先判断上下方向再判断左右方向)
-        this._barrier.stones.forEach(element => {
-            let elementRec=element.getBounds();
-            elementRec=elementRec.setTo(elementRec.x+elementRec.width/10,elementRec.y+elementRec.height/10,elementRec.width*4/5,elementRec.height*4/5);
-            if((ballRec.x>=elementRec.x-ballRec.width)&&
-                (ballRec.right<=elementRec.right+ballRec.width)&&
-                (ballRec.bottom>=elementRec.y)&&
-                (ballRec.y<elementRec.y)&&
-                (ball.vy>0))//向上反弹
+        //判断球是否与陨石碰撞反弹
+        let inStone:number=0;
+        for(let item of this._barriersManagement.stones)
+        {
+            if(item.detectCollisions(ball))//在此处添加碰撞音效
+            {
+                inStone=item.detectCollisions(ball);  
+                this._scoreIndicator.getPenalty(2);//减2分
+                this.backgroundView.removeChildAt(item.index);
+                this._barriersManagement.stones.splice(this._barriersManagement.stones.indexOf(item),1);
+                if(this._scoreIndicator.data<=0)
                 {
-                    ball.collide(1, -1);
-                    this._scoreIndicator.getPenalty(2);
-                    this.backgroundView.removeChild(element);
-                    this._barrier.stones.splice(this._barrier.stones.indexOf(element),1);
-                    if(this._scoreIndicator.data<=0)
-                    {
-                        this.gameEnd();
-                        return;
-                    }
+                    this.gameEnd();
+                    return;
                 }
-            else if((ballRec.x>=elementRec.x-ballRec.width)&&
-                (ballRec.right<=elementRec.right+ballRec.width)&&
-                (ballRec.y<=elementRec.bottom)&&
-                (ballRec.bottom>elementRec.bottom)&&
-                (ball.vy<0))//向下反弹
+                switch(inStone)
                 {
-                    ball.collide(1, -1);
-                    this._scoreIndicator.getPenalty(2);
-                    this.backgroundView.removeChild(element);
-                    this._barrier.stones.splice(this._barrier.stones.indexOf(element),1);
-                    if(this._scoreIndicator.data<=0)
-                    {
-                        this.gameEnd();
-                        return;
-                    }
-                }
-            else if((ballRec.y>=elementRec.y-ballRec.height)&&
-                (ballRec.bottom<=elementRec.bottom+ballRec.height)&&
-                (ballRec.right>=elementRec.x)&&
-                (ballRec.x<elementRec.x)&&
-                (ball.vx>0))//向左反弹
-                {
-                    ball.collide(-1,1);
-                    this._scoreIndicator.getPenalty(2);
-                    this.backgroundView.removeChild(element);
-                    this._barrier.stones.splice(this._barrier.stones.indexOf(element),1);
-                    if(this._scoreIndicator.data<=0)
-                    {
-                        this.gameEnd();
-                        return;
-                    }
-                }
-            else if((ballRec.y>=elementRec.y-ballRec.height)&&
-                (ballRec.bottom<=elementRec.bottom+ballRec.height)&&
-                (ballRec.x<=elementRec.right)&&
-                (ballRec.right>elementRec.right)&&
-                (ball.vx<0))//向右反弹
-                {
-                    ball.collide(-1,1);
-                    this._scoreIndicator.getPenalty(2);
-                    this.backgroundView.removeChild(element);
-                    this._barrier.stones.splice(this._barrier.stones.indexOf(element),1);
-                    if(this._scoreIndicator.data<=0)
-                    {
-                        this.gameEnd();
-                        return;
-                    }
-                }
-        });
-
+                    case 1:
+                        ball.collide(1, -1);
+                        break;
+                    case 2:
+                        ball.collide(-1,1);
+                        break;
+                    default:
+                        break;
+                }       
+            }
+        }
     }   
 
     //球与边缘的相对位置的检测与处理
