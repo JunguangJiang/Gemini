@@ -28,35 +28,38 @@ var Game;
 //游戏的主视图
 var GameView = /** @class */ (function (_super) {
     __extends(GameView, _super);
+    //构造函数
     function GameView() {
-        var _this = _super.call(this) || this;
+        return _super.call(this) || this;
+    }
+    //界面初始化
+    GameView.prototype.init = function () {
         //游戏的活动区域
-        _this._activityArea = { up: _this.height - _this.backgroundView.height, down: 0 };
+        this._activityArea = { up: this.height - this.backgroundView.height, down: 0 };
         //球的初始化
-        _this._bigBall = new Ball(25, 400, Game.initialY, _this.bigBallView);
-        _this._smallBall = new Ball(15, 200, Game.initialY, _this.smallBallView);
+        this._bigBall = new Ball(25, 400, Game.initialY, this.bigBallView);
+        this._smallBall = new Ball(15, 200, Game.initialY, this.smallBallView);
         //控制方向的箭头区域的初始化
-        _this._arrow = new Arrow(_this.arrowView.getChildByName("left"), _this.arrowView.getChildByName("right"), Laya.Handler.create(_this, _this.onTouchStart, null, false), Laya.Handler.create(_this, _this.onTouchEnd, null, false), "big");
+        this._arrow = new Arrow(this.arrowView.getChildByName("left"), this.arrowView.getChildByName("right"), Laya.Handler.create(this, this.onTouchStart, null, false), Laya.Handler.create(this, this.onTouchEnd, null, false), "big");
         if (Game.playerNum === 2) { //如果是双人模式
-            _this._smallArrow = new Arrow(_this.smallArrowView.getChildByName("left"), _this.smallArrowView.getChildByName("right"), Laya.Handler.create(_this, _this.onTouchStart, null, false), Laya.Handler.create(_this, _this.onTouchEnd, null, false), "small");
+            this._smallArrow = new Arrow(this.smallArrowView.getChildByName("left"), this.smallArrowView.getChildByName("right"), Laya.Handler.create(this, this.onTouchStart, null, false), Laya.Handler.create(this, this.onTouchEnd, null, false), "small");
         }
         else { //如果是单人模式
-            _this.smallArrowView.visible = false;
+            this.smallArrowView.visible = false;
         }
-        _this._loopCount = 0;
-        _this._level = 1;
+        this._loopCount = 0;
+        this._level = 1;
         //障碍物类初始化与障碍物绘制
-        _this._barriersManagement = new BarriersManagement(_this.backgroundView);
-        _this._barriersManagement.drawBarriers();
+        this._barriersManagement = new BarriersManagement(this.backgroundView);
+        this._barriersManagement.drawBarriers();
         //计分器的初始化
-        _this._scoreIndicator = new ScoreIndicator(_this.scoreView, 3, _this.runningView.height, 0);
+        this._scoreIndicator = new ScoreIndicator(this.scoreView, 3, this.runningView.height, 0);
         //等级显示
-        _this.levelView.visible = true;
+        this.levelView.visible = true;
         //音乐播放器
-        _this._musicManager = new MusicManager();
-        _this._musicManager.onPlayMusic(1); //播放等级1的音乐
-        return _this;
-    }
+        this._musicManager = new MusicManager();
+        this._musicManager.onPlayMusic(1); //播放等级1的音乐
+    };
     //进入新的一级
     GameView.prototype.enterNewLevel = function () {
         this._level++;

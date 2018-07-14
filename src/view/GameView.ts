@@ -35,8 +35,15 @@ class GameView extends ui.GameViewUI{
 
     private _level: number;//当前游戏的等级
 
-    constructor(){
+    //构造函数
+    constructor()
+    {
         super();
+    }
+
+    //界面初始化
+    init():void
+    {
 
         //游戏的活动区域
         this._activityArea = {up:this.height-this.backgroundView.height, down:0};
