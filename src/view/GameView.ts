@@ -1,7 +1,7 @@
 //游戏的一些参数
 namespace Game{
     export const debug: boolean = true;//是否处于调试模式
-    export const playerNum: number = 1;//玩家数目，可以取1或者2
+    export let playerNum: number = 2;//玩家数目，可以取1或者2
     export const interval:number = 100;//刷新时间(单位：毫秒)
 
     export const gravity:number = 12;//重力加速度
@@ -21,7 +21,8 @@ class GameView extends ui.GameViewUI{
     //管理黑洞、障碍物、小球等对象
     private _smallBall: Ball;//小球
     private _bigBall: Ball;//大球
-    private _arrow: Arrow;//控制方向的箭头区域
+    private _arrow: Arrow;//控制大球的箭头区域
+    private _smallArrow: Arrow;//控制小球的箭头区域
     private _barrier:Barrier;//障碍物
     private _backgroundView: Laya.Image;//背景视图
     private _scoreIndicator: ScoreIndicator;//计分器
@@ -47,8 +48,18 @@ class GameView extends ui.GameViewUI{
             this.arrowView.getChildByName("left") as Laya.Image, 
             this.arrowView.getChildByName("right") as Laya.Image, 
             Laya.Handler.create(this, this.onTouchStart, null, false),
-            Laya.Handler.create(this, this.onTouchEnd, null, false)
+            Laya.Handler.create(this, this.onTouchEnd, null, false),"big"
         );
+        if(Game.playerNum === 2){//如果是双人模式
+            this._smallArrow = new Arrow(
+                this.smallArrowView.getChildByName("left") as Laya.Image, 
+                this.smallArrowView.getChildByName("right") as Laya.Image, 
+                Laya.Handler.create(this, this.onTouchStart, null, false),
+                Laya.Handler.create(this, this.onTouchEnd, null, false),"small"
+            )
+        }else{//如果是单人模式
+            this.smallArrowView.visible = false;
+        }
 
         this._loopCount = 0;
         this._level = 1;
@@ -109,12 +120,14 @@ class GameView extends ui.GameViewUI{
         console.log("游戏结束");
         console.log("你的总分为"+this._scoreIndicator.data);
         Laya.timer.clear(this, this.onLoop);
-        this._musicManager.onPlaySound(Game.GameOverSound);
     }
 
     //需要每隔单位时间进行一次调用的函数请写入以下函数体
     onLoop():void{
         this.detectCollisions(this._bigBall);//大球碰撞检测与处理
+        if(Game.playerNum === 2){
+            this.detectCollisions(this._smallBall);//双人模式下小球也需要检测碰撞
+        }
         this.updateForces();//更新大小球的受力
         this.detectBorder(this._bigBall);//检测与边缘的相对位置
         this.detectBorder(this._smallBall);
@@ -315,18 +328,26 @@ class GameView extends ui.GameViewUI{
     }
 
     //当触摸开始时调用
-    onTouchStart(data:{type:string}):void{
+    onTouchStart(data:{type:string, ballType:string}):void{
         //增加大球受力
         let force = Math.random() * Game.humanForce/2+Game.humanForce;
         if(data.type === "left"){
             force = -force;
         }
-        this._bigBall.setForce(force, 0, "humanControl");
+        if(data.ballType === "big"){
+            this._bigBall.setForce(force, 0, "humanControl");
+        }else{
+            this._smallBall.setForce(force, 0, "humanControl");
+        }
     }
 
-    onTouchEnd(data:{type:string}):void{
+    onTouchEnd(data:{type:string, ballType:string}):void{
         //移除大球受力
-        this._bigBall.removeForce("humanControl");
+        if(data.ballType === "big"){
+            this._bigBall.removeForce("humanControl");
+        }else{
+            this._smallBall.removeForce("humanControl");
+        }
     }
 
 }

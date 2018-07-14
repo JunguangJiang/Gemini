@@ -12,7 +12,7 @@ var __extends = (this && this.__extends) || (function () {
 var Game;
 (function (Game) {
     Game.debug = true; //是否处于调试模式
-    Game.playerNum = 1; //玩家数目，可以取1或者2
+    Game.playerNum = 2; //玩家数目，可以取1或者2
     Game.interval = 100; //刷新时间(单位：毫秒)
     Game.gravity = 12; //重力加速度
     Game.liftCoefficient = Game.debug ? 1600 : 600; //升力系数,升力=liftCoefficient/(球心距离)
@@ -35,7 +35,13 @@ var GameView = /** @class */ (function (_super) {
         _this._bigBall = new Ball(25, 400, Game.initialY, _this.bigBallView);
         _this._smallBall = new Ball(15, 200, Game.initialY, _this.smallBallView);
         //控制方向的箭头区域的初始化
-        _this._arrow = new Arrow(_this.arrowView.getChildByName("left"), _this.arrowView.getChildByName("right"), Laya.Handler.create(_this, _this.onTouchStart, null, false), Laya.Handler.create(_this, _this.onTouchEnd, null, false));
+        _this._arrow = new Arrow(_this.arrowView.getChildByName("left"), _this.arrowView.getChildByName("right"), Laya.Handler.create(_this, _this.onTouchStart, null, false), Laya.Handler.create(_this, _this.onTouchEnd, null, false), "big");
+        if (Game.playerNum === 2) { //如果是双人模式
+            _this._smallArrow = new Arrow(_this.smallArrowView.getChildByName("left"), _this.smallArrowView.getChildByName("right"), Laya.Handler.create(_this, _this.onTouchStart, null, false), Laya.Handler.create(_this, _this.onTouchEnd, null, false), "small");
+        }
+        else { //如果是单人模式
+            _this.smallArrowView.visible = false;
+        }
         _this._loopCount = 0;
         _this._level = 1;
         //障碍物初始化与绘制
@@ -82,11 +88,13 @@ var GameView = /** @class */ (function (_super) {
         console.log("游戏结束");
         console.log("你的总分为" + this._scoreIndicator.data);
         Laya.timer.clear(this, this.onLoop);
-        this._musicManager.onPlaySound(Game.GameOverSound);
     };
     //需要每隔单位时间进行一次调用的函数请写入以下函数体
     GameView.prototype.onLoop = function () {
         this.detectCollisions(this._bigBall); //大球碰撞检测与处理
+        if (Game.playerNum === 2) {
+            this.detectCollisions(this._smallBall); //双人模式下小球也需要检测碰撞
+        }
         this.updateForces(); //更新大小球的受力
         this.detectBorder(this._bigBall); //检测与边缘的相对位置
         this.detectBorder(this._smallBall);
@@ -257,11 +265,21 @@ var GameView = /** @class */ (function (_super) {
         if (data.type === "left") {
             force = -force;
         }
-        this._bigBall.setForce(force, 0, "humanControl");
+        if (data.ballType === "big") {
+            this._bigBall.setForce(force, 0, "humanControl");
+        }
+        else {
+            this._smallBall.setForce(force, 0, "humanControl");
+        }
     };
     GameView.prototype.onTouchEnd = function (data) {
         //移除大球受力
-        this._bigBall.removeForce("humanControl");
+        if (data.ballType === "big") {
+            this._bigBall.removeForce("humanControl");
+        }
+        else {
+            this._smallBall.removeForce("humanControl");
+        }
     };
     return GameView;
 }(ui.GameViewUI));
