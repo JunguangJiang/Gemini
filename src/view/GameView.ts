@@ -1,12 +1,17 @@
 //游戏的一些参数
 namespace Game{
     export const interval:number = 100;//刷新时间(单位：毫秒)
+
     export const gravity:number = 12;//重力加速度
     export const liftCoefficient:number = 600;//升力系数,升力=liftCoefficient/(球心距离)
     export const dragCoefficient:number = 0.001;//阻力系数，阻力=-dragCoefficient*速度^3
-    export const attractionCoefficient:number=8000;//球之间的引力系数
-    export const randomForce = 20;//随机力的幅度
+    export let attractionCoefficient:number=8000;//球之间的引力系数
+    export let randomForce = 10;//随机力的幅度
     export const humanForce = 40;//人类施力的幅度
+    export let smallBallRandomForcePeriod = 100;//小球受到随机力的周期
+    export let bigBallRandomForcePeriod = 500;//大球受到随机力的周期
+
+    export const initialY = 2600;//小球的初始高度
 }
 
 //游戏的主视图
@@ -18,11 +23,12 @@ class GameView extends ui.GameViewUI{
     private _barrier:Barrier;//障碍物
     private _backgroundView: Laya.Image;//背景视图
     private _scoreIndicator: ScoreIndicator;//计分器
+    private _musicManager: MusicManager;//音乐管理器
     
     private _loopCount: number;//记录刷新（循环）总次数
     private _activityArea:{up:number, down:number};//游戏的最大活动区域
 
-    private _musicManager: MusicManager;//音乐管理器
+    private _level: number;//当前游戏的等级
 
     constructor(){
         super();
@@ -31,8 +37,8 @@ class GameView extends ui.GameViewUI{
         this._activityArea = {up:this.height-this.backgroundView.height, down:0};
 
         //球的初始化
-        this._bigBall = new Ball(25, 400, 2600,this.bigBallView);
-        this._smallBall = new Ball(15, 200, 2600,this.smallBallView);
+        this._bigBall = new Ball(25, 400, Game.initialY,this.bigBallView);
+        this._smallBall = new Ball(15, 200, Game.initialY,this.smallBallView);
 
         //控制方向的箭头区域的初始化
         this._arrow = new Arrow(
@@ -41,7 +47,9 @@ class GameView extends ui.GameViewUI{
             Laya.Handler.create(this, this.onTouchStart, null, false),
             Laya.Handler.create(this, this.onTouchEnd, null, false)
         );
+
         this._loopCount = 0;
+        this._level = 1;
 
         //障碍物初始化与绘制
         this._barrier=new Barrier(this.backgroundView);
@@ -53,6 +61,22 @@ class GameView extends ui.GameViewUI{
         //音乐播放器
         this._musicManager = new MusicManager();
         this._musicManager.onPlayMusic(1);//播放等级1的音乐
+        this.increaseDifficulty();
+    }
+
+    //进入新的一级
+    enterNewLevel():void{
+        this._level++;
+        this._bigBall.y = this._smallBall.y = Game.initialY;//让大球和小球都回到起点
+        //清除原先的障碍物
+        //绘制新的障碍物
+        this._musicManager.onPlayMusic(this._level);//绘制新的音乐
+
+    }
+
+    increaseDifficulty():void{
+        Game.attractionCoefficient = Game.attractionCoefficient * 1;
+        Game.randomForce = Game.randomForce * 1.1;
     }
 
     //游戏开始
@@ -68,6 +92,7 @@ class GameView extends ui.GameViewUI{
     //游戏结束
     gameEnd():void{
         console.log("游戏结束");
+        console.log("你的总分为"+this._scoreIndicator.data);
         Laya.timer.clear(this, this.onLoop);
     }
 
@@ -98,7 +123,7 @@ class GameView extends ui.GameViewUI{
         //分析当前球和其他物体的位置关系，并作出相应的处理
 
         let ballRec=new Laya.Rectangle(ball.x,ball.y,ball.radius*2,ball.radius*2);
-        console.log(ball.vx,ball.vy);
+        // console.log(ball.vx,ball.vy);
    
         //判断球是否进入黑洞
         let inBlackhole:boolean=false;
@@ -118,7 +143,7 @@ class GameView extends ui.GameViewUI{
 
         //判断是否与障碍物碰撞反弹(先判断上下方向再判断左右方向)
         this._barrier.stones.forEach(element => {
-            console.log(`(${element.width},${element.height})`);
+            // console.log(`(${element.width},${element.height})`);
             if((ballRec.x>=element.x-ballRec.width)&&
                 (ballRec.right<=element.x+element.width+ballRec.width)&&
                 (ballRec.bottom>=element.y)&&
@@ -126,7 +151,7 @@ class GameView extends ui.GameViewUI{
                 (ball.vy>0))//向上反弹
                 {
                     ball.collide(1, -10/ball.vy);
-                    console.log(`1:${ball.vx},${ball.vy}`);
+                    // console.log(`1:${ball.vx},${ball.vy}`);
                     this._scoreIndicator.getPenalty(2);
                     if(this._scoreIndicator.data<=0)
                     {
@@ -141,7 +166,7 @@ class GameView extends ui.GameViewUI{
                 (ball.vy<0))//向下反弹
                 {
                     ball.collide(1, 10/ball.vy);
-                                        console.log(`2:${ball.vx},${ball.vy}`);
+                                        // console.log(`2:${ball.vx},${ball.vy}`);
                     this._scoreIndicator.getPenalty(2);
                     if(this._scoreIndicator.data<=0)
                     {
@@ -156,7 +181,7 @@ class GameView extends ui.GameViewUI{
                 (ball.vx>0))//向左反弹
                 {
                     ball.collide(-10/ball.vx,1);
-                                        console.log(`3:${ball.vx},${ball.vy}`);
+                                        // console.log(`3:${ball.vx},${ball.vy}`);
                     this._scoreIndicator.getPenalty(2);
                     if(this._scoreIndicator.data<=0)
                     {
@@ -171,7 +196,7 @@ class GameView extends ui.GameViewUI{
                 (ball.vx<0))//向右反弹
                 {
                     ball.collide(10/ball.vx,1);
-                                        console.log(`4:${ball.vx},${ball.vy}`);
+                                        // console.log(`4:${ball.vx},${ball.vy}`);
                     this._scoreIndicator.getPenalty(2);
                     if(this._scoreIndicator.data<=0)
                     {
@@ -196,6 +221,10 @@ class GameView extends ui.GameViewUI{
         ){
             // console.log("碰到垂直边缘");
             ball.collide(1, -0.9);
+        }else if(
+            (((ball.y-ball.radius) <= 0) && ball.vy < 0)
+        ){
+            this.enterNewLevel();//进入新的一个回合
         }
     }
 
@@ -239,22 +268,34 @@ class GameView extends ui.GameViewUI{
         )
 
         //随机受力
-        if(this._loopCount % 10 == 0){//每隔1s，才会刷新一次随机受力
-            this._smallBall.setForce(
-                (Math.random()-0.5)*Game.randomForce, 
-                (Math.random()-0.5)*Game.randomForce*0.3, 
-                "random");
-            this._bigBall.setForce(
-                (Math.random()-0.5)*Game.randomForce, 
-                (Math.random()-0.5)*Game.randomForce*0.3, 
-                "random");
+        if(this._loopCount % Game.smallBallRandomForcePeriod === 0){
+            this.setRandomForce(this._smallBall);
         }
+        if(this._loopCount % Game.bigBallRandomForcePeriod === 0){
+            this.setRandomForce(this._bigBall);
+        }
+    }
+
+    //让球受到随机力
+    setRandomForce(ball: Ball):void{
+        if(Math.random()>0.2){
+            let Fx:number = (Math.random()-0.5)*Game.randomForce/2+Game.randomForce;
+            // console.log("水平力Fx="+Fx);
+            ball.setForce(Fx, 0, "random");
+        }else{
+            let Fy:number = (Math.random()-0.5)*Game.randomForce/2+Game.randomForce;
+            // console.log("垂直力Fx="+Fy);
+            ball.setForce(0,Fy, "random");
+        }
+        let forceTime:number = Math.random() * 3000 + 1000;//持续时间也是随机的
+        Laya.timer.once(forceTime, ball, ball.removeForce, ["random"]);
+        // console.log(ball.radius+" ball get random force for "+forceTime+"s");
     }
 
     //当触摸开始时调用
     onTouchStart(data:{type:string}):void{
         //增加大球受力
-        let force = Math.random() * Game.humanForce;
+        let force = Math.random() * Game.humanForce/2+Game.humanForce;
         if(data.type === "left"){
             force = -force;
         }

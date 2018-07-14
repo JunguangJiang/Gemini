@@ -15,7 +15,7 @@ var MusicManager = /** @class */ (function () {
     //根据等级播放背景音乐，level从1开始
     MusicManager.prototype.onPlayMusic = function (level) {
         console.log("播放音乐");
-        this._level = level;
+        this._level = Math.min(level, Game.BackgroundMusic.length);
         Laya.SoundManager.playMusic(Game.BackgroundMusic[this._level - 1], 1, new Laya.Handler(this, this.onComplete));
     };
     //播放完背景音乐后调用

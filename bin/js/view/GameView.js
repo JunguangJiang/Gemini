@@ -16,8 +16,11 @@ var Game;
     Game.liftCoefficient = 600; //升力系数,升力=liftCoefficient/(球心距离)
     Game.dragCoefficient = 0.001; //阻力系数，阻力=-dragCoefficient*速度^3
     Game.attractionCoefficient = 8000; //球之间的引力系数
-    Game.randomForce = 20; //随机力的幅度
+    Game.randomForce = 10; //随机力的幅度
     Game.humanForce = 40; //人类施力的幅度
+    Game.smallBallRandomForcePeriod = 100; //小球受到随机力的周期
+    Game.bigBallRandomForcePeriod = 500; //大球受到随机力的周期
+    Game.initialY = 2600; //小球的初始高度
 })(Game || (Game = {}));
 //游戏的主视图
 var GameView = /** @class */ (function (_super) {
@@ -27,11 +30,12 @@ var GameView = /** @class */ (function (_super) {
         //游戏的活动区域
         _this._activityArea = { up: _this.height - _this.backgroundView.height, down: 0 };
         //球的初始化
-        _this._bigBall = new Ball(25, 400, 2600, _this.bigBallView);
-        _this._smallBall = new Ball(15, 200, 2600, _this.smallBallView);
+        _this._bigBall = new Ball(25, 400, Game.initialY, _this.bigBallView);
+        _this._smallBall = new Ball(15, 200, Game.initialY, _this.smallBallView);
         //控制方向的箭头区域的初始化
         _this._arrow = new Arrow(_this.arrowView.getChildByName("left"), _this.arrowView.getChildByName("right"), Laya.Handler.create(_this, _this.onTouchStart, null, false), Laya.Handler.create(_this, _this.onTouchEnd, null, false));
         _this._loopCount = 0;
+        _this._level = 1;
         //障碍物初始化与绘制
         _this._barrier = new Barrier(_this.backgroundView);
         _this._barrier.drawBarriers();
@@ -40,8 +44,21 @@ var GameView = /** @class */ (function (_super) {
         //音乐播放器
         _this._musicManager = new MusicManager();
         _this._musicManager.onPlayMusic(1); //播放等级1的音乐
+        _this.increaseDifficulty();
         return _this;
     }
+    //进入新的一级
+    GameView.prototype.enterNewLevel = function () {
+        this._level++;
+        this._bigBall.y = this._smallBall.y = Game.initialY; //让大球和小球都回到起点
+        //清除原先的障碍物
+        //绘制新的障碍物
+        this._musicManager.onPlayMusic(this._level); //绘制新的音乐
+    };
+    GameView.prototype.increaseDifficulty = function () {
+        Game.attractionCoefficient = Game.attractionCoefficient * 1;
+        Game.randomForce = Game.randomForce * 1.1;
+    };
     //游戏开始
     GameView.prototype.gameStart = function () {
         console.log("游戏开始");
@@ -53,6 +70,7 @@ var GameView = /** @class */ (function (_super) {
     //游戏结束
     GameView.prototype.gameEnd = function () {
         console.log("游戏结束");
+        console.log("你的总分为" + this._scoreIndicator.data);
         Laya.timer.clear(this, this.onLoop);
     };
     //需要每隔单位时间进行一次调用的函数请写入以下函数体
@@ -82,7 +100,7 @@ var GameView = /** @class */ (function (_super) {
         //分析当前球和其他物体的位置关系，并作出相应的处理
         var _this = this;
         var ballRec = new Laya.Rectangle(ball.x, ball.y, ball.radius * 2, ball.radius * 2);
-        console.log(ball.vx, ball.vy);
+        // console.log(ball.vx,ball.vy);
         //判断球是否进入黑洞
         var inBlackhole = false;
         this._barrier.blackHoles.forEach(function (element) {
@@ -97,7 +115,7 @@ var GameView = /** @class */ (function (_super) {
         }
         //判断是否与障碍物碰撞反弹(先判断上下方向再判断左右方向)
         this._barrier.stones.forEach(function (element) {
-            console.log("(" + element.width + "," + element.height + ")");
+            // console.log(`(${element.width},${element.height})`);
             if ((ballRec.x >= element.x - ballRec.width) &&
                 (ballRec.right <= element.x + element.width + ballRec.width) &&
                 (ballRec.bottom >= element.y) &&
@@ -105,7 +123,7 @@ var GameView = /** @class */ (function (_super) {
                 (ball.vy > 0)) //向上反弹
              {
                 ball.collide(1, -10 / ball.vy);
-                console.log("1:" + ball.vx + "," + ball.vy);
+                // console.log(`1:${ball.vx},${ball.vy}`);
                 _this._scoreIndicator.getPenalty(2);
                 if (_this._scoreIndicator.data <= 0) {
                     _this.gameEnd();
@@ -119,7 +137,7 @@ var GameView = /** @class */ (function (_super) {
                 (ball.vy < 0)) //向下反弹
              {
                 ball.collide(1, 10 / ball.vy);
-                console.log("2:" + ball.vx + "," + ball.vy);
+                // console.log(`2:${ball.vx},${ball.vy}`);
                 _this._scoreIndicator.getPenalty(2);
                 if (_this._scoreIndicator.data <= 0) {
                     _this.gameEnd();
@@ -133,7 +151,7 @@ var GameView = /** @class */ (function (_super) {
                 (ball.vx > 0)) //向左反弹
              {
                 ball.collide(-10 / ball.vx, 1);
-                console.log("3:" + ball.vx + "," + ball.vy);
+                // console.log(`3:${ball.vx},${ball.vy}`);
                 _this._scoreIndicator.getPenalty(2);
                 if (_this._scoreIndicator.data <= 0) {
                     _this.gameEnd();
@@ -147,7 +165,7 @@ var GameView = /** @class */ (function (_super) {
                 (ball.vx < 0)) //向右反弹
              {
                 ball.collide(10 / ball.vx, 1);
-                console.log("4:" + ball.vx + "," + ball.vy);
+                // console.log(`4:${ball.vx},${ball.vy}`);
                 _this._scoreIndicator.getPenalty(2);
                 if (_this._scoreIndicator.data <= 0) {
                     _this.gameEnd();
@@ -167,6 +185,9 @@ var GameView = /** @class */ (function (_super) {
         else if ((((ball.y + ball.radius) >= this.runningView.height) && ball.vy > 0)) {
             // console.log("碰到垂直边缘");
             ball.collide(1, -0.9);
+        }
+        else if ((((ball.y - ball.radius) <= 0) && ball.vy < 0)) {
+            this.enterNewLevel(); //进入新的一个回合
         }
     };
     //更新球的受力，主要是两个球之间的作用力
@@ -189,15 +210,43 @@ var GameView = /** @class */ (function (_super) {
         this._bigBall.setForce((this._smallBall.x - this._bigBall.x) * attraction, (this._smallBall.y - this._bigBall.y) * attraction, "attraction");
         this._smallBall.setForce((this._bigBall.x - this._smallBall.x) * attraction, (this._bigBall.y - this._smallBall.y) * attraction, "attraction");
         //随机受力
-        if (this._loopCount % 10 == 0) { //每隔1s，才会刷新一次随机受力
-            this._smallBall.setForce((Math.random() - 0.5) * Game.randomForce, (Math.random() - 0.5) * Game.randomForce * 0.3, "random");
-            this._bigBall.setForce((Math.random() - 0.5) * Game.randomForce, (Math.random() - 0.5) * Game.randomForce * 0.3, "random");
+        // if(this._loopCount % 100 == 0){//每隔1s，才会刷新一次随机受力
+        //     this._smallBall.setForce(
+        //         (Math.random()-0.5)*Game.randomForce, 
+        //         (Math.random()-0.5)*Game.randomForce*0.3, 
+        //         "random");
+        //     this._bigBall.setForce(
+        //         (Math.random()-0.5)*Game.randomForce, 
+        //         (Math.random()-0.5)*Game.randomForce*0.3, 
+        //         "random");
+        // }
+        if (this._loopCount % Game.smallBallRandomForcePeriod === 0) {
+            this.setRandomForce(this._smallBall);
         }
+        if (this._loopCount % Game.bigBallRandomForcePeriod === 0) {
+            this.setRandomForce(this._bigBall);
+        }
+    };
+    //让球受到随机力
+    GameView.prototype.setRandomForce = function (ball) {
+        if (Math.random() > 0.2) {
+            var Fx = (Math.random() - 0.5) * Game.randomForce / 2 + Game.randomForce;
+            console.log("水平力Fx=" + Fx);
+            ball.setForce(Fx, 0, "random");
+        }
+        else {
+            var Fy = (Math.random() - 0.5) * Game.randomForce / 2 + Game.randomForce;
+            console.log("垂直力Fx=" + Fy);
+            ball.setForce(0, Fy, "random");
+        }
+        var forceTime = Math.random() * 3000 + 1000; //持续时间也是随机的
+        Laya.timer.once(forceTime, ball, ball.removeForce, ["random"]);
+        console.log(ball.radius + " ball get random force for " + forceTime + "s");
     };
     //当触摸开始时调用
     GameView.prototype.onTouchStart = function (data) {
         //增加大球受力
-        var force = Math.random() * Game.humanForce;
+        var force = Math.random() * Game.humanForce / 2 + Game.humanForce;
         if (data.type === "left") {
             force = -force;
         }
