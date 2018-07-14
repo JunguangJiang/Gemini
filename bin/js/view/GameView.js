@@ -118,15 +118,21 @@ var GameView = /** @class */ (function (_super) {
         //判断是否与障碍物碰撞反弹(先判断上下方向再判断左右方向)
         this._barrier.stones.forEach(function (element) {
             var elementRec = element.getBounds();
-            //elementRec=elementRec.setTo(elementRec.x+elementRec.width/10,elementRec.y+elementRec.height/10,elementRec.width*4/5,elementRec.height*4/5);
+            elementRec = elementRec.setTo(elementRec.x + elementRec.width / 10, elementRec.y + elementRec.height / 10, elementRec.width * 4 / 5, elementRec.height * 4 / 5);
             if ((ballRec.x >= elementRec.x - ballRec.width) &&
                 (ballRec.right <= elementRec.right + ballRec.width) &&
                 (ballRec.bottom >= elementRec.y) &&
                 (ballRec.y < elementRec.y) &&
                 (ball.vy > 0)) //向上反弹
              {
+<<<<<<< HEAD
                 ball.collide(1, -100 / ball.vy);
+=======
+                ball.collide(1, -1);
+>>>>>>> ae898508c7a07031499058f346bbb5e73bf61eb4
                 _this._scoreIndicator.getPenalty(2);
+                _this.backgroundView.removeChild(element);
+                _this._barrier.stones.splice(_this._barrier.stones.indexOf(element), 1);
                 if (_this._scoreIndicator.data <= 0) {
                     _this.gameEnd();
                     return;
@@ -138,8 +144,14 @@ var GameView = /** @class */ (function (_super) {
                 (ballRec.bottom > elementRec.bottom) &&
                 (ball.vy < 0)) //向下反弹
              {
+<<<<<<< HEAD
                 ball.collide(1, 100 / ball.vy);
+=======
+                ball.collide(1, -1);
+>>>>>>> ae898508c7a07031499058f346bbb5e73bf61eb4
                 _this._scoreIndicator.getPenalty(2);
+                _this.backgroundView.removeChild(element);
+                _this._barrier.stones.splice(_this._barrier.stones.indexOf(element), 1);
                 if (_this._scoreIndicator.data <= 0) {
                     _this.gameEnd();
                     return;
@@ -151,8 +163,14 @@ var GameView = /** @class */ (function (_super) {
                 (ballRec.x < elementRec.x) &&
                 (ball.vx > 0)) //向左反弹
              {
+<<<<<<< HEAD
                 ball.collide(-100 / ball.vx, 1);
+=======
+                ball.collide(-1, 1);
+>>>>>>> ae898508c7a07031499058f346bbb5e73bf61eb4
                 _this._scoreIndicator.getPenalty(2);
+                _this.backgroundView.removeChild(element);
+                _this._barrier.stones.splice(_this._barrier.stones.indexOf(element), 1);
                 if (_this._scoreIndicator.data <= 0) {
                     _this.gameEnd();
                     return;
@@ -164,8 +182,14 @@ var GameView = /** @class */ (function (_super) {
                 (ballRec.right > elementRec.right) &&
                 (ball.vx < 0)) //向右反弹
              {
+<<<<<<< HEAD
                 ball.collide(100 / ball.vx, 1);
+=======
+                ball.collide(-1, 1);
+>>>>>>> ae898508c7a07031499058f346bbb5e73bf61eb4
                 _this._scoreIndicator.getPenalty(2);
+                _this.backgroundView.removeChild(element);
+                _this._barrier.stones.splice(_this._barrier.stones.indexOf(element), 1);
                 if (_this._scoreIndicator.data <= 0) {
                     _this.gameEnd();
                     return;
@@ -208,6 +232,7 @@ var GameView = /** @class */ (function (_super) {
         var attraction = Game.attractionCoefficient / (Math.pow(effectiveDistance, 3));
         this._bigBall.setForce((this._smallBall.x - this._bigBall.x) * attraction, (this._smallBall.y - this._bigBall.y) * attraction, "attraction");
         this._smallBall.setForce((this._bigBall.x - this._smallBall.x) * attraction, (this._bigBall.y - this._smallBall.y) * attraction, "attraction");
+<<<<<<< HEAD
         // //随机受力
         // if(this._loopCount % Game.smallBallRandomForcePeriod === 0){
         //     this.setRandomForce(this._smallBall);
@@ -215,22 +240,31 @@ var GameView = /** @class */ (function (_super) {
         // if(this._loopCount % Game.bigBallRandomForcePeriod === 0){
         //     this.setRandomForce(this._bigBall);
         // }
+=======
+        //随机受力
+        if (this._loopCount % Game.smallBallRandomForcePeriod === 0) {
+            this.setRandomForce(this._smallBall);
+        }
+        if (this._loopCount % Game.bigBallRandomForcePeriod === 0) {
+            this.setRandomForce(this._bigBall);
+        }
+>>>>>>> ae898508c7a07031499058f346bbb5e73bf61eb4
     };
     //让球受到随机力
     GameView.prototype.setRandomForce = function (ball) {
         if (Math.random() > 0.2) {
             var Fx = (Math.random() - 0.5) * Game.randomForce / 2 + Game.randomForce;
-            console.log("水平力Fx=" + Fx);
+            // console.log("水平力Fx="+Fx);
             ball.setForce(Fx, 0, "random");
         }
         else {
             var Fy = (Math.random() - 0.5) * Game.randomForce / 2 + Game.randomForce;
-            console.log("垂直力Fx=" + Fy);
+            // console.log("垂直力Fx="+Fy);
             ball.setForce(0, Fy, "random");
         }
         var forceTime = Math.random() * 3000 + 1000; //持续时间也是随机的
         Laya.timer.once(forceTime, ball, ball.removeForce, ["random"]);
-        console.log(ball.radius + " ball get random force for " + forceTime + "s");
+        // console.log(ball.radius+" ball get random force for "+forceTime+"s");
     };
     //当触摸开始时调用
     GameView.prototype.onTouchStart = function (data) {
