@@ -158,50 +158,37 @@ class GameView extends ui.GameViewUI{
     //碰撞检测与处理
     detectCollisions(ball:Ball):void{
         //判断球是否进入黑洞
-        let inBlackhole:number=0;
         for(let item of this._barriersManagement.blackHoles)
         {
             if(item.detectCollisions(ball))
             {
-                inBlackhole=item.detectCollisions(ball);
-                break;
+                this.gameEnd();
             }
-        }
-        if(inBlackhole)
-        {
-            this.gameEnd();
         }
 
         //判断球是否与陨石碰撞反弹
-        let inStone:number=0;
         for(let item of this._barriersManagement.stones)
         {
             if(item.detectCollisions(ball))//在此处添加碰撞音效
             {
-                inStone=item.detectCollisions(ball);  
-                if(item.isFalling){//根据陨石是否下落确定惩罚的分数
+                //根据陨石是否下落确定惩罚的分数
+                if(item.isFalling){
                     this._scoreIndicator.getPenalty(4);
                 }else{
                     this._scoreIndicator.getPenalty(5);
                 }
-                this.backgroundView.removeChildAt(item.index);
+                //移除该陨石
+                this.backgroundView.removeChild(item.item);
                 this._barriersManagement.stones.splice(this._barriersManagement.stones.indexOf(item),1);
+
+                //判断游戏是否结束
                 if(this._scoreIndicator.data<=0)
                 {
                     this.gameEnd();
                     return;
                 }
-                switch(inStone)
-                {
-                    case 1:
-                        ball.collide(1, -1);
-                        break;
-                    case 2:
-                        ball.collide(-1,1);
-                        break;
-                    default:
-                        break;
-                }       
+                //小球受到碰撞冲量
+                ball.collide(-0.8, -0.8);
             }
         }
 

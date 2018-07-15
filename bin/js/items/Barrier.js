@@ -4,7 +4,7 @@ var Barrier = /** @class */ (function () {
         this._width = width;
         this._height = height;
         this._name = name;
-        this.index = 0;
+        // this.index=0;    
         this._isTouched = false;
     }
     //item随机生成在背景某处
@@ -37,7 +37,7 @@ var Barrier = /** @class */ (function () {
             this.item.x = x_1;
             this.item.y = y_1;
             backgroundImage.addChild(this.item);
-            this.index = backgroundImage.getChildIndex(this.item);
+            // this.index=backgroundImage.getChildIndex(this.item);
         }
     };
     ;

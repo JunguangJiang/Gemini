@@ -1,8 +1,7 @@
 //障碍物抽象类
 abstract class Barrier<T extends Laya.Sprite>{
     public item:T;//动画或者图像
-    public index:number;//在背景的children中的编号
-
+    
     protected _width:number;//item宽度
     protected _height:number;//item高度
     protected _name:string;//item的名字
@@ -13,7 +12,6 @@ abstract class Barrier<T extends Laya.Sprite>{
         this._width=width;
         this._height=height;
         this._name=name;
-        this.index=0;    
         this._isTouched = false;
     }
 
@@ -57,7 +55,6 @@ abstract class Barrier<T extends Laya.Sprite>{
             this.item.y=y;
             
             backgroundImage.addChild(this.item);
-            this.index=backgroundImage.getChildIndex(this.item);
         }
     };
 
