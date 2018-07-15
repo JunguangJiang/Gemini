@@ -67,6 +67,7 @@ class GameView extends ui.GameViewUI{
                 Laya.Handler.create(this, this.onTouchStart, null, false),
                 Laya.Handler.create(this, this.onTouchEnd, null, false),"small"
             )
+            this.smallArrowView.visible = true;
         }else{//如果是单人模式
             this.smallArrowView.visible = false;
         }
@@ -75,7 +76,7 @@ class GameView extends ui.GameViewUI{
         this._level = 1;
 
         //障碍物类初始化与障碍物绘制
-        this._barriersManagement=new BarriersManagement(this.backgroundView);
+        this._barriersManagement=new BarriersManagement(this.backgroundView, 0.5);
         this._barriersManagement.drawBarriers();
 
         //计分器的初始化
@@ -105,7 +106,7 @@ class GameView extends ui.GameViewUI{
         this._bigBall.stop(); 
         this._smallBall.stop();
 
-        this._barriersManagement.updateBarrier(this.backgroundView);//清除原先的障碍物
+        this._barriersManagement.regenerateBarrier(this.backgroundView);//清除原先的障碍物
         this._barriersManagement.drawBarriers(); //绘制新的障碍物
         
         this._musicManager.onPlaySound(Game.NewLevelSound);//播放过关音乐
@@ -133,12 +134,12 @@ class GameView extends ui.GameViewUI{
         console.log("游戏结束");
         console.log("你的总分为"+this._scoreIndicator.data);
         Laya.timer.clear(this, this.onLoop);
-        Game.score=this._scoreIndicator.data;
         this.endButton.event(Laya.Event.CLICK);
     }
 
     //需要每隔单位时间进行一次调用的函数请写入以下函数体
     onLoop():void{
+        this._barriersManagement.updateBarriers();
         this.detectCollisions(this._bigBall);//大球碰撞检测与处理
         if(Game.playerNum === 2){
             this.detectCollisions(this._smallBall);//双人模式下小球也需要检测碰撞
@@ -151,7 +152,8 @@ class GameView extends ui.GameViewUI{
         this.updateBackground();//根据当前球的位置更新背景
         this._loopCount++;
         this._scoreIndicator.updateHeight(-(this._bigBall.y-this.runningView.height+this._bigBall.radius));
-        // this._bigBall.debug("大球");
+        //不断更新游戏分数
+        Game.score=this._scoreIndicator.data;
     }
 
     //根据当前球的位置更新背景
@@ -165,46 +167,37 @@ class GameView extends ui.GameViewUI{
     //碰撞检测与处理
     detectCollisions(ball:Ball):void{
         //判断球是否进入黑洞
-        let inBlackhole:number=0;
         for(let item of this._barriersManagement.blackHoles)
         {
             if(item.detectCollisions(ball))
             {
-                inBlackhole=item.detectCollisions(ball);
-                break;
+                this.gameEnd();
             }
-        }
-        if(inBlackhole)
-        {
-            this.gameEnd();
         }
 
         //判断球是否与陨石碰撞反弹
-        let inStone:number=0;
         for(let item of this._barriersManagement.stones)
         {
             if(item.detectCollisions(ball))//在此处添加碰撞音效
             {
-                inStone=item.detectCollisions(ball);  
-                this._scoreIndicator.getPenalty(2);//减2分
-                this.backgroundView.removeChildAt(item.index);
+                //根据陨石是否下落确定惩罚的分数
+                if(item.isFalling){
+                    this._scoreIndicator.getPenalty(4);
+                }else{
+                    this._scoreIndicator.getPenalty(5);
+                }
+                //移除该陨石
+                this.backgroundView.removeChild(item.item);
                 this._barriersManagement.stones.splice(this._barriersManagement.stones.indexOf(item),1);
+
+                //判断游戏是否结束
                 if(this._scoreIndicator.data<=0)
                 {
                     this.gameEnd();
                     return;
                 }
-                switch(inStone)
-                {
-                    case 1:
-                        ball.collide(1, -1);
-                        break;
-                    case 2:
-                        ball.collide(-1,1);
-                        break;
-                    default:
-                        break;
-                }       
+                //小球受到碰撞冲量
+                ball.collide(-0.8, -0.8);
             }
         }
 
@@ -213,8 +206,7 @@ class GameView extends ui.GameViewUI{
         {
             if(item.detectCollisions(ball))
             {
-                this._scoreIndicator.getReward(3);
-                console.log("发生碰撞");
+                this._scoreIndicator.getReward(8);
             }
         }
     }   

@@ -24,27 +24,27 @@ var EndView = /** @class */ (function (_super) {
     EndView.prototype.init = function () {
         //避免下次到结束界面时显示分数
         this.scoreView.visible = false;
-        //去掉已有的lose字样
-        while (this.removeChildByName("failText"))
+        //去掉已有的结束字样
+        while (this.removeChildByName("endText"))
             ;
     };
     //显示失败的缓动动画
-    EndView.prototype.showFailure = function () {
+    EndView.prototype.showEnd = function () {
         var textWidth = 300;
         var offset = this.backgroundView.width - textWidth >> 1;
         var endY = 50;
-        var failText = "Lose";
-        for (var i = 0, len = failText.length; i < len; ++i) {
-            var letterText = this.createLetter(failText.charAt(i));
-            letterText.name = "failText";
+        var endText = "GAMEOVER";
+        for (var i = 0, len = endText.length; i < len; ++i) {
+            var letterText = this.createLetter(endText.charAt(i));
+            letterText.name = "endText";
             this.addChild(letterText);
             letterText.x = textWidth / len * i + offset;
             letterText.y = -300;
             if (i === len - 1) //最后一个字母之后调用回调函数
              {
-                Laya.Tween.to(letterText, { y: endY }, 500, Laya.Ease.elasticOut, Laya.Handler.create(this, this.showScore), i * 500);
+                Laya.Tween.to(letterText, { y: endY }, 400, Laya.Ease.elasticOut, Laya.Handler.create(this, this.showScore), i * 400);
             }
-            Laya.Tween.to(letterText, { y: endY }, 500, Laya.Ease.elasticOut, null, i * 500);
+            Laya.Tween.to(letterText, { y: endY }, 400, Laya.Ease.elasticOut, null, i * 400);
         }
     };
     //创建缓动文字
@@ -53,7 +53,7 @@ var EndView = /** @class */ (function (_super) {
         letter.text = char;
         letter.color = "#FFFFFF";
         letter.font = "Impact";
-        letter.fontSize = 80;
+        letter.fontSize = 40;
         this.backgroundView.addChild(letter);
         return letter;
     };

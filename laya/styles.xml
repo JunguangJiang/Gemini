@@ -8,4 +8,5 @@
    <item name="ui/zodiac/yellow.png" type="Clip" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
    <item name="ui/background/EndBackGround.jpg" type="Image" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
    <item name="ui/button/SelectButton.png" type="Image" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
+   <item name="ui/fallingStone/fallingStone.png" type="Image" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
 </res>

@@ -1,8 +1,13 @@
+var Game;
+(function (Game) {
+    Game.MainHeight = 600;
+    Game.MainWidth = 800;
+})(Game || (Game = {}));
 // 程序入口
 var GameMain = /** @class */ (function () {
     function GameMain() {
         Laya.MiniAdpter.init();
-        Laya.init(800, 600);
+        Laya.init(Game.MainWidth, Game.MainHeight);
         //设置屏幕自动平铺和旋转
         Laya.stage.scaleMode = Laya.Stage.SCALE_EXACTFIT;
         Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
@@ -93,9 +98,10 @@ var GameMain = /** @class */ (function () {
     };
     //到结束界面
     GameMain.prototype.toEndView = function () {
+        Laya.timer.clear(GameMain.gameView, GameMain.gameView.onLoop);
         GameMain.viewStack.selectedIndex = 2;
         GameMain.endView.init();
-        GameMain.endView.showFailure();
+        GameMain.endView.showEnd();
     };
     //到开始界面
     GameMain.prototype.toStartView = function () {

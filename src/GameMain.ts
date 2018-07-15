@@ -1,3 +1,7 @@
+namespace Game{
+    export const MainHeight:number = 600;
+    export const MainWidth: number = 800;
+}
 // 程序入口
 class GameMain{
     private static viewStack:Laya.ViewStack;//界面管理器
@@ -9,7 +13,7 @@ class GameMain{
     constructor()
     {
         Laya.MiniAdpter.init();
-        Laya.init(800,600);
+        Laya.init(Game.MainWidth,Game.MainHeight);
         
         //设置屏幕自动平铺和旋转
         Laya.stage.scaleMode = Laya.Stage.SCALE_EXACTFIT;
@@ -120,9 +124,10 @@ class GameMain{
     //到结束界面
     toEndView():void
     {
+        Laya.timer.clear(GameMain.gameView, GameMain.gameView.onLoop);
         GameMain.viewStack.selectedIndex=2;
         GameMain.endView.init();
-        GameMain.endView.showFailure();
+        GameMain.endView.showEnd();
     }
 
     //到开始界面

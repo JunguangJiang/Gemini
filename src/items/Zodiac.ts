@@ -5,7 +5,6 @@ namespace Game{
 // 星座类
 class Zodiac extends Barrier<Laya.Clip>{
     private _type:number;//星座的类型
-    private _isTouched: boolean;//是否被触碰到
     
     constructor(backgroundImage: Laya.Image, width: number, height:number, name: string, type: number){
         super(backgroundImage, width, height, name);
@@ -14,7 +13,6 @@ class Zodiac extends Barrier<Laya.Clip>{
         this.item.clipX = 3;
         this.item.clipY = 4;
         this.item.index = type % 12;
-        this._isTouched = false;
     }
 
     //绘制item

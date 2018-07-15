@@ -72,7 +72,7 @@
 
 **public method**
 + `Barriers()`：构造函数，函数参数见代码。
-+ `updateBarrier(backgroundImage:Laya.Image)`：更新背景各障碍物的位置（在构造Barriers类对象的时候会先初始化一次）。
++ `regenerateBarrier(backgroundImage:Laya.Image)`：更新背景各障碍物的位置（在构造Barriers类对象的时候会先初始化一次）。
 + `drawBarriers()`：将障碍物的动画和图像绘制到背景上。
 
 ### Ball(球类)

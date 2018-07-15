@@ -4,7 +4,7 @@ var Barrier = /** @class */ (function () {
         this._width = width;
         this._height = height;
         this._name = name;
-        this.index = 0;
+        this._isTouched = false;
     }
     //item随机生成在背景某处
     Barrier.prototype.randomGenerate = function (backgroundImage) {
@@ -36,10 +36,11 @@ var Barrier = /** @class */ (function () {
             this.item.x = x_1;
             this.item.y = y_1;
             backgroundImage.addChild(this.item);
-            this.index = backgroundImage.getChildIndex(this.item);
         }
     };
     ;
+    //更新item的位置等
+    Barrier.prototype.update = function () { }; //默认情况下什么都不做
     return Barrier;
 }());
 //# sourceMappingURL=Barrier.js.map

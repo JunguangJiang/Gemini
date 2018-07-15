@@ -92,6 +92,9 @@ P 29CA414F NoSoundButton.png
 P 28BBC03C PauseButton.png
 P C81C1259 SelectButton.png
 P C395CBD6 SoundButton.png
+D ui/fallingStone
+R 6D88006A .DS_Store
+R 6F73ED82 fallingStone.png
 D ui/score
 P 60053BEA clip_number.png
 D ui/star
@@ -117,3 +120,9 @@ D ui/zodiac
 R 38E3E1DC .DS_Store
 P D217C862 light.png
 P 33050CAF yellow.png
+D ui/background/fallingStone
+R 7431B55D 34fae6cd7b899e51bfd8243348a7d933c8950d46.jpg
+R 18B86987 7af40ad162d9f2d3b81c3cc8a3ec8a136327cc8c.jpg
+R 81ED24C7 92cf0d48d2b44f542a3b195eef1194bd.jpg
+R 383B4AD2 b219ebc4b74543a90ea5a8e715178a82b901145a.jpg
+P D8A6E343 ba8e8c09d37bbb7b78a4ef5572288ec7.jpg
