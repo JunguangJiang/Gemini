@@ -3,7 +3,6 @@ class Ball{
     public _animation: Laya.Animation;//球的动画
     private _radius: number;//小球半径
     private _forces: Laya.Dictionary;//施加在小球上的所有力
-
     //速度
     private _vx: number;
     private _vy: number;
@@ -13,7 +12,6 @@ class Ball{
     private _ay: number;
 
     private _timer: Timer;//时钟
-
     constructor(radius: number, x:number, y:number,ballView:Laya.Animation){
         this._animation=ballView;
         this._radius = radius;
@@ -21,7 +19,6 @@ class Ball{
         this._timer = new Timer();
         this._forces = new Laya.Dictionary();//记录所有的受力
         this.x = x; this.y = y; //设置小球的位置
-
         //绘制动画并加入背景中
         this.drawNormalBall();
         this.drawShinyBall();       

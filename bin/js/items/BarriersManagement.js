@@ -1,6 +1,7 @@
 var BarriersManagement = /** @class */ (function () {
-    function BarriersManagement(backgroundImage, blackHolesNum, blackHoleWidth, blackHoleHeight, blackHoleName, stonesNum, stoneWidth, stoneHeight, stoneName, zodiacsNum, zodiacWidth, zodiacHeight, zodiacName) {
-        if (blackHolesNum === void 0) { blackHolesNum = 5; }
+    function BarriersManagement(backgroundImage, fallingStoneRate, blackHolesNum, blackHoleWidth, blackHoleHeight, blackHoleName, stonesNum, stoneWidth, stoneHeight, stoneName, zodiacsNum, zodiacWidth, zodiacHeight, zodiacName) {
+        if (fallingStoneRate === void 0) { fallingStoneRate = 0; }
+        if (blackHolesNum === void 0) { blackHolesNum = 1; }
         if (blackHoleWidth === void 0) { blackHoleWidth = 100; }
         if (blackHoleHeight === void 0) { blackHoleHeight = 100; }
         if (blackHoleName === void 0) { blackHoleName = "blackhole"; }
@@ -30,11 +31,12 @@ var BarriersManagement = /** @class */ (function () {
         this._zodiacWidth = zodiacWidth;
         this._zodiacHeight = zodiacHeight;
         this._zodiacName = zodiacName;
+        this.fallingStoneRate = fallingStoneRate;
         //更新所有障碍物
-        this.updateBarrier(backgroundImage);
+        this.regenerateBarrier(backgroundImage);
     }
-    //更新屏幕上所有障碍物
-    BarriersManagement.prototype.updateBarrier = function (backgroundImage) {
+    //重新生成屏幕上所有障碍物
+    BarriersManagement.prototype.regenerateBarrier = function (backgroundImage) {
         //初始化
         this.blackHoles.slice(0);
         while (backgroundImage.removeChildByName(this._blackHoleName))
@@ -53,7 +55,8 @@ var BarriersManagement = /** @class */ (function () {
         }
         //生成陨石数组
         for (var i = 0; i < this._stonesNum; i++) {
-            var stone = new Stone(backgroundImage, this._stoneWidth, this._stoneHeight, this._stoneName);
+            var isFalling = Math.random() <= this.fallingStoneRate;
+            var stone = new Stone(backgroundImage, this._stoneWidth, this._stoneHeight, this._stoneName, isFalling);
             stone.randomGenerate(backgroundImage);
             this.stones.push(stone);
         }
@@ -74,6 +77,18 @@ var BarriersManagement = /** @class */ (function () {
         });
         this.zodiacs.forEach(function (element) {
             element.drawItem();
+        });
+    };
+    //刷新各障碍物的动画或图像
+    BarriersManagement.prototype.updateBarriers = function () {
+        this.blackHoles.forEach(function (element) {
+            element.update();
+        });
+        this.stones.forEach(function (element) {
+            element.update();
+        });
+        this.zodiacs.forEach(function (element) {
+            element.update();
         });
     };
     return BarriersManagement;

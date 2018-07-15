@@ -72,7 +72,7 @@ class GameView extends ui.GameViewUI{
         this._level = 1;
 
         //障碍物类初始化与障碍物绘制
-        this._barriersManagement=new BarriersManagement(this.backgroundView);
+        this._barriersManagement=new BarriersManagement(this.backgroundView, 0.5);
         this._barriersManagement.drawBarriers();
 
         //计分器的初始化
@@ -99,7 +99,7 @@ class GameView extends ui.GameViewUI{
         this._bigBall.stop(); 
         this._smallBall.stop();
 
-        this._barriersManagement.updateBarrier(this.backgroundView);//清除原先的障碍物
+        this._barriersManagement.regenerateBarrier(this.backgroundView);//清除原先的障碍物
         this._barriersManagement.drawBarriers(); //绘制新的障碍物
         
         this._musicManager.onPlaySound(Game.NewLevelSound);//播放过关音乐
@@ -131,6 +131,7 @@ class GameView extends ui.GameViewUI{
 
     //需要每隔单位时间进行一次调用的函数请写入以下函数体
     onLoop():void{
+        this._barriersManagement.updateBarriers();
         this.detectCollisions(this._bigBall);//大球碰撞检测与处理
         if(Game.playerNum === 2){
             this.detectCollisions(this._smallBall);//双人模式下小球也需要检测碰撞
@@ -178,7 +179,11 @@ class GameView extends ui.GameViewUI{
             if(item.detectCollisions(ball))//在此处添加碰撞音效
             {
                 inStone=item.detectCollisions(ball);  
-                this._scoreIndicator.getPenalty(2);//减2分
+                if(item.isFalling){//根据陨石是否下落确定惩罚的分数
+                    this._scoreIndicator.getPenalty(4);
+                }else{
+                    this._scoreIndicator.getPenalty(5);
+                }
                 this.backgroundView.removeChildAt(item.index);
                 this._barriersManagement.stones.splice(this._barriersManagement.stones.indexOf(item),1);
                 if(this._scoreIndicator.data<=0)
@@ -205,8 +210,7 @@ class GameView extends ui.GameViewUI{
         {
             if(item.detectCollisions(ball))
             {
-                this._scoreIndicator.getReward(3);
-                console.log("发生碰撞");
+                this._scoreIndicator.getReward(8);
             }
         }
     }   

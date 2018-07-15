@@ -23,7 +23,6 @@ var Zodiac = /** @class */ (function (_super) {
         _this.item.clipX = 3;
         _this.item.clipY = 4;
         _this.item.index = type % 12;
-        _this._isTouched = false;
         return _this;
     }
     //绘制item

@@ -11,6 +11,7 @@ class BarriersManagement{
     private _stoneWidth:number;//陨石宽度
     private _stoneHeight:number;//陨石高度
     private _stoneName:string;//陨石类的名称，默认为stone 
+    public fallingStoneRate: number;//坠落的陨石的比例
 
     public zodiacs: Zodiac[];//存星座的数组
     private _zodiacNum: number;//星座个数
@@ -18,8 +19,8 @@ class BarriersManagement{
     private _zodiacHeight: number;//星座高度
     private _zodiacName:string;//星座名称，默认为zodiac
 
-    constructor(backgroundImage:Laya.Image,
-    blackHolesNum:number=5,blackHoleWidth:number=100,blackHoleHeight:number=100,blackHoleName:string="blackhole",
+    constructor(backgroundImage:Laya.Image, fallingStoneRate:number=0,
+    blackHolesNum:number=1,blackHoleWidth:number=100,blackHoleHeight:number=100,blackHoleName:string="blackhole",
     stonesNum:number=16,stoneWidth:number=50,stoneHeight:number=100,stoneName:string="stone",
     zodiacsNum: number=12, zodiacWidth:number=100, zodiacHeight:number=100, zodiacName:string="zodiac")
     {
@@ -44,13 +45,15 @@ class BarriersManagement{
         this._zodiacHeight = zodiacHeight;
         this._zodiacName = zodiacName;
 
+        this.fallingStoneRate = fallingStoneRate;
+
         //更新所有障碍物
-        this.updateBarrier(backgroundImage);
+        this.regenerateBarrier(backgroundImage);
         
     }
 
-    //更新屏幕上所有障碍物
-    public updateBarrier(backgroundImage:Laya.Image):void
+    //重新生成屏幕上所有障碍物
+    public regenerateBarrier(backgroundImage:Laya.Image):void
     {
         //初始化
         this.blackHoles.slice(0);
@@ -73,7 +76,8 @@ class BarriersManagement{
         //生成陨石数组
         for(let i=0;i<this._stonesNum;i++)
         {
-            const stone:Stone=new Stone(backgroundImage,this._stoneWidth,this._stoneHeight,this._stoneName);
+            let isFalling:boolean = Math.random()<=this.fallingStoneRate;
+            const stone:Stone=new Stone(backgroundImage,this._stoneWidth,this._stoneHeight,this._stoneName, isFalling);
             stone.randomGenerate(backgroundImage);
             this.stones.push(stone);
         }     
@@ -84,7 +88,6 @@ class BarriersManagement{
             zodiac.randomGenerate(backgroundImage);
             this.zodiacs.push(zodiac);
         }
-
     }
 
     //绘制各障碍物的动画或图像
@@ -100,6 +103,22 @@ class BarriersManagement{
 
         this.zodiacs.forEach(element =>{
             element.drawItem();
+        });
+    }
+
+    //刷新各障碍物的动画或图像
+    public updateBarriers():void
+    {
+        this.blackHoles.forEach(element => {
+            element.update();
+        });
+
+        this.stones.forEach(element => {
+            element.update();
+        });
+
+        this.zodiacs.forEach(element =>{
+            element.update();
         });
     }
 }
