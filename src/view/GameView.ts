@@ -16,6 +16,9 @@ namespace Game{
     export const initialY = 2600;//小球的初始高度
 
     export const serverResURL = "http://jjg15.iterator-traits.com/res";//服务器资源路径
+
+    export let sound:boolean=true;//是否有声音
+    export let pause:boolean=false;//是否暂停
 }
 
 //游戏的主视图
@@ -84,6 +87,9 @@ class GameView extends ui.GameViewUI{
         //音乐播放器
         this._musicManager = new MusicManager();
         this._musicManager.onPlayMusic(1);//播放等级1的音乐
+
+        //创建按钮事件
+        this.createButtonEvents();
     }
 
     //进入新的一级
@@ -127,6 +133,8 @@ class GameView extends ui.GameViewUI{
         console.log("游戏结束");
         console.log("你的总分为"+this._scoreIndicator.data);
         Laya.timer.clear(this, this.onLoop);
+        Game.score=this._scoreIndicator.data;
+        this.endButton.event(Laya.Event.CLICK);
     }
 
     //需要每隔单位时间进行一次调用的函数请写入以下函数体
@@ -216,8 +224,6 @@ class GameView extends ui.GameViewUI{
         if( ( ((ball.x-ball.radius) <= 0) && ball.vx < 0 ) || 
             ( ((ball.x+ball.radius) >= this.runningView.width) && ball.vx > 0 )
             ){
-                // console.log("碰到水平边缘");
-                //this._musicManager.onPlaySound(Game.RewardSound);//播放和石头碰撞的声音，仅用于调试
             ball.collide(-1,1);
         }else if(
             (((ball.y+ball.radius) >= this.runningView.height) && ball.vy > 0)
@@ -317,6 +323,50 @@ class GameView extends ui.GameViewUI{
             this._bigBall.removeForce("humanControl");
         }else{
             this._smallBall.removeForce("humanControl");
+        }
+    }
+
+    //创建各种按钮响应事件
+    private createButtonEvents():void
+    {
+        //暂停按钮
+       this.pauseButton.on(Laya.Event.CLICK,this,this.pauseEvent);
+       //静音按钮
+       this.soundButton.on(Laya.Event.CLICK,this,this.soundEvent);
+      
+    }
+
+    //切换暂停状态事件
+    private pauseEvent():void
+    {
+        if(Game.pause)//现在处于暂停状态
+        {
+            this.pauseButton.skin="ui/button/PauseButton.png";
+            Game.pause=false;
+            //继续游戏TODO：
+        }
+        else//现在处于游戏状态
+        {
+            this.pauseButton.skin="ui/button/ContinueButton.png";
+            Game.pause=true;
+            //暂停游戏TODO：
+        }
+    }
+
+    //切换静音状态事件
+    private soundEvent():void
+    {
+        if(Game.sound)//现在处于播放音乐状态
+        {
+            this.soundButton.skin="ui/button/SoundButton.png";
+            Game.sound=false;
+            //暂停音乐TODO：
+        }
+        else//现在处于静音状态
+        {
+            this.soundButton.skin="ui/button/NoSoundButton.png";
+            Game.sound=true;
+            //播放音乐TODO：
         }
     }
 

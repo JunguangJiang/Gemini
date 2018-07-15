@@ -1,4 +1,5 @@
 D .
+R EAEBE2F6 .DS_Store
 D comp
 P D12221A9 bg.png
 P 9401CC40 blank.png
@@ -34,11 +35,14 @@ P 7E990267 vscroll.png
 P E466EB1C vslider$bar.png
 P 2BFF7046 vslider.png
 D ui
+R 2C087A01 .DS_Store
 D ui/arrow
+R 6D88006A .DS_Store
 P F8355C0F left.png
 P 2FC92A05 right.png
 D ui/background
-R 59C528A4 BackGround .jpg
+P 59C528A4 BackGround .jpg
+P 052A3C12 EndBackGround.jpg
 P E31D5A8F StartBackGround.png
 D ui/blackhole
 P B96ED697 1.png
@@ -82,7 +86,12 @@ P A6007A08 7.png
 P E66F4719 8.png
 P 91CAA9D2 9.png
 D ui/button
-P C81C1259 1.png
+P 43B8A16A ContinueButton.png
+P 23B8D463 EndButton.png
+P 29CA414F NoSoundButton.png
+P 28BBC03C PauseButton.png
+P C81C1259 SelectButton.png
+P C395CBD6 SoundButton.png
 D ui/score
 P 60053BEA clip_number.png
 D ui/star
@@ -105,5 +114,6 @@ P 8F5DC24B 9.png
 D ui/stone
 P F6CD4B33 stone.png
 D ui/zodiac
-P 602A00B4 light.png
-P 6AAD4097 yellow.png
+R 38E3E1DC .DS_Store
+P D217C862 light.png
+P 33050CAF yellow.png
