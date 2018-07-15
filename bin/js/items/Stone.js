@@ -11,40 +11,10 @@ var __extends = (this && this.__extends) || (function () {
 var Stone = /** @class */ (function (_super) {
     __extends(Stone, _super);
     function Stone(backgroundImage, width, height, name) {
-        return _super.call(this, backgroundImage, width, height, name) || this;
+        var _this = _super.call(this, backgroundImage, width, height, name) || this;
+        _this.item = new Laya.Image();
+        return _this;
     }
-    //item随机生成在背景某处
-    Stone.prototype.randomGenerate = function (backgroundImage) {
-        var _this = this;
-        this.item = new Laya.Image();
-        this.item.width = this._width; //不确定要不要在这里设置尺寸！！
-        this.item.height = this._height;
-        this.item.name = this._name;
-        //随机生成坐标并检测是否会与其他物体重叠
-        var overlap, x, y, testRec; //用于测试的矩形范围
-        testRec = new Laya.Sprite();
-        while (true) {
-            x = Math.min(backgroundImage.width - this._width, Math.random() * backgroundImage.width);
-            y = Math.min(backgroundImage.height - this._height - 150, Math.random() * backgroundImage.height);
-            overlap = 0;
-            backgroundImage._childs.forEach(function (element) {
-                testRec.width = element.width + 2 * _this._width;
-                testRec.height = element.height + 2 * _this._height;
-                testRec.x = element.x - _this._width;
-                testRec.y = element.y - _this._height;
-                if (testRec.hitTestPoint(x, y)) {
-                    overlap = overlap + 1;
-                }
-            });
-            if (!overlap) {
-                break;
-            }
-        }
-        this.item.x = x;
-        this.item.y = y;
-        backgroundImage.addChild(this.item);
-        this.index = backgroundImage.getChildIndex(this.item);
-    };
     //绘制item
     Stone.prototype.drawItem = function () {
         this.item.loadImage("res/atlas/ui/stone.png");

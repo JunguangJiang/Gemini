@@ -10,11 +10,18 @@ class BarriersManagement{
     private _stonesNum:number;//陨石个数
     private _stoneWidth:number;//陨石宽度
     private _stoneHeight:number;//陨石高度
-    private _stoneName;//陨石类的名称，默认为stone  
+    private _stoneName:string;//陨石类的名称，默认为stone 
+
+    public zodiacs: Zodiac[];//存星座的数组
+    private _zodiacNum: number;//星座个数
+    private _zodiacWidth: number;//星座宽度
+    private _zodiacHeight: number;//星座高度
+    private _zodiacName:string;//星座名称，默认为zodiac
 
     constructor(backgroundImage:Laya.Image,
     blackHolesNum:number=5,blackHoleWidth:number=100,blackHoleHeight:number=100,blackHoleName:string="blackhole",
-    stonesNum:number=15,stoneWidth:number=50,stoneHeight:number=100,stoneName:string="stone")
+    stonesNum:number=16,stoneWidth:number=50,stoneHeight:number=100,stoneName:string="stone",
+    zodiacsNum: number=12, zodiacWidth:number=100, zodiacHeight:number=100, zodiacName:string="zodiac")
     {
         /*黑洞初始化*/
         this.blackHoles=[];
@@ -30,6 +37,13 @@ class BarriersManagement{
         this._stoneHeight=stoneHeight;
         this._stoneName=stoneName;
 
+        /* 星座的初始化 */
+        this.zodiacs = [];
+        this._zodiacNum = zodiacsNum;
+        this._zodiacWidth = zodiacWidth;
+        this._zodiacHeight = zodiacHeight;
+        this._zodiacName = zodiacName;
+
         //更新所有障碍物
         this.updateBarrier(backgroundImage);
         
@@ -44,6 +58,9 @@ class BarriersManagement{
 
         this.stones.slice(0);
         while(backgroundImage.removeChildByName(this._stoneName));
+
+        this.zodiacs.slice(0);
+        while(backgroundImage.removeChildByName(this._zodiacName));
 
         //生成黑洞数组
         for(let i=0;i<this._blackHolesNum;i++)
@@ -61,6 +78,12 @@ class BarriersManagement{
             this.stones.push(stone);
         }     
 
+        //生成星座数组
+        for(let i=0; i<this._zodiacNum; i++){
+            const zodiac: Zodiac=new Zodiac(backgroundImage, this._zodiacWidth, this._zodiacHeight, this._zodiacName, i%12);
+            zodiac.randomGenerate(backgroundImage);
+            this.zodiacs.push(zodiac);
+        }
 
     }
 
@@ -72,6 +95,10 @@ class BarriersManagement{
         });
 
         this.stones.forEach(element => {
+            element.drawItem();
+        });
+
+        this.zodiacs.forEach(element =>{
             element.drawItem();
         });
     }

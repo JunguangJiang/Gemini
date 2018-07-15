@@ -1,15 +1,15 @@
 //游戏的一些参数
 namespace Game{
-    export const debug: boolean = false;//是否处于调试模式
+    export const debug: boolean = true;//是否处于调试模式
     export let playerNum: number = 1;//玩家数目，可以取1或者2
     export const interval:number = 100;//刷新时间(单位：毫秒)
 
-    export const gravity:number = 12;//重力加速度
-    export const liftCoefficient:number = debug?1600:600;//升力系数,升力=liftCoefficient/(球心距离)
+    export const gravity:number = 14;//重力加速度
+    export const liftCoefficient:number = debug?1600:700;//升力系数,升力=liftCoefficient/(球心距离)
     export const dragCoefficient:number = 0.001;//阻力系数，阻力=-dragCoefficient*速度^3
     export let attractionCoefficient:number=8000;//球之间的引力系数
     export let randomForce = 10;//随机力的幅度
-    export const humanForce = 60;//人类施力的幅度
+    export const humanForce = 40;//人类施力的幅度
     export let smallBallRandomForcePeriod = 100;//小球受到随机力的周期
     export let bigBallRandomForcePeriod = 500;//大球受到随机力的周期
 
@@ -26,7 +26,6 @@ class GameView extends ui.GameViewUI{
     private _arrow: Arrow;//控制大球的箭头区域
     private _smallArrow: Arrow;//控制小球的箭头区域
     private _barriersManagement:BarriersManagement;//障碍物管理
-    private _backgroundView: Laya.Image;//背景视图
     private _scoreIndicator: ScoreIndicator;//计分器
     private _musicManager: MusicManager;//音乐管理器
     
@@ -44,7 +43,6 @@ class GameView extends ui.GameViewUI{
     //界面初始化
     init():void
     {
-
         //游戏的活动区域
         this._activityArea = {up:this.height-this.backgroundView.height, down:0};
 
@@ -201,6 +199,16 @@ class GameView extends ui.GameViewUI{
                 }       
             }
         }
+
+        //判断球是否和星座相碰
+        for(let item of this._barriersManagement.zodiacs)
+        {
+            if(item.detectCollisions(ball))
+            {
+                this._scoreIndicator.getReward(3);
+                console.log("发生碰撞");
+            }
+        }
     }   
 
     //球与边缘的相对位置的检测与处理
@@ -209,8 +217,8 @@ class GameView extends ui.GameViewUI{
             ( ((ball.x+ball.radius) >= this.runningView.width) && ball.vx > 0 )
             ){
                 // console.log("碰到水平边缘");
-                this._musicManager.onPlaySound(Game.RewardSound);//播放和石头碰撞的声音，仅用于调试
-            ball.collide(-0.8,1);
+                //this._musicManager.onPlaySound(Game.RewardSound);//播放和石头碰撞的声音，仅用于调试
+            ball.collide(-1,1);
         }else if(
             (((ball.y+ball.radius) >= this.runningView.height) && ball.vy > 0)
         ){
@@ -277,16 +285,16 @@ class GameView extends ui.GameViewUI{
     setRandomForce(ball: Ball):void{
         if(Math.random()>0.2){
             let Fx:number = (Math.random()-0.5)*Game.randomForce/2+Game.randomForce;
-            console.log("水平力Fx="+Fx);
+            // console.log("水平力Fx="+Fx);
             ball.setForce(Fx, 0, "random");
         }else{
             let Fy:number = (Math.random()-0.5)*Game.randomForce/2+Game.randomForce;
-            console.log("垂直力Fx="+Fy);
-            ball.setForce(0,Fy, "random");
+            // console.log("垂直力Fx="+Fy);
+            ball.setForce(0,Fy/3, "random");
         }
         let forceTime:number = Math.random() * 3000 + 1000;//持续时间也是随机的
         Laya.timer.once(forceTime, ball, ball.removeForce, ["random"]);
-        console.log(ball.radius+" ball get random force for "+forceTime+"s");
+        // console.log(ball.radius+" ball get random force for "+forceTime+"s");
     }
 
     //当触摸开始时调用

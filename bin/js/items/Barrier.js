@@ -6,6 +6,40 @@ var Barrier = /** @class */ (function () {
         this._name = name;
         this.index = 0;
     }
+    //item随机生成在背景某处
+    Barrier.prototype.randomGenerate = function (backgroundImage) {
+        var _this = this;
+        if (this.item) {
+            this.item.width = this._width; //不确定要不要在这里设置尺寸！！
+            this.item.height = this._height;
+            this.item.name = this._name;
+            //随机生成坐标并检测是否会与其他物体重叠
+            var overlap_1, x_1, y_1, testRec_1; //用于测试的矩形范围
+            testRec_1 = new Laya.Sprite();
+            while (true) {
+                x_1 = Math.min(backgroundImage.width - this._width, Math.random() * backgroundImage.width);
+                y_1 = Math.min(backgroundImage.height - this._height - 150, Math.random() * backgroundImage.height);
+                overlap_1 = 0;
+                backgroundImage._childs.forEach(function (element) {
+                    testRec_1.width = element.width + 2 * _this._width;
+                    testRec_1.height = element.height + 2 * _this._height;
+                    testRec_1.x = element.x - _this._width;
+                    testRec_1.y = element.y - _this._height;
+                    if (testRec_1.hitTestPoint(x_1, y_1)) {
+                        overlap_1 = overlap_1 + 1;
+                    }
+                });
+                if (!overlap_1) {
+                    break;
+                }
+            }
+            this.item.x = x_1;
+            this.item.y = y_1;
+            backgroundImage.addChild(this.item);
+            this.index = backgroundImage.getChildIndex(this.item);
+        }
+    };
+    ;
     return Barrier;
 }());
 //# sourceMappingURL=Barrier.js.map

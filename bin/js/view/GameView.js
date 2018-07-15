@@ -11,15 +11,15 @@ var __extends = (this && this.__extends) || (function () {
 //游戏的一些参数
 var Game;
 (function (Game) {
-    Game.debug = false; //是否处于调试模式
+    Game.debug = true; //是否处于调试模式
     Game.playerNum = 1; //玩家数目，可以取1或者2
     Game.interval = 100; //刷新时间(单位：毫秒)
-    Game.gravity = 12; //重力加速度
-    Game.liftCoefficient = Game.debug ? 1600 : 600; //升力系数,升力=liftCoefficient/(球心距离)
+    Game.gravity = 14; //重力加速度
+    Game.liftCoefficient = Game.debug ? 1600 : 700; //升力系数,升力=liftCoefficient/(球心距离)
     Game.dragCoefficient = 0.001; //阻力系数，阻力=-dragCoefficient*速度^3
     Game.attractionCoefficient = 8000; //球之间的引力系数
     Game.randomForce = 10; //随机力的幅度
-    Game.humanForce = 60; //人类施力的幅度
+    Game.humanForce = 40; //人类施力的幅度
     Game.smallBallRandomForcePeriod = 100; //小球受到随机力的周期
     Game.bigBallRandomForcePeriod = 500; //大球受到随机力的周期
     Game.initialY = 2600; //小球的初始高度
@@ -158,14 +158,22 @@ var GameView = /** @class */ (function (_super) {
                 }
             }
         }
+        //判断球是否和星座相碰
+        for (var _d = 0, _e = this._barriersManagement.zodiacs; _d < _e.length; _d++) {
+            var item = _e[_d];
+            if (item.detectCollisions(ball)) {
+                this._scoreIndicator.getReward(3);
+                console.log("发生碰撞");
+            }
+        }
     };
     //球与边缘的相对位置的检测与处理
     GameView.prototype.detectBorder = function (ball) {
         if ((((ball.x - ball.radius) <= 0) && ball.vx < 0) ||
             (((ball.x + ball.radius) >= this.runningView.width) && ball.vx > 0)) {
             // console.log("碰到水平边缘");
-            this._musicManager.onPlaySound(Game.RewardSound); //播放和石头碰撞的声音，仅用于调试
-            ball.collide(-0.8, 1);
+            //this._musicManager.onPlaySound(Game.RewardSound);//播放和石头碰撞的声音，仅用于调试
+            ball.collide(-1, 1);
         }
         else if ((((ball.y + ball.radius) >= this.runningView.height) && ball.vy > 0)) {
             // console.log("碰到垂直边缘");
@@ -208,17 +216,17 @@ var GameView = /** @class */ (function (_super) {
     GameView.prototype.setRandomForce = function (ball) {
         if (Math.random() > 0.2) {
             var Fx = (Math.random() - 0.5) * Game.randomForce / 2 + Game.randomForce;
-            console.log("水平力Fx=" + Fx);
+            // console.log("水平力Fx="+Fx);
             ball.setForce(Fx, 0, "random");
         }
         else {
             var Fy = (Math.random() - 0.5) * Game.randomForce / 2 + Game.randomForce;
-            console.log("垂直力Fx=" + Fy);
-            ball.setForce(0, Fy, "random");
+            // console.log("垂直力Fx="+Fy);
+            ball.setForce(0, Fy / 3, "random");
         }
         var forceTime = Math.random() * 3000 + 1000; //持续时间也是随机的
         Laya.timer.once(forceTime, ball, ball.removeForce, ["random"]);
-        console.log(ball.radius + " ball get random force for " + forceTime + "s");
+        // console.log(ball.radius+" ball get random force for "+forceTime+"s");
     };
     //当触摸开始时调用
     GameView.prototype.onTouchStart = function (data) {
