@@ -27,28 +27,20 @@ class Stone extends Barrier<Laya.Image>{
             this.item.loadImage(Game.stoneImage);
             this.item.scaleX=this._width/108;
             this.item.scaleY=this._height/191;
+            // this._bounds = this.getInnerBounds(0.8,0.8);
         }else{
             this.item.loadImage(Game.fallingStoneImage);
             this.item.scaleX=this._width/600;
             this.item.scaleY=this._height/800;
+            // this._bounds = this.getInnerBounds(0.8,0.8);
         }
     }
 
-    //判断球是否与陨石相撞，0为不相撞，1为碰撞
-     public detectCollisions(ball:Ball):number
+    //判断球是否与陨石相撞
+     public detectCollisions(ball:Ball):boolean
      {
-         if(this._isTouched){
-             return;
-         }
-        let ballRec=new Laya.Rectangle(ball.x-ball.radius,ball.y-ball.radius,ball.radius*2,ball.radius*2);
-   
-        let itemRec=this.item.getBounds();
-        itemRec=itemRec.setTo(itemRec.x+itemRec.width/10,itemRec.y+itemRec.height/10,itemRec.width*4/5,itemRec.height*4/5);
-        if(!itemRec.intersects(ballRec)){
-            return 0;
-        }else{
-            return 1;
-        }
+         if(this._isTouched)return false;//如果已经碰撞，则不再判断
+        return this.getInnerBounds(0.8,0.8).intersects(ball.animation.getBounds());
      }
 
      //不断更新陨石的位置，只有当_isFalling为真时，位置才会改变

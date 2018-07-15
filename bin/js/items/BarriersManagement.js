@@ -1,7 +1,7 @@
 var BarriersManagement = /** @class */ (function () {
     function BarriersManagement(backgroundImage, fallingStoneRate, blackHolesNum, blackHoleWidth, blackHoleHeight, blackHoleName, stonesNum, stoneWidth, stoneHeight, stoneName, zodiacsNum, zodiacWidth, zodiacHeight, zodiacName) {
         if (fallingStoneRate === void 0) { fallingStoneRate = 0; }
-        if (blackHolesNum === void 0) { blackHolesNum = 1; }
+        if (blackHolesNum === void 0) { blackHolesNum = 10; }
         if (blackHoleWidth === void 0) { blackHoleWidth = 100; }
         if (blackHoleHeight === void 0) { blackHoleHeight = 100; }
         if (blackHoleName === void 0) { blackHoleName = "blackhole"; }

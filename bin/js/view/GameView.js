@@ -95,10 +95,14 @@ var GameView = /** @class */ (function (_super) {
     };
     //需要每隔单位时间进行一次调用的函数请写入以下函数体
     GameView.prototype.onLoop = function () {
-        this._barriersManagement.updateBarriers();
-        this.detectCollisions(this._bigBall); //大球碰撞检测与处理
-        if (Game.playerNum === 2) {
-            this.detectCollisions(this._smallBall); //双人模式下小球也需要检测碰撞
+        this._barriersManagement.updateBarriers(); //更新当前障碍物的位置
+        //在任何模式下，
+        this.detectCollisionsBetween(this._bigBall, "BlackHole"); //大球都会被黑洞吸入
+        this.detectCollisionsBetween(this._bigBall, "Stone"); //大球都会被岩石击中
+        this.detectCollisionsBetween(this._smallBall, "Zodiac"); //只有小球才可以点亮星座
+        if (Game.playerNum === 2) { //双人模式下
+            this.detectCollisionsBetween(this._smallBall, "BlackHole"); //小球也会被黑洞吸入
+            this.detectCollisionsBetween(this._smallBall, "Stone"); //被岩石击中
         }
         this.updateForces(); //更新大小球的受力
         this.detectBorder(this._bigBall); //检测与边缘的相对位置
@@ -120,46 +124,99 @@ var GameView = /** @class */ (function (_super) {
         this.runningView.y = y;
     };
     //碰撞检测与处理
-    GameView.prototype.detectCollisions = function (ball) {
-        //判断球是否进入黑洞
-        for (var _i = 0, _a = this._barriersManagement.blackHoles; _i < _a.length; _i++) {
-            var item = _a[_i];
-            if (item.detectCollisions(ball)) {
-                this.gameEnd();
-            }
-        }
-        //判断球是否与陨石碰撞反弹
-        for (var _b = 0, _c = this._barriersManagement.stones; _b < _c.length; _b++) {
-            var item = _c[_b];
-            if (item.detectCollisions(ball)) //在此处添加碰撞音效
-             {
-                //根据陨石是否下落确定惩罚的分数
-                if (item.isFalling) {
-                    this._scoreIndicator.getPenalty(4);
+    GameView.prototype.detectCollisionsBetween = function (ball, barriers) {
+        switch (barriers) {
+            case "BlackHole": //判断球是否进入黑洞
+                for (var _i = 0, _a = this._barriersManagement.blackHoles; _i < _a.length; _i++) {
+                    var item = _a[_i];
+                    if (item.detectCollisions(ball)) {
+                        this._musicManager.onPlaySound(Game.BlackHoleCollisionSound);
+                        this.gameEnd();
+                    }
                 }
-                else {
-                    this._scoreIndicator.getPenalty(5);
+                break;
+            case "Stone": //判断球是否与陨石碰撞反弹
+                for (var _b = 0, _c = this._barriersManagement.stones; _b < _c.length; _b++) {
+                    var item = _c[_b];
+                    if (item.detectCollisions(ball)) //在此处添加碰撞音效
+                     {
+                        this._musicManager.onPlaySound(Game.StoneCollisionSound);
+                        //根据陨石是否下落确定惩罚的分数
+                        if (item.isFalling) {
+                            this._scoreIndicator.getPenalty(4);
+                        }
+                        else {
+                            this._scoreIndicator.getPenalty(5);
+                        }
+                        //移除该陨石
+                        this.backgroundView.removeChild(item.item);
+                        this._barriersManagement.stones.splice(this._barriersManagement.stones.indexOf(item), 1);
+                        //判断游戏是否结束
+                        if (this._scoreIndicator.data <= 0) {
+                            this.gameEnd();
+                            return;
+                        }
+                        //小球受到碰撞冲量
+                        ball.collide(-0.8, -0.8);
+                    }
                 }
-                //移除该陨石
-                this.backgroundView.removeChild(item.item);
-                this._barriersManagement.stones.splice(this._barriersManagement.stones.indexOf(item), 1);
-                //判断游戏是否结束
-                if (this._scoreIndicator.data <= 0) {
-                    this.gameEnd();
-                    return;
+                break;
+            case "Zodiac": //判断球是否和星座相碰
+                for (var _d = 0, _e = this._barriersManagement.zodiacs; _d < _e.length; _d++) {
+                    var item = _e[_d];
+                    if (item.detectCollisions(ball)) {
+                        this._musicManager.onPlaySound(Game.RewardSound);
+                        this._scoreIndicator.getReward(8);
+                    }
                 }
-                //小球受到碰撞冲量
-                ball.collide(-0.8, -0.8);
-            }
-        }
-        //判断球是否和星座相碰
-        for (var _d = 0, _e = this._barriersManagement.zodiacs; _d < _e.length; _d++) {
-            var item = _e[_d];
-            if (item.detectCollisions(ball)) {
-                this._scoreIndicator.getReward(8);
-            }
+                break;
         }
     };
+    // detectCollisions(ball:Ball):void{
+    //     //判断球是否进入黑洞
+    //     for(let item of this._barriersManagement.blackHoles)
+    //     {
+    //         if(item.detectCollisions(ball))
+    //         {
+    //             this._musicManager.onPlaySound(Game.BlackHoleCollisionSound);
+    //             this.gameEnd();
+    //         }
+    //     }
+    //     //判断球是否与陨石碰撞反弹
+    //     for(let item of this._barriersManagement.stones)
+    //     {
+    //         if(item.detectCollisions(ball))//在此处添加碰撞音效
+    //         {
+    //             this._musicManager.onPlaySound(Game.StoneCollisionSound);
+    //             //根据陨石是否下落确定惩罚的分数
+    //             if(item.isFalling){
+    //                 this._scoreIndicator.getPenalty(4);
+    //             }else{
+    //                 this._scoreIndicator.getPenalty(5);
+    //             }
+    //             //移除该陨石
+    //             this.backgroundView.removeChild(item.item);
+    //             this._barriersManagement.stones.splice(this._barriersManagement.stones.indexOf(item),1);
+    //             //判断游戏是否结束
+    //             if(this._scoreIndicator.data<=0)
+    //             {
+    //                 this.gameEnd();
+    //                 return;
+    //             }
+    //             //小球受到碰撞冲量
+    //             ball.collide(-0.8, -0.8);
+    //         }
+    //     }
+    //     //判断球是否和星座相碰
+    //     for(let item of this._barriersManagement.zodiacs)
+    //     {
+    //         if(item.detectCollisions(ball))
+    //         {
+    //             this._musicManager.onPlaySound(Game.RewardSound);
+    //             this._scoreIndicator.getReward(8);
+    //         }
+    //     }
+    // }   
     //球与边缘的相对位置的检测与处理
     GameView.prototype.detectBorder = function (ball) {
         if ((((ball.x - ball.radius) <= 0) && ball.vx < 0) ||

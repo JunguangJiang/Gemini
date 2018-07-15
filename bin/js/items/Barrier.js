@@ -4,8 +4,8 @@ var Barrier = /** @class */ (function () {
         this._width = width;
         this._height = height;
         this._name = name;
-        // this.index=0;    
         this._isTouched = false;
+        this._bounds = null;
     }
     //item随机生成在背景某处
     Barrier.prototype.randomGenerate = function (backgroundImage) {
@@ -37,12 +37,17 @@ var Barrier = /** @class */ (function () {
             this.item.x = x_1;
             this.item.y = y_1;
             backgroundImage.addChild(this.item);
-            // this.index=backgroundImage.getChildIndex(this.item);
         }
     };
     ;
     //更新item的位置等
     Barrier.prototype.update = function () { }; //默认情况下什么都不做
+    //获得图片区域内的一个有效区域,xScale和yScale分别为水平和竖直方向的缩放率
+    Barrier.prototype.getInnerBounds = function (xScale, yScale) {
+        var itemRec = this.item.getBounds();
+        itemRec = itemRec.setTo(itemRec.x + itemRec.width * (1 - xScale) / 2, itemRec.y + itemRec.height * (1 - yScale) / 2, itemRec.width * xScale, itemRec.height * yScale);
+        return itemRec;
+    };
     return Barrier;
 }());
 //# sourceMappingURL=Barrier.js.map

@@ -20,7 +20,7 @@ class BarriersManagement{
     private _zodiacName:string;//星座名称，默认为zodiac
 
     constructor(backgroundImage:Laya.Image, fallingStoneRate:number=0,
-    blackHolesNum:number=1,blackHoleWidth:number=100,blackHoleHeight:number=100,blackHoleName:string="blackhole",
+    blackHolesNum:number=10,blackHoleWidth:number=100,blackHoleHeight:number=100,blackHoleName:string="blackhole",
     stonesNum:number=16,stoneWidth:number=50,stoneHeight:number=100,stoneName:string="stone",
     zodiacsNum: number=12, zodiacWidth:number=100, zodiacHeight:number=100, zodiacName:string="zodiac")
     {

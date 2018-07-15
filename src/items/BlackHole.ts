@@ -13,23 +13,16 @@ class BlackHole extends Barrier<Laya.Animation>{
         this.item.scaleX=this._width/100;
         this.item.scaleY=this._height/100;
         this.item.play();
-
     }
 
     //判断球是否与黑洞相撞，0为不相撞，1为相撞
-     public detectCollisions(ball:Ball):number
+     public detectCollisions(ball:Ball):boolean
      {
-        let ballRec=new Laya.Rectangle(ball.x-ball.radius,ball.y-ball.radius,ball.radius*2,ball.radius*2);
-   
+         if(this._bounds === null){
+            this._bounds = this.getInnerBounds(0.25,0.25);
+         }
+        if(this._isTouched) return false;//如果已经碰撞，则不再判断
         //判断球是否进入黑洞
-        let inBlackhole:number=0;
-        let itemRec=this.item.getBounds();
-        itemRec=itemRec.setTo(itemRec.x+itemRec.width/10,itemRec.y+itemRec.height/10,itemRec.width*4/5,itemRec.height*4/5);
-        if(itemRec.intersects(ballRec))
-        {
-            inBlackhole=1;
-        }
-
-         return inBlackhole;
+        return this._bounds.intersects(ball.animation.getBounds());
      }
 }

@@ -7,12 +7,15 @@ abstract class Barrier<T extends Laya.Sprite>{
     protected _name:string;//item的名字
     protected _isTouched: boolean;//是否被触碰到
 
+    protected _bounds:Laya.Rectangle;//接触的有效边界
+
     constructor(backgroundImage:Laya.Image,width:number,height:number,name:string)
     {
         this._width=width;
         this._height=height;
         this._name=name;
         this._isTouched = false;
+        this._bounds = null;
     }
 
     //item随机生成在背景某处
@@ -62,8 +65,15 @@ abstract class Barrier<T extends Laya.Sprite>{
     public abstract drawItem():void;
 
     //检测item与球类的碰撞
-    public abstract detectCollisions(ball:Ball):number;
+    public abstract detectCollisions(ball:Ball):boolean;
 
     //更新item的位置等
     public update():void{}//默认情况下什么都不做
+
+    //获得图片区域内的一个有效区域,xScale和yScale分别为水平和竖直方向的缩放率
+    public getInnerBounds(xScale:number, yScale:number){
+        let itemRec:Laya.Rectangle=this.item.getBounds();
+        itemRec=itemRec.setTo(itemRec.x+itemRec.width*(1-xScale)/2,itemRec.y+itemRec.height*(1-yScale)/2,itemRec.width*xScale,itemRec.height*yScale);
+        return itemRec;
+    }
 }

@@ -29,13 +29,16 @@ class Zodiac extends Barrier<Laya.Clip>{
     }
 
     //判断小球是否与星座相接触
-    public detectCollisions(ball: Ball):number{
-        if(!this._isTouched && this.item.getBounds().intersects(ball.animation.getBounds())){
+    public detectCollisions(ball: Ball):boolean{
+        if(this._bounds === null){
+            this._bounds = this.getInnerBounds(0.8, 0.8);
+        }
+        if(!this._isTouched && this._bounds.intersects(ball.animation.getBounds())){
             this._isTouched = true;
             this.drawItem();
-            return 1;
+            return true;
         }
-        return 0;
+        return false;
     }
 
 }
