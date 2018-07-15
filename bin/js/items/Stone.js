@@ -45,7 +45,7 @@ var Stone = /** @class */ (function (_super) {
             return false; //如果已经碰撞，则不再判断
         return this.getInnerBounds(this.item.getBounds(), 0.8, 0.8).intersects(ball.animation.getBounds());
     };
-    //不断更新陨石的位置，只有当_isFalling为真时，位置才会改变
+    //不断更新陨石的位置，只有当_isFalling为真时，位置才会改变
     Stone.prototype.update = function () {
         if (this.isFalling) {
             this.item.y += this._fallingStoneSpeed;

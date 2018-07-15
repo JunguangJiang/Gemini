@@ -7,7 +7,8 @@ class GameMain{
     private static viewStack:Laya.ViewStack;//界面管理器
 
     private static gameView: GameView;//游戏界面
-    private static startView:ui.StartViewUI;//开始界面
+    private static startView:StartView;//开始界面
+    private static endView:EndView;//结束界面
 
     constructor()
     {
@@ -26,7 +27,8 @@ class GameMain{
         //加载资源
         let resArray: Array<any> = [
             {url: "ui/background/BackGround.jpg", type:Laya.Loader.IMAGE},
-            {url: "ui/background/StartBackGround.png", type:Laya.Loader.IMAGE},           
+            {url: "ui/background/StartBackGround.png", type:Laya.Loader.IMAGE},
+            {url: "ui/background/EndBackGround.jpg", type:Laya.Loader.IMAGE},        
             {url: "res/atlas/ui/blackhole.atlas", type:Laya.Loader.ATLAS},
             {url: "res/atlas/ui/star.atlas", type:Laya.Loader.ATLAS},
             {url:"res/atlas/ui/arrow.atlas", type:Laya.Loader.ATLAS},
@@ -41,10 +43,12 @@ class GameMain{
     onLoaded():void
     {
         GameMain.gameView = new GameView();
-        GameMain.startView=new ui.StartViewUI();
+        GameMain.startView=new StartView();
+        GameMain.endView=new EndView();
 
         GameMain.viewStack.addItem(GameMain.startView);
         GameMain.viewStack.addItem(GameMain.gameView);
+        GameMain.viewStack.addItem(GameMain.endView);       
 
         this.createEvents();
     }
@@ -52,7 +56,7 @@ class GameMain{
     //创建各种响应事件
     createEvents():void
     {
-        //单人的开始按钮
+        //开始界面单人的开始按钮
         GameMain.startView.onePlayerButton.on(Laya.Event.MOUSE_MOVE,this,function(){
             GameMain.startView.onePlayerButton.scale(1.1,1.1);
         });
@@ -61,7 +65,7 @@ class GameMain{
         });
         GameMain.startView.onePlayerButton.on(Laya.Event.CLICK,this,this.toOnePlayerGameView);
 
-        //双人的开始按钮
+        //开始界面双人的开始按钮
         GameMain.startView.twoPlayersButton.on(Laya.Event.MOUSE_MOVE,this,function(){
             GameMain.startView.twoPlayersButton.scale(1.1,1.1);
         });
@@ -70,13 +74,33 @@ class GameMain{
         });
         GameMain.startView.twoPlayersButton.on(Laya.Event.CLICK,this,this.toTwoPlayersGameView);
 
-        //排行榜查看按钮
+        //开始界面排行榜查看按钮
         GameMain.startView.rankButton.on(Laya.Event.MOUSE_MOVE,this,function(){
             GameMain.startView.rankButton.scale(1.1,1.1);
         });
         GameMain.startView.rankButton.on(Laya.Event.MOUSE_OUT,this,function(){
             GameMain.startView.rankButton.scale(1,1);
-        });        
+        });
+
+        //游戏界面结束按钮
+        GameMain.gameView.endButton.on(Laya.Event.CLICK,this,this.toEndView);
+
+        //结束界面回到开始界面的按钮
+        GameMain.endView.startButton.on(Laya.Event.MOUSE_MOVE,this,function(){
+            GameMain.endView.startButton.scale(1.1,1.1);
+        });
+        GameMain.endView.startButton.on(Laya.Event.MOUSE_OUT,this,function(){
+            GameMain.endView.startButton.scale(1,1);
+        });
+        GameMain.endView.startButton.on(Laya.Event.CLICK,this,this.toStartView);
+
+        //结束界面排行榜查看按钮
+        GameMain.endView.rankButton.on(Laya.Event.MOUSE_MOVE,this,function(){
+            GameMain.endView.rankButton.scale(1.1,1.1);
+        });
+        GameMain.endView.rankButton.on(Laya.Event.MOUSE_OUT,this,function(){
+            GameMain.endView.rankButton.scale(1,1);
+        });               
     }
 
     //到单人游戏界面
@@ -95,7 +119,22 @@ class GameMain{
         Game.playerNum=2;
         GameMain.gameView.init();
         GameMain.gameView.gameStart();//开始游戏
-    }   
+    }
+
+    //到结束界面
+    toEndView():void
+    {
+        Laya.timer.clear(GameMain.gameView, GameMain.gameView.onLoop);
+        GameMain.viewStack.selectedIndex=2;
+        GameMain.endView.init();
+        GameMain.endView.showEnd();
+    }
+
+    //到开始界面
+    toStartView():void
+    {
+        GameMain.viewStack.selectedIndex=0;
+    }
 
 }
 new GameMain();
