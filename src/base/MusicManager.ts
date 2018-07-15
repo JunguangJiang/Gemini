@@ -36,4 +36,15 @@ class MusicManager{
         Laya.SoundManager.playSound(url, 1);
     }
 
+    //关闭声音
+    turnOff():void{
+        console.log("关闭音量");
+        Laya.SoundManager.setMusicVolume(0);
+    }
+
+    //重新打开声音
+    turnOn():void{
+        console.log("重新打开音量");
+        Laya.SoundManager.setMusicVolume(1);
+    }
 }

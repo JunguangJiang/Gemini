@@ -25,7 +25,7 @@ var BlackHole = /** @class */ (function (_super) {
     //判断球是否与黑洞相撞，0为不相撞，1为相撞
     BlackHole.prototype.detectCollisions = function (ball) {
         if (this._bounds === null) {
-            this._bounds = this.getInnerBounds(0.25, 0.25);
+            this._bounds = this.getInnerBounds(this.item.getBounds(), 0.25, 0.25);
         }
         if (this._isTouched)
             return false; //如果已经碰撞，则不再判断

@@ -31,7 +31,8 @@ class Zodiac extends Barrier<Laya.Clip>{
     //判断小球是否与星座相接触
     public detectCollisions(ball: Ball):boolean{
         if(this._bounds === null){
-            this._bounds = this.getInnerBounds(0.8, 0.8);
+            this._bounds = this.getInnerBounds(this.item.getBounds(), 0.8, 0.8);
+            // console.log("星座:" + this._bounds);
         }
         if(!this._isTouched && this._bounds.intersects(ball.animation.getBounds())){
             this._isTouched = true;

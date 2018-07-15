@@ -43,8 +43,7 @@ var Barrier = /** @class */ (function () {
     //更新item的位置等
     Barrier.prototype.update = function () { }; //默认情况下什么都不做
     //获得图片区域内的一个有效区域,xScale和yScale分别为水平和竖直方向的缩放率
-    Barrier.prototype.getInnerBounds = function (xScale, yScale) {
-        var itemRec = this.item.getBounds();
+    Barrier.prototype.getInnerBounds = function (itemRec, xScale, yScale) {
         itemRec = itemRec.setTo(itemRec.x + itemRec.width * (1 - xScale) / 2, itemRec.y + itemRec.height * (1 - yScale) / 2, itemRec.width * xScale, itemRec.height * yScale);
         return itemRec;
     };

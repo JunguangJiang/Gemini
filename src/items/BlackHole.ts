@@ -19,9 +19,12 @@ class BlackHole extends Barrier<Laya.Animation>{
      public detectCollisions(ball:Ball):boolean
      {
          if(this._bounds === null){
-            this._bounds = this.getInnerBounds(0.25,0.25);
+            this._bounds = this.getInnerBounds(this.item.getBounds(), 0.25,0.25);
          }
-        if(this._isTouched) return false;//如果已经碰撞，则不再判断
+        
+        if(this._isTouched) 
+            return false;//如果已经碰撞，则不再判断
+        
         //判断球是否进入黑洞
         return this._bounds.intersects(ball.animation.getBounds());
      }

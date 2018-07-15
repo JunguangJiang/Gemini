@@ -32,20 +32,18 @@ var Stone = /** @class */ (function (_super) {
             this.item.loadImage(Game.stoneImage);
             this.item.scaleX = this._width / 108;
             this.item.scaleY = this._height / 191;
-            // this._bounds = this.getInnerBounds(0.8,0.8);
         }
         else {
             this.item.loadImage(Game.fallingStoneImage);
             this.item.scaleX = this._width / 600;
             this.item.scaleY = this._height / 800;
-            // this._bounds = this.getInnerBounds(0.8,0.8);
         }
     };
     //判断球是否与陨石相撞
     Stone.prototype.detectCollisions = function (ball) {
         if (this._isTouched)
             return false; //如果已经碰撞，则不再判断
-        return this.getInnerBounds(0.8, 0.8).intersects(ball.animation.getBounds());
+        return this.getInnerBounds(this.item.getBounds(), 0.8, 0.8).intersects(ball.animation.getBounds());
     };
     //不断更新陨石的位置，只有当_isFalling为真时，位置才会改变
     Stone.prototype.update = function () {

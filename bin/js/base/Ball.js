@@ -93,10 +93,19 @@ var Ball = /** @class */ (function () {
     //对小球的位置和速度进行更新
     Ball.prototype.update = function () {
         var deltaT = this._timer.get() / 1000.0 * 1.5;
+        this._timer.stop();
         this.x = this.x + this._vx * deltaT;
         this.y = this.y + this._vy * deltaT;
         this._vx = this._vx + this._ax * deltaT;
         this._vy = this._vy + this._ay * deltaT;
+        this._timer.start();
+    };
+    //让小球静止
+    Ball.prototype.pause = function () {
+        this._timer.pause();
+    };
+    //让小球重新开始运动
+    Ball.prototype.restart = function () {
         this._timer.start();
     };
     //进行小球动画的加载和绘制

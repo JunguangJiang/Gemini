@@ -17,7 +17,7 @@ var Game;
     Game.gravity = 14; //重力加速度
     Game.liftCoefficient = Game.debug ? 1600 : 700; //升力系数,升力=liftCoefficient/(球心距离)
     Game.dragCoefficient = 0.001; //阻力系数，阻力=-dragCoefficient*速度^3
-    Game.attractionCoefficient = 8000; //球之间的引力系数
+    Game.attractionCoefficient = 10000; //球之间的引力系数
     Game.randomForce = 10; //随机力的幅度
     Game.humanForce = 40; //人类施力的幅度
     Game.smallBallRandomForcePeriod = 100; //小球受到随机力的周期
@@ -86,12 +86,36 @@ var GameView = /** @class */ (function (_super) {
         //给球施加重力
         this._bigBall.setForce(0, Game.gravity, "gravity");
         this._smallBall.setForce(0, Game.gravity, "gravity");
+        this._isRunning = true;
+    };
+    //游戏的暂停
+    GameView.prototype.gamePause = function () {
+        if (this._isRunning) {
+            console.log("游戏暂停");
+            this._smallBall.pause();
+            this._bigBall.pause();
+            this._isRunning = false;
+            Laya.timer.clear(this, this.onLoop);
+            this._musicManager.turnOff(); //关闭声音
+        }
+    };
+    //游戏重新开始
+    GameView.prototype.gameRestart = function () {
+        if (!this._isRunning) {
+            console.log("游戏重新开始");
+            this._smallBall.restart();
+            this._bigBall.restart();
+            this._isRunning = true;
+            Laya.timer.loop(Game.interval, this, this.onLoop);
+            this._musicManager.turnOn(); //打开声音
+        }
     };
     //游戏结束
     GameView.prototype.gameEnd = function () {
         console.log("游戏结束");
         console.log("你的总分为" + this._scoreIndicator.data);
         Laya.timer.clear(this, this.onLoop);
+        this._isRunning = false;
     };
     //需要每隔单位时间进行一次调用的函数请写入以下函数体
     GameView.prototype.onLoop = function () {
@@ -172,51 +196,6 @@ var GameView = /** @class */ (function (_super) {
                 break;
         }
     };
-    // detectCollisions(ball:Ball):void{
-    //     //判断球是否进入黑洞
-    //     for(let item of this._barriersManagement.blackHoles)
-    //     {
-    //         if(item.detectCollisions(ball))
-    //         {
-    //             this._musicManager.onPlaySound(Game.BlackHoleCollisionSound);
-    //             this.gameEnd();
-    //         }
-    //     }
-    //     //判断球是否与陨石碰撞反弹
-    //     for(let item of this._barriersManagement.stones)
-    //     {
-    //         if(item.detectCollisions(ball))//在此处添加碰撞音效
-    //         {
-    //             this._musicManager.onPlaySound(Game.StoneCollisionSound);
-    //             //根据陨石是否下落确定惩罚的分数
-    //             if(item.isFalling){
-    //                 this._scoreIndicator.getPenalty(4);
-    //             }else{
-    //                 this._scoreIndicator.getPenalty(5);
-    //             }
-    //             //移除该陨石
-    //             this.backgroundView.removeChild(item.item);
-    //             this._barriersManagement.stones.splice(this._barriersManagement.stones.indexOf(item),1);
-    //             //判断游戏是否结束
-    //             if(this._scoreIndicator.data<=0)
-    //             {
-    //                 this.gameEnd();
-    //                 return;
-    //             }
-    //             //小球受到碰撞冲量
-    //             ball.collide(-0.8, -0.8);
-    //         }
-    //     }
-    //     //判断球是否和星座相碰
-    //     for(let item of this._barriersManagement.zodiacs)
-    //     {
-    //         if(item.detectCollisions(ball))
-    //         {
-    //             this._musicManager.onPlaySound(Game.RewardSound);
-    //             this._scoreIndicator.getReward(8);
-    //         }
-    //     }
-    // }   
     //球与边缘的相对位置的检测与处理
     GameView.prototype.detectBorder = function (ball) {
         if ((((ball.x - ball.radius) <= 0) && ball.vx < 0) ||
@@ -284,6 +263,10 @@ var GameView = /** @class */ (function (_super) {
         var force = Math.random() * Game.humanForce / 2 + Game.humanForce;
         if (data.type === "left") {
             force = -force;
+            this.gameRestart();
+        }
+        else {
+            this.gamePause();
         }
         if (data.ballType === "big") {
             this._bigBall.setForce(force, 0, "humanControl");

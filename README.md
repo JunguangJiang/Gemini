@@ -103,3 +103,11 @@
 
 **public method**
 + `onPlaySound(url:string)`:播放特殊音效，url可取值见包括Game.BlackHoleCollisionSound(和黑洞撞击)，Game.StoneCollisionSound(和岩石撞击的声音)
++ `turnOff():void`:关闭声音
++ `turnOn():void`:重新打开声音
+
+### GameView
+**public method**
++ `gamePause`:暂停游戏
++ `gameRestart`:恢复此前暂停的游戏
+

@@ -84,10 +84,21 @@ class Ball{
     //对小球的位置和速度进行更新
     update():void{
         let deltaT: number = this._timer.get()/1000.0*1.5;
+        this._timer.stop();
         this.x = this.x + this._vx * deltaT;
         this.y = this.y + this._vy * deltaT;
         this._vx = this._vx + this._ax * deltaT;
         this._vy =  this._vy + this._ay * deltaT;
+        this._timer.start();
+    }
+
+    //让小球静止
+    pause():void{
+        this._timer.pause();
+    }
+
+    //让小球重新开始运动
+    restart():void{
         this._timer.start();
     }
 
