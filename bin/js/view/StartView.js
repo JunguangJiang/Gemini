@@ -13,7 +13,9 @@ var StartView = /** @class */ (function (_super) {
     __extends(StartView, _super);
     //构造函数
     function StartView() {
-        return _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.loadImage(Game.serverResURL + "/ui/background/StartBackGround.png");
+        return _this;
     }
     return StartView;
 }(ui.StartViewUI));

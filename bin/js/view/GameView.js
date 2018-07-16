@@ -24,7 +24,7 @@ var Game;
     Game.bigBallRandomForcePeriod = 500; //大球受到随机力的周期
     Game.initialY = 2600; //小球的初始高度
     Game.serverResURL = "http://jjg15.iterator-traits.com/res"; //服务器资源路径
-    Game.setting = false; //是否处于设置界面
+    Game.setting = false; //是否处于设定模式
     Game.sound = true; //是否有声音
     Game.pause = false; //是否暂停
 })(Game || (Game = {}));
@@ -102,7 +102,6 @@ var GameView = /** @class */ (function (_super) {
             this._bigBall.pause();
             this._isRunning = false;
             Laya.timer.clear(this, this.onLoop);
-            this._musicManager.turnOff(); //关闭声音
         }
     };
     //游戏重新开始
@@ -113,7 +112,6 @@ var GameView = /** @class */ (function (_super) {
             this._bigBall.restart();
             this._isRunning = true;
             Laya.timer.loop(Game.interval, this, this.onLoop);
-            this._musicManager.turnOn(); //打开声音
         }
     };
     //游戏结束
@@ -143,8 +141,8 @@ var GameView = /** @class */ (function (_super) {
         this.updateBackground(); //根据当前球的位置更新背景
         this._loopCount++;
         this._scoreIndicator.updateHeight(-(this._bigBall.y - this.runningView.height + this._bigBall.radius));
-        //不断更新游戏分数,最小值为0
-        Game.score = Math.max(this._scoreIndicator.data, 0);
+        //不断更新游戏分数
+        Game.score = this._scoreIndicator.data;
     };
     //根据当前球的位置更新背景
     GameView.prototype.updateBackground = function () {
@@ -288,31 +286,20 @@ var GameView = /** @class */ (function (_super) {
     };
     //创建各种按钮响应事件
     GameView.prototype.createButtonEvents = function () {
-        //设置按钮
+        //设定按钮
         this.settingButton.on(Laya.Event.CLICK, this, this.settingEvent);
         //暂停按钮
         this.pauseButton.on(Laya.Event.CLICK, this, this.pauseEvent);
         //静音按钮
         this.soundButton.on(Laya.Event.CLICK, this, this.soundEvent);
     };
-    //设置按钮事件
+    //设定状态事件
     GameView.prototype.settingEvent = function () {
-        if (Game.setting) //现在处于设置状态
-         {
-            Game.setting = false;
-            this.settingButton._childs.forEach(function (item, index) {
-                item.visible = false;
-                item.disabled = true;
-            });
-        }
-        else //现在处于非设置状态
-         {
-            Game.setting = true;
-            this.settingButton._childs.forEach(function (item, index) {
-                item.visible = true;
-                item.disabled = false;
-            });
-        }
+        this.settingButton._childs.forEach(function (item, index) {
+            item.visible = !Game.setting;
+            item.disabled = Game.setting;
+        });
+        Game.setting = !Game.setting;
     };
     //切换暂停状态事件
     GameView.prototype.pauseEvent = function () {
@@ -338,14 +325,14 @@ var GameView = /** @class */ (function (_super) {
             this.soundButton.skin = "ui/button/SoundButton.png";
             Game.sound = false;
             //暂停音乐TODO：
-            Laya.SoundManager.muted = true;
+            this._musicManager.turnOff(); //关闭声音
         }
         else //现在处于静音状态
          {
             this.soundButton.skin = "ui/button/NoSoundButton.png";
             Game.sound = true;
             //播放音乐TODO：
-            Laya.SoundManager.muted = false;
+            this._musicManager.turnOn(); //开启声音
         }
     };
     return GameView;

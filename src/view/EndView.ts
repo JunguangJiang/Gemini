@@ -9,6 +9,7 @@ class EndView extends ui.EndViewUI{
     constructor()
     {
         super();
+        this.loadImage(Game.serverResURL + "/ui/background/EndBackGround.jpg");
     }
 
     //结束界面还原初始化设置

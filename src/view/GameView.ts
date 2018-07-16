@@ -17,7 +17,7 @@ namespace Game{
 
     export const serverResURL = "http://jjg15.iterator-traits.com/res";//服务器资源路径
 
-    export let setting:boolean=false;//是否处于设置界面
+    export let setting:boolean=false;//是否处于设定模式
     export let sound:boolean=true;//是否有声音
     export let pause:boolean=false;//是否暂停
 }
@@ -141,7 +141,6 @@ class GameView extends ui.GameViewUI{
             this._bigBall.pause();
             this._isRunning = false;
             Laya.timer.clear(this, this.onLoop);
-            this._musicManager.turnOff();//关闭声音
         }
     }
 
@@ -153,7 +152,6 @@ class GameView extends ui.GameViewUI{
             this._bigBall.restart();
             this._isRunning = true;
             Laya.timer.loop(Game.interval, this, this.onLoop);
-            this._musicManager.turnOn();//打开声音
         }
     }
 
@@ -187,8 +185,8 @@ class GameView extends ui.GameViewUI{
         this.updateBackground();//根据当前球的位置更新背景
         this._loopCount++;
         this._scoreIndicator.updateHeight(-(this._bigBall.y-this.runningView.height+this._bigBall.radius));
-        //不断更新游戏分数,最小值为0
-        Game.score=Math.max(this._scoreIndicator.data,0);
+        //不断更新游戏分数
+        Game.score=this._scoreIndicator.data;
     }
 
     //根据当前球的位置更新背景
@@ -362,7 +360,7 @@ class GameView extends ui.GameViewUI{
     //创建各种按钮响应事件
     private createButtonEvents():void
     {
-       //设置按钮
+       //设定按钮
        this.settingButton.on(Laya.Event.CLICK,this,this.settingEvent);
         //暂停按钮
        this.pauseButton.on(Laya.Event.CLICK,this,this.pauseEvent);
@@ -371,25 +369,14 @@ class GameView extends ui.GameViewUI{
       
     }
 
-    //设置按钮事件
+    //设定状态事件
     private settingEvent():void
     {
-        if(Game.setting)//现在处于设置状态
-        {
-            Game.setting=false;
-            this.settingButton._childs.forEach(function(item,index){
-                item.visible=false;
-                item.disabled=true;
-            });
-        }
-        else//现在处于非设置状态
-        {
-            Game.setting=true;
-            this.settingButton._childs.forEach(function(item,index){
-                item.visible=true;
-                item.disabled=false;
-            });
-        }
+        this.settingButton._childs.forEach(function(item,index){
+            item.visible=!Game.setting;
+            item.disabled=Game.setting;
+        });
+        Game.setting=!Game.setting;
     }
 
     //切换暂停状态事件
@@ -401,6 +388,7 @@ class GameView extends ui.GameViewUI{
             Game.pause=false;
             //继续游戏TODO：
             this.gameRestart();
+            
         }
         else//现在处于游戏状态
         {
@@ -419,15 +407,17 @@ class GameView extends ui.GameViewUI{
             this.soundButton.skin="ui/button/SoundButton.png";
             Game.sound=false;
             //暂停音乐TODO：
-            Laya.SoundManager.muted=true;
+            this._musicManager.turnOff();//关闭声音
         }
         else//现在处于静音状态
         {
             this.soundButton.skin="ui/button/NoSoundButton.png";
             Game.sound=true;
             //播放音乐TODO：
-            Laya.SoundManager.muted=false;
+            this._musicManager.turnOn();//开启声音
+
         }
     }
+
 
 }

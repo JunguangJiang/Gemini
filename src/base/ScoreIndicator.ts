@@ -42,12 +42,14 @@ class ScoreIndicator{
     //接受奖励
     getReward(reward: number){
         this._data += reward;
+        this.showScoreChange(reward);
         this.updateUI();
     }
 
     //接受惩罚
     getPenalty(penalty: number){
         this._data -= penalty;
+        this.showScoreChange(-penalty);
         this.updateUI();
     }
 
@@ -65,5 +67,32 @@ class ScoreIndicator{
         }
         this._box.dataSource = data;
         // console.log("当前分数为"+this._data);
+    }
+
+    //显示分数变化
+    showScoreChange(scoreChange:number):void{
+        let text :Laya.Text;
+        if(scoreChange > 0){
+            text = this._box.getChildByName("reward") as Laya.Text;
+            text.text = "+"+scoreChange;
+        }else{
+            text = this._box.getChildByName("penalty") as Laya.Text;
+            text.text = ""+scoreChange;
+        }
+        text.scaleX = text.scaleY = 0.2;
+        Laya.Tween.to(text, {scaleX:1, scaleY:1}, 1000, Laya.Ease.backOut);
+        Laya.timer.once(2000, this, this.closeScoreChange, [scoreChange]);
+    }
+
+    //关闭分数显示
+    closeScoreChange(scoreChange:number):void{
+        console.log("关闭分数显示");
+        if(scoreChange > 0){
+            let text: Laya.Text = this._box.getChildByName("reward") as Laya.Text;
+            text.text = "";
+        }else{
+            let text: Laya.Text = this._box.getChildByName("penalty") as Laya.Text;
+            text.text = "";
+        }
     }
 }
