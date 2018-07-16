@@ -113,7 +113,7 @@ class GameMain{
     }
 
     //到双人游戏界面
-     toTwoPlayersGameView():void
+    toTwoPlayersGameView():void
     {
         GameMain.viewStack.selectedIndex=1;
         Game.playerNum=2;

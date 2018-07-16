@@ -20,7 +20,7 @@ class EndView extends ui.EndViewUI{
         while(this.removeChildByName("endText"));
     }
 
-    //显示失败的缓动动画
+    //显示结束的缓动动画
     public showEnd():void
     {
         const textWidth: number = 300;
