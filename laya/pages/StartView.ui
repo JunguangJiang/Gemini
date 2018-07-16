@@ -15,7 +15,7 @@
         {
             "x":15,
             "type":"Image",
-            "props":{"y":0,"x":0,"width":800,"var":"backgroundView","height":600},
+            "props":{"y":0,"x":0,"width":800,"var":"backgroundView","skin":"ui/background/StartBackGround.png","height":600},
             "nodeParent":1,
             "label":"Image(backgroundView)",
             "isOpen":true,

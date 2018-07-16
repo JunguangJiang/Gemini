@@ -15,6 +15,9 @@ var GameMain = /** @class */ (function () {
     function GameMain() {
         Laya.MiniAdpter.init();
         Laya.init(Game.MainWidth, Game.MainHeight);
+        //使用多线程
+        Laya.WorkerLoader.workerPath = "libs/worker.js";
+        Laya.WorkerLoader.enable = true;
         //设置屏幕自动平铺和旋转
         Laya.stage.scaleMode = Laya.Stage.SCALE_EXACTFIT;
         Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
