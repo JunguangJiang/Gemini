@@ -30,7 +30,7 @@ var EndView = /** @class */ (function (_super) {
         while (this.removeChildByName("endText"))
             ;
     };
-    //显示失败的缓动动画
+    //显示结束的缓动动画
     EndView.prototype.showEnd = function () {
         var textWidth = 300;
         var offset = this.backgroundView.width - textWidth >> 1;

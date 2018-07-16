@@ -24,6 +24,7 @@ var Game;
     Game.bigBallRandomForcePeriod = 500; //大球受到随机力的周期
     Game.initialY = 2600; //小球的初始高度
     Game.serverResURL = "http://jjg15.iterator-traits.com/res"; //服务器资源路径
+    Game.setting = false; //是否处于设定模式
     Game.sound = true; //是否有声音
     Game.pause = false; //是否暂停
 })(Game || (Game = {}));
@@ -101,7 +102,6 @@ var GameView = /** @class */ (function (_super) {
             this._bigBall.pause();
             this._isRunning = false;
             Laya.timer.clear(this, this.onLoop);
-            this._musicManager.turnOff(); //关闭声音
         }
     };
     //游戏重新开始
@@ -112,7 +112,6 @@ var GameView = /** @class */ (function (_super) {
             this._bigBall.restart();
             this._isRunning = true;
             Laya.timer.loop(Game.interval, this, this.onLoop);
-            this._musicManager.turnOn(); //打开声音
         }
     };
     //游戏结束
@@ -287,10 +286,20 @@ var GameView = /** @class */ (function (_super) {
     };
     //创建各种按钮响应事件
     GameView.prototype.createButtonEvents = function () {
+        //设定按钮
+        this.settingButton.on(Laya.Event.CLICK, this, this.settingEvent);
         //暂停按钮
         this.pauseButton.on(Laya.Event.CLICK, this, this.pauseEvent);
         //静音按钮
         this.soundButton.on(Laya.Event.CLICK, this, this.soundEvent);
+    };
+    //设定状态事件
+    GameView.prototype.settingEvent = function () {
+        this.settingButton._childs.forEach(function (item, index) {
+            item.visible = !Game.setting;
+            item.disabled = Game.setting;
+        });
+        Game.setting = !Game.setting;
     };
     //切换暂停状态事件
     GameView.prototype.pauseEvent = function () {
@@ -299,12 +308,14 @@ var GameView = /** @class */ (function (_super) {
             this.pauseButton.skin = "ui/button/PauseButton.png";
             Game.pause = false;
             //继续游戏TODO：
+            this.gameRestart();
         }
         else //现在处于游戏状态
          {
             this.pauseButton.skin = "ui/button/ContinueButton.png";
             Game.pause = true;
             //暂停游戏TODO：
+            this.gamePause();
         }
     };
     //切换静音状态事件
@@ -314,12 +325,14 @@ var GameView = /** @class */ (function (_super) {
             this.soundButton.skin = "ui/button/SoundButton.png";
             Game.sound = false;
             //暂停音乐TODO：
+            this._musicManager.turnOff(); //关闭声音
         }
         else //现在处于静音状态
          {
             this.soundButton.skin = "ui/button/NoSoundButton.png";
             Game.sound = true;
             //播放音乐TODO：
+            this._musicManager.turnOn(); //开启声音
         }
     };
     return GameView;
