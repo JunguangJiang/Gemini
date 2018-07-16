@@ -14,7 +14,7 @@ var StartView = /** @class */ (function (_super) {
     //构造函数
     function StartView() {
         var _this = _super.call(this) || this;
-        _this.loadImage(Game.startBackGroundImage);
+        _this.loadImage(Game.startBackGroundImage, 0, 0, 800, 600);
         return _this;
     }
     return StartView;
