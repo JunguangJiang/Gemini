@@ -32,11 +32,13 @@ var ScoreIndicator = /** @class */ (function () {
     //接受奖励
     ScoreIndicator.prototype.getReward = function (reward) {
         this._data += reward;
+        this.showScoreChange(reward);
         this.updateUI();
     };
     //接受惩罚
     ScoreIndicator.prototype.getPenalty = function (penalty) {
         this._data -= penalty;
+        this.showScoreChange(-penalty);
         this.updateUI();
     };
     Object.defineProperty(ScoreIndicator.prototype, "data", {
@@ -56,6 +58,33 @@ var ScoreIndicator = /** @class */ (function () {
         }
         this._box.dataSource = data;
         // console.log("当前分数为"+this._data);
+    };
+    //显示分数变化
+    ScoreIndicator.prototype.showScoreChange = function (scoreChange) {
+        var text;
+        if (scoreChange > 0) {
+            text = this._box.getChildByName("reward");
+            text.text = "+" + scoreChange;
+        }
+        else {
+            text = this._box.getChildByName("penalty");
+            text.text = "" + scoreChange;
+        }
+        text.scaleX = text.scaleY = 0.2;
+        Laya.Tween.to(text, { scaleX: 1, scaleY: 1 }, 1000, Laya.Ease.backOut);
+        Laya.timer.once(1000, this, this.closeScoreChange, [scoreChange]);
+    };
+    //关闭分数显示
+    ScoreIndicator.prototype.closeScoreChange = function (scoreChange) {
+        console.log("关闭分数显示");
+        if (scoreChange > 0) {
+            var text = this._box.getChildByName("reward");
+            text.text = "";
+        }
+        else {
+            var text = this._box.getChildByName("penalty");
+            text.text = "";
+        }
     };
     return ScoreIndicator;
 }());

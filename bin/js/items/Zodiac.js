@@ -40,7 +40,7 @@ var Zodiac = /** @class */ (function (_super) {
     };
     //判断小球是否与星座相接触
     Zodiac.prototype.detectCollisions = function (ball) {
-        if (this._bounds === null) {
+        if (this._bounds === null || this._bounds.width === 0) {
             this._bounds = this.getInnerBounds(this.item.getBounds(), 0.8, 0.8);
             // console.log("星座:" + this._bounds);
         }
