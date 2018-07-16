@@ -18,7 +18,9 @@ var EndView = /** @class */ (function (_super) {
     __extends(EndView, _super);
     //构造函数
     function EndView() {
-        return _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.loadImage(Game.serverResURL + "/ui/background/EndBackGround.jpg");
+        return _this;
     }
     //结束界面还原初始化设置
     EndView.prototype.init = function () {

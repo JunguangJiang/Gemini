@@ -4,6 +4,7 @@ class StartView extends ui.StartViewUI{
     constructor()
     {
         super();
+        this.loadImage(Game.serverResURL+"/ui/background/StartBackGround.png");
     }
 
 }

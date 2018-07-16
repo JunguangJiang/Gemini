@@ -27,8 +27,8 @@ class GameMain{
         //加载资源
         let resArray: Array<any> = [
             {url: "ui/background/BackGround.jpg", type:Laya.Loader.IMAGE},
-            {url: "ui/background/StartBackGround.png", type:Laya.Loader.IMAGE},
-            {url: "ui/background/EndBackGround.jpg", type:Laya.Loader.IMAGE},        
+            {url: Game.serverResURL + "/ui/background/StartBackGround.png", type:Laya.Loader.IMAGE},
+            {url: Game.serverResURL + "/ui/background/EndBackGround.jpg", type:Laya.Loader.IMAGE},        
             {url: "res/atlas/ui/blackhole.atlas", type:Laya.Loader.ATLAS},
             {url: "res/atlas/ui/star.atlas", type:Laya.Loader.ATLAS},
             {url:"res/atlas/ui/arrow.atlas", type:Laya.Loader.ATLAS},
