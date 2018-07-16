@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":8,
-    "selecteID":18,
+    "selectedBox":1,
+    "selecteID":23,
     "props":{"y":0,"x":0,"width":800,"sceneColor":"#000000","height":600},
     "nodeParent":-1,
     "label":"View",
@@ -92,7 +92,7 @@
                 {
                     "x":30,
                     "type":"Image",
-                    "props":{"y":308,"x":60,"width":100,"var":"startButton","skin":"ui/button/SelectButton.png","height":100,"alpha":1},
+                    "props":{"y":350,"x":100,"width":100,"var":"startButton","skin":"ui/button/SelectButton.png","pivotY":50,"pivotX":54,"height":100,"alpha":1},
                     "nodeParent":8,
                     "label":"Image(startButton)",
                     "isOpen":true,
@@ -118,25 +118,25 @@
                 {
                     "x":30,
                     "type":"Image",
-                    "props":{"y":451,"x":61,"width":100,"var":"rankButton","skin":"ui/button/SelectButton.png","height":100},
+                    "props":{"y":500,"x":100,"width":100,"var":"rankButton","skin":"ui/button/SelectButton.png","pivotY":50,"pivotX":54,"height":100,"alpha":1},
                     "nodeParent":8,
                     "label":"Image(rankButton)",
                     "isOpen":true,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
-                    "compId":18,
+                    "compId":22,
                     "child":[
                         {
                             "x":45,
                             "type":"Text",
-                            "props":{"y":26,"x":24,"width":50,"text":"排","overflow":"hidden","height":50,"fontSize":40,"font":"Microsoft YaHei","color":"#ffffff","bold":true,"align":"center"},
-                            "nodeParent":18,
+                            "props":{"y":23,"x":24,"width":50,"text":"排","strokeColor":"#000000","overflow":"hidden","height":50,"fontSize":40,"font":"Microsoft YaHei","color":"#ffffff","bold":true,"align":"center"},
+                            "nodeParent":22,
                             "label":"Text",
                             "isDirectory":false,
                             "isAniNode":true,
                             "hasChild":false,
-                            "compId":20,
+                            "compId":23,
                             "child":[
                                 ]
                         }]

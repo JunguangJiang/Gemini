@@ -141,8 +141,8 @@ var GameView = /** @class */ (function (_super) {
         this.updateBackground(); //根据当前球的位置更新背景
         this._loopCount++;
         this._scoreIndicator.updateHeight(-(this._bigBall.y - this.runningView.height + this._bigBall.radius));
-        //不断更新游戏分数
-        Game.score = this._scoreIndicator.data;
+        //不断更新游戏分数，最小为0
+        Game.score = Math.max(this._scoreIndicator.data, 0);
     };
     //根据当前球的位置更新背景
     GameView.prototype.updateBackground = function () {
