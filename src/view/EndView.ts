@@ -9,7 +9,7 @@ class EndView extends ui.EndViewUI{
     constructor()
     {
         super();
-        this.loadImage(Game.serverResURL + "/ui/background/EndBackGround.jpg");
+        this.loadImage(Game.endBackGroundImage);
     }
 
     //结束界面还原初始化设置
@@ -21,7 +21,7 @@ class EndView extends ui.EndViewUI{
         while(this.removeChildByName("endText"));
     }
 
-    //显示结束的缓动动画
+    //显示失败的缓动动画
     public showEnd():void
     {
         const textWidth: number = 300;

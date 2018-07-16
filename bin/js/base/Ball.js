@@ -92,7 +92,7 @@ var Ball = /** @class */ (function () {
     };
     //对小球的位置和速度进行更新
     Ball.prototype.update = function () {
-        var deltaT = this._timer.get() / 1000.0 * 1.5;
+        var deltaT = this._timer.get() / 1000.0 * 2;
         this._timer.stop();
         this.x = this.x + this._vx * deltaT;
         this.y = this.y + this._vy * deltaT;
@@ -111,7 +111,7 @@ var Ball = /** @class */ (function () {
     //进行小球动画的加载和绘制
     Ball.prototype.drawNormalBall = function () {
         // this._animation.clear();
-        this._animation.loadAnimation(Game.serverResURL + "/GameAnimation/Ball.ani");
+        this._animation.loadAnimation("GameAnimation/Ball.ani");
         this._animation.scaleX = this._radius * 2 / 120;
         this._animation.scaleY = this._radius * 2 / 120;
         this._animation.play();

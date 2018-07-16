@@ -19,7 +19,7 @@ var EndView = /** @class */ (function (_super) {
     //构造函数
     function EndView() {
         var _this = _super.call(this) || this;
-        _this.loadImage(Game.serverResURL + "/ui/background/EndBackGround.jpg");
+        _this.loadImage(Game.endBackGroundImage);
         return _this;
     }
     //结束界面还原初始化设置
@@ -30,7 +30,7 @@ var EndView = /** @class */ (function (_super) {
         while (this.removeChildByName("endText"))
             ;
     };
-    //显示结束的缓动动画
+    //显示失败的缓动动画
     EndView.prototype.showEnd = function () {
         var textWidth = 300;
         var offset = this.backgroundView.width - textWidth >> 1;

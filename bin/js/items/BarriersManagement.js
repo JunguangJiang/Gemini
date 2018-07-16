@@ -13,6 +13,7 @@ var BarriersManagement = /** @class */ (function () {
         if (zodiacWidth === void 0) { zodiacWidth = 100; }
         if (zodiacHeight === void 0) { zodiacHeight = 100; }
         if (zodiacName === void 0) { zodiacName = "zodiac"; }
+        this._backgroundImage = backgroundImage;
         /*黑洞初始化*/
         this.blackHoles = [];
         this._blackHolesNum = blackHolesNum;
@@ -32,38 +33,43 @@ var BarriersManagement = /** @class */ (function () {
         this._zodiacHeight = zodiacHeight;
         this._zodiacName = zodiacName;
         this.fallingStoneRate = fallingStoneRate;
-        //更新所有障碍物
-        this.regenerateBarrier(backgroundImage);
     }
+    //清除所有的障碍物
+    BarriersManagement.prototype.clear = function () {
+        // this.blackHoles.slice(0);
+        this.blackHoles = [];
+        while (this._backgroundImage.removeChildByName(this._blackHoleName))
+            ;
+        // this.stones.slice(0);
+        this.stones = [];
+        while (this._backgroundImage.removeChildByName(this._stoneName))
+            ;
+        // this.zodiacs.slice(0);
+        this.zodiacs = [];
+        while (this._backgroundImage.removeChildByName(this._zodiacName))
+            ;
+    };
     //重新生成屏幕上所有障碍物
-    BarriersManagement.prototype.regenerateBarrier = function (backgroundImage) {
+    BarriersManagement.prototype.regenerateBarrier = function () {
         //初始化
-        this.blackHoles.slice(0);
-        while (backgroundImage.removeChildByName(this._blackHoleName))
-            ;
-        this.stones.slice(0);
-        while (backgroundImage.removeChildByName(this._stoneName))
-            ;
-        this.zodiacs.slice(0);
-        while (backgroundImage.removeChildByName(this._zodiacName))
-            ;
+        this.clear();
         //生成黑洞数组
         for (var i = 0; i < this._blackHolesNum; i++) {
-            var blackhole = new BlackHole(backgroundImage, this._blackHoleWidth, this._blackHoleHeight, this._blackHoleName);
-            blackhole.randomGenerate(backgroundImage);
+            var blackhole = new BlackHole(this._backgroundImage, this._blackHoleWidth, this._blackHoleHeight, this._blackHoleName);
+            blackhole.randomGenerate(this._backgroundImage);
             this.blackHoles.push(blackhole);
         }
         //生成陨石数组
         for (var i = 0; i < this._stonesNum; i++) {
             var isFalling = Math.random() <= this.fallingStoneRate;
-            var stone = new Stone(backgroundImage, this._stoneWidth, this._stoneHeight, this._stoneName, isFalling);
-            stone.randomGenerate(backgroundImage);
+            var stone = new Stone(this._backgroundImage, this._stoneWidth, this._stoneHeight, this._stoneName, isFalling);
+            stone.randomGenerate(this._backgroundImage);
             this.stones.push(stone);
         }
         //生成星座数组
         for (var i = 0; i < this._zodiacNum; i++) {
-            var zodiac = new Zodiac(backgroundImage, this._zodiacWidth, this._zodiacHeight, this._zodiacName, i % 12);
-            zodiac.randomGenerate(backgroundImage);
+            var zodiac = new Zodiac(this._backgroundImage, this._zodiacWidth, this._zodiacHeight, this._zodiacName, i % 12);
+            zodiac.randomGenerate(this._backgroundImage);
             this.zodiacs.push(zodiac);
         }
     };

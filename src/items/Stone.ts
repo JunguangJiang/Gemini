@@ -1,6 +1,4 @@
 namespace Game{
-    export const stoneImage: string = "res/atlas/ui/stone.png";
-    export const fallingStoneImage: string = "res/atlas/ui/fallingStone.png";
     export const fallingStoneSpeed: number = 5;//陨石下落的平均速度
 }
 

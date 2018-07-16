@@ -1,4 +1,4 @@
-//障碍物抽象类
+//障碍物抽象父类
 abstract class Barrier<T extends Laya.Sprite>{
     public item:T;//动画或者图像
     
@@ -70,7 +70,7 @@ abstract class Barrier<T extends Laya.Sprite>{
     //更新item的位置等
     public update():void{}//默认情况下什么都不做
 
-    //获得图片区域内的一个有效区域,xScale和yScale分别为水平和竖直方向的缩放率
+    //获得图片区域内的一个有效区域,xScale和yScale分别为水平和竖直方向的缩放率
     public getInnerBounds(itemRec:Laya.Rectangle, xScale:number, yScale:number){
         itemRec=itemRec.setTo(itemRec.x+itemRec.width*(1-xScale)/2,itemRec.y+itemRec.height*(1-yScale)/2,itemRec.width*xScale,itemRec.height*yScale);
         return itemRec;

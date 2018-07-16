@@ -83,7 +83,7 @@ class Ball{
 
     //对小球的位置和速度进行更新
     update():void{
-        let deltaT: number = this._timer.get()/1000.0*1.5;
+        let deltaT: number = this._timer.get()/1000.0*2;
         this._timer.stop();
         this.x = this.x + this._vx * deltaT;
         this.y = this.y + this._vy * deltaT;
@@ -106,7 +106,7 @@ class Ball{
     public drawNormalBall()
     {
         // this._animation.clear();
-        this._animation.loadAnimation(Game.serverResURL+"/GameAnimation/Ball.ani");
+        this._animation.loadAnimation("GameAnimation/Ball.ani");
         this._animation.scaleX=this._radius*2/120;
         this._animation.scaleY=this._radius*2/120;
         this._animation.play();

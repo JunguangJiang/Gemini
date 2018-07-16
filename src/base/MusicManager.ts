@@ -1,4 +1,3 @@
-//全局的音乐管理器
 namespace Game{
     export const SoundURLPrefix: string = "http://jjg15.iterator-traits.com/res/music/" //声音资源前缀
     export const BlackHoleCollisionSound: string = SoundURLPrefix + "BlackHoleCollisionSound.wav";
@@ -11,6 +10,7 @@ namespace Game{
     ];
 }
 
+//全局的音乐管理器
 class MusicManager{
     private _level:number;//当前等级
     constructor(){
@@ -22,6 +22,7 @@ class MusicManager{
         console.log("播放音乐");
         this._level = Math.min(level, Game.BackgroundMusic.length);
         Laya.SoundManager.playMusic(Game.BackgroundMusic[this._level-1], 1, new Laya.Handler(this, this.onComplete));    
+        Laya.SoundManager.setMusicVolume(1);
     }
 
     //播放完背景音乐后调用

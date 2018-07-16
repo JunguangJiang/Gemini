@@ -11,20 +11,19 @@ var __extends = (this && this.__extends) || (function () {
 //游戏的一些参数
 var Game;
 (function (Game) {
-    Game.debug = true; //是否处于调试模式
+    Game.debug = false; //是否处于调试模式
     Game.playerNum = 1; //玩家数目，可以取1或者2
     Game.interval = 100; //刷新时间(单位：毫秒)
     Game.gravity = 14; //重力加速度
     Game.liftCoefficient = Game.debug ? 1600 : 700; //升力系数,升力=liftCoefficient/(球心距离)
     Game.dragCoefficient = 0.001; //阻力系数，阻力=-dragCoefficient*速度^3
-    Game.attractionCoefficient = 10000; //球之间的引力系数
+    Game.attractionCoefficient = 15000; //球之间的引力系数
     Game.randomForce = 10; //随机力的幅度
     Game.humanForce = 40; //人类施力的幅度
     Game.smallBallRandomForcePeriod = 100; //小球受到随机力的周期
     Game.bigBallRandomForcePeriod = 500; //大球受到随机力的周期
     Game.initialY = 2600; //小球的初始高度
-    Game.serverResURL = "http://jjg15.iterator-traits.com/res"; //服务器资源路径
-    Game.setting = false; //是否处于设定模式
+    Game.setting = false; //是否处于设置界面
     Game.sound = true; //是否有声音
     Game.pause = false; //是否暂停
 })(Game || (Game = {}));
@@ -54,7 +53,9 @@ var GameView = /** @class */ (function (_super) {
         this._loopCount = 0;
         this._level = 1;
         //障碍物类初始化与障碍物绘制
-        this._barriersManagement = new BarriersManagement(this.backgroundView, 0.5);
+        this._barriersManagement = new BarriersManagement(this.backgroundView);
+        this.adjustBarrier();
+        this._barriersManagement.regenerateBarrier();
         this._barriersManagement.drawBarriers();
         //计分器的初始化
         this._scoreIndicator = new ScoreIndicator(this.scoreView, 3, this.runningView.height, 0);
@@ -70,20 +71,23 @@ var GameView = /** @class */ (function (_super) {
     GameView.prototype.enterNewLevel = function () {
         this._level++;
         this.levelView.text = "level " + this._level;
-        this.increaseDifficulty(); //增加游戏难度
+        this._scoreIndicator.getReward(20);
         this._scoreIndicator.clearHeight(); //计分器维护的高度归零
         this._bigBall.y = this._smallBall.y = Game.initialY; //让大球和小球都回到起点
         this._bigBall.stop();
         this._smallBall.stop();
-        this._barriersManagement.regenerateBarrier(this.backgroundView); //清除原先的障碍物
+        this.adjustBarrier(); //调整障碍物的数量
+        this._barriersManagement.regenerateBarrier(); //清除原先的障碍物
         this._barriersManagement.drawBarriers(); //绘制新的障碍物
         this._musicManager.onPlaySound(Game.NewLevelSound); //播放过关音乐
-        this._musicManager.onPlayMusic(this._level); //绘制新的音乐
+        // this._musicManager.onPlayMusic(this._level);//绘制新的音乐
     };
-    //增加游戏难度
-    GameView.prototype.increaseDifficulty = function () {
-        Game.randomForce = Game.randomForce * 1.1;
-        //增加障碍物的数量
+    //调整障碍物的数量
+    GameView.prototype.adjustBarrier = function () {
+        this._barriersManagement._stonesNum = Math.min(12 + 4 * this._level, 30);
+        this._barriersManagement._blackHolesNum = Math.min(2 * this._level + 1, 10);
+        this._barriersManagement.fallingStoneRate = Math.min(0.1 * this._level, 0.8);
+        this._barriersManagement._zodiacNum = 15;
     };
     //游戏开始
     GameView.prototype.gameStart = function () {
@@ -102,6 +106,7 @@ var GameView = /** @class */ (function (_super) {
             this._bigBall.pause();
             this._isRunning = false;
             Laya.timer.clear(this, this.onLoop);
+            this._musicManager.turnOff(); //关闭声音
         }
     };
     //游戏重新开始
@@ -112,6 +117,7 @@ var GameView = /** @class */ (function (_super) {
             this._bigBall.restart();
             this._isRunning = true;
             Laya.timer.loop(Game.interval, this, this.onLoop);
+            this._musicManager.turnOn(); //打开声音
         }
     };
     //游戏结束
@@ -140,8 +146,10 @@ var GameView = /** @class */ (function (_super) {
         this._smallBall.update(); //更新小球的位置和速度
         this.updateBackground(); //根据当前球的位置更新背景
         this._loopCount++;
-        this._scoreIndicator.updateHeight(-(this._bigBall.y - this.runningView.height + this._bigBall.radius));
-        //不断更新游戏分数，最小为0
+        if (this._level === 1) {
+            this._scoreIndicator.updateHeight(-(this._bigBall.y - this.runningView.height + this._bigBall.radius));
+        }
+        //不断更新游戏分数,最小值为0
         Game.score = Math.max(this._scoreIndicator.data, 0);
     };
     //根据当前球的位置更新背景
@@ -219,7 +227,7 @@ var GameView = /** @class */ (function (_super) {
     //更新球的受力，主要是两个球之间的作用力
     GameView.prototype.updateForces = function () {
         var distance = Math.sqrt(Math.pow((this._bigBall.x - this._smallBall.x), 2) +
-            Math.pow((this._bigBall.y - this._smallBall.y), 2)); //球的距离平方
+            Math.pow((this._bigBall.y - this._smallBall.y), 2)); //球的距离
         var minDistance = this._bigBall.radius + this._smallBall.radius; //最近距离不能小于两球的半径之和
         var effectiveDistance = Math.max(distance, minDistance); //在计算受力时的有效距离
         //首先处理球靠近产生的升力
@@ -231,7 +239,8 @@ var GameView = /** @class */ (function (_super) {
         this._bigBall.setForce(-bigVSquare * this._bigBall.vx * Game.dragCoefficient, -bigVSquare * this._bigBall.vy * Game.dragCoefficient, "drag");
         var smallVSquare = Math.pow(this._smallBall.vx, 2) + Math.pow(this._smallBall.vy, 2);
         this._smallBall.setForce(-smallVSquare * this._smallBall.vx * Game.dragCoefficient, -smallVSquare * this._smallBall.vy * Game.dragCoefficient, "drag");
-        //处理两个小球之间的引力(认为水平方向无引力)
+        //处理两个小球之间的引力
+        effectiveDistance = Math.min(effectiveDistance, minDistance * 3);
         var attraction = Game.attractionCoefficient / (Math.pow(effectiveDistance, 3));
         this._bigBall.setForce((this._smallBall.x - this._bigBall.x) * attraction, (this._smallBall.y - this._bigBall.y) * attraction, "attraction");
         this._smallBall.setForce((this._bigBall.x - this._smallBall.x) * attraction, (this._bigBall.y - this._smallBall.y) * attraction, "attraction");
@@ -286,20 +295,31 @@ var GameView = /** @class */ (function (_super) {
     };
     //创建各种按钮响应事件
     GameView.prototype.createButtonEvents = function () {
-        //设定按钮
+        //设置按钮
         this.settingButton.on(Laya.Event.CLICK, this, this.settingEvent);
         //暂停按钮
         this.pauseButton.on(Laya.Event.CLICK, this, this.pauseEvent);
         //静音按钮
         this.soundButton.on(Laya.Event.CLICK, this, this.soundEvent);
     };
-    //设定状态事件
+    //设置按钮事件
     GameView.prototype.settingEvent = function () {
-        this.settingButton._childs.forEach(function (item, index) {
-            item.visible = !Game.setting;
-            item.disabled = Game.setting;
-        });
-        Game.setting = !Game.setting;
+        if (Game.setting) //现在处于设置状态
+         {
+            Game.setting = false;
+            this.settingButton._childs.forEach(function (item, index) {
+                item.visible = false;
+                item.disabled = true;
+            });
+        }
+        else //现在处于非设置状态
+         {
+            Game.setting = true;
+            this.settingButton._childs.forEach(function (item, index) {
+                item.visible = true;
+                item.disabled = false;
+            });
+        }
     };
     //切换暂停状态事件
     GameView.prototype.pauseEvent = function () {
@@ -325,14 +345,14 @@ var GameView = /** @class */ (function (_super) {
             this.soundButton.skin = "ui/button/SoundButton.png";
             Game.sound = false;
             //暂停音乐TODO：
-            this._musicManager.turnOff(); //关闭声音
+            Laya.SoundManager.muted = true;
         }
         else //现在处于静音状态
          {
             this.soundButton.skin = "ui/button/NoSoundButton.png";
             Game.sound = true;
             //播放音乐TODO：
-            this._musicManager.turnOn(); //开启声音
+            Laya.SoundManager.muted = false;
         }
     };
     return GameView;

@@ -8,11 +8,6 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Game;
-(function (Game) {
-    Game.zodiacLightImage = "ui/zodiac/light.png";
-    Game.zodiacYellowImage = "ui/zodiac/yellow.png";
-})(Game || (Game = {}));
 // 星座类
 var Zodiac = /** @class */ (function (_super) {
     __extends(Zodiac, _super);
@@ -40,7 +35,7 @@ var Zodiac = /** @class */ (function (_super) {
     };
     //判断小球是否与星座相接触
     Zodiac.prototype.detectCollisions = function (ball) {
-        if (this._bounds === null || this._bounds.width === 0) {
+        if (this._bounds === null) {
             this._bounds = this.getInnerBounds(this.item.getBounds(), 0.8, 0.8);
             // console.log("星座:" + this._bounds);
         }

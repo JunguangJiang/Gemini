@@ -10,8 +10,6 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Game;
 (function (Game) {
-    Game.stoneImage = "res/atlas/ui/stone.png";
-    Game.fallingStoneImage = "res/atlas/ui/fallingStone.png";
     Game.fallingStoneSpeed = 5; //陨石下落的平均速度
 })(Game || (Game = {}));
 var Stone = /** @class */ (function (_super) {

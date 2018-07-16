@@ -49,6 +49,7 @@ var ScoreIndicator = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    //更新计分器的UI界面
     ScoreIndicator.prototype.updateUI = function () {
         var data = {};
         var temp = this._data;
@@ -57,7 +58,6 @@ var ScoreIndicator = /** @class */ (function () {
             temp /= 10;
         }
         this._box.dataSource = data;
-        // console.log("当前分数为"+this._data);
     };
     //显示分数变化
     ScoreIndicator.prototype.showScoreChange = function (scoreChange) {
@@ -74,7 +74,7 @@ var ScoreIndicator = /** @class */ (function () {
         Laya.Tween.to(text, { scaleX: 1, scaleY: 1 }, 1000, Laya.Ease.backOut);
         Laya.timer.once(2000, this, this.closeScoreChange, [scoreChange]);
     };
-    //关闭分数显示
+    //关闭分数变化的显示
     ScoreIndicator.prototype.closeScoreChange = function (scoreChange) {
         console.log("关闭分数显示");
         if (scoreChange > 0) {

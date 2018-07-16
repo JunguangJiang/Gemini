@@ -17,14 +17,14 @@ var BlackHole = /** @class */ (function (_super) {
     }
     //绘制item
     BlackHole.prototype.drawItem = function () {
-        this.item.loadAnimation(Game.serverResURL + "/GameAnimation/BlackHole.ani");
+        this.item.loadAnimation("GameAnimation/BlackHole.ani");
         this.item.scaleX = this._width / 100;
         this.item.scaleY = this._height / 100;
         this.item.play();
     };
     //判断球是否与黑洞相撞，0为不相撞，1为相撞
     BlackHole.prototype.detectCollisions = function (ball) {
-        if (this._bounds === null || this._bounds.width === 0) {
+        if (this._bounds === null) {
             this._bounds = this.getInnerBounds(this.item.getBounds(), 0.25, 0.25);
         }
         if (this._isTouched)

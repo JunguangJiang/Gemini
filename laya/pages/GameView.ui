@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":43,
-    "selecteID":37,
+    "selectedBox":22,
+    "selecteID":2,
     "props":{"y":0,"x":0,"width":800,"sceneColor":"#000000","height":600},
     "nodeParent":-1,
     "label":"View",
@@ -163,10 +163,9 @@
                 {
                     "x":30,
                     "type":"Text",
-                    "props":{"y":-23,"x":55,"width":92,"var":"levelView","text":"Level 1","strokeColor":"#16d225","italic":false,"height":25,"fontSize":25,"font":"SimHei","color":"#ebff08","bold":true,"alpha":1,"align":"center"},
+                    "props":{"y":-23,"x":60,"width":92,"var":"levelView","text":"Level 1","strokeColor":"#16d225","italic":true,"height":25,"fontSize":25,"font":"Impact","color":"#ff2f08","bold":false,"alpha":0.5,"align":"center"},
                     "nodeParent":22,
                     "label":"Text(levelView)",
-                    "isOpen":true,
                     "isDirectory":false,
                     "isAniNode":true,
                     "hasChild":false,
@@ -176,47 +175,35 @@
                 },
                 {
                     "x":30,
-                    "type":"Text",
-                    "props":{"y":103,"x":71,"width":66,"var":"rewardView","strokeColor":"#734bf4","stroke":2,"pivotY":33,"pivotX":36,"name":"reward","height":60,"fontSize":50,"font":"ChalkBoard","color":"#08f838"},
-                    "nodeParent":22,
-                    "label":"Text(rewardView)",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":40,
-                    "child":[
-                        ]
-                },
-                {
-                    "x":30,
-                    "type":"Text",
-                    "props":{"y":100,"x":148,"width":49,"var":"penaltyView","strokeColor":"#f37808","stroke":2,"pivotY":30,"pivotX":29,"name":"penalty","height":59,"fontSize":50,"font":"ChalkBoard","color":"#f82408"},
-                    "nodeParent":22,
-                    "label":"Text(penaltyView)",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":42,
-                    "child":[
-                        ]
-                },
-                {
-                    "x":30,
                     "type":"Image",
-                    "props":{"y":0,"x":-50,"width":50,"var":"settingButton","skin":"ui/button/SettingButton.png","height":50},
+                    "props":{"y":0,"x":-30,"width":50,"var":"settingButton","skin":"ui/button/SettingButton.png","height":50,"alpha":0.5},
                     "nodeParent":22,
                     "label":"Image(settingButton)",
                     "isOpen":true,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
-                    "compId":43,
+                    "compId":42,
                     "child":[
                         {
                             "x":45,
                             "type":"Image",
-                            "props":{"y":70,"x":0,"visible":false,"var":"soundButton","skin":"ui/button/NoSoundButton.png","disabled":true},
-                            "nodeParent":43,
+                            "props":{"y":140,"x":0,"width":50,"visible":false,"var":"pauseButton","skin":"ui/button/PauseButton.png","height":50,"disabled":true},
+                            "nodeParent":42,
+                            "label":"Image(pauseButton)",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":38,
+                            "child":[
+                                ],
+                            "$HIDDEN":false
+                        },
+                        {
+                            "x":45,
+                            "type":"Image",
+                            "props":{"y":70,"x":0,"width":50,"visible":false,"var":"soundButton","skin":"ui/button/NoSoundButton.png","height":50,"disabled":true},
+                            "nodeParent":42,
                             "label":"Image(soundButton)",
                             "isDirectory":false,
                             "isAniNode":true,
@@ -228,21 +215,8 @@
                         {
                             "x":45,
                             "type":"Image",
-                            "props":{"y":140,"x":0,"visible":false,"var":"pauseButton","skin":"ui/button/PauseButton.png","disabled":true},
-                            "nodeParent":43,
-                            "label":"Image(pauseButton)",
-                            "isDirectory":false,
-                            "isAniNode":true,
-                            "hasChild":false,
-                            "compId":38,
-                            "child":[
-                                ]
-                        },
-                        {
-                            "x":45,
-                            "type":"Image",
-                            "props":{"y":210,"x":0,"visible":false,"var":"endButton","skin":"ui/button/EndButton.png","disabled":true},
-                            "nodeParent":43,
+                            "props":{"y":210,"x":0,"width":50,"visible":false,"var":"endButton","skin":"ui/button/EndButton.png","height":50,"disabled":true},
+                            "nodeParent":42,
                             "label":"Image(endButton)",
                             "isDirectory":false,
                             "isAniNode":true,
@@ -251,6 +225,32 @@
                             "child":[
                                 ]
                         }]
+                },
+                {
+                    "x":30,
+                    "type":"Text",
+                    "props":{"y":48,"x":35,"strokeColor":"#f4720b","stroke":2,"name":"penalty","fontSize":50,"font":"ChalkBoard","color":"#f82e08"},
+                    "nodeParent":22,
+                    "label":"Text(penalty)",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":43,
+                    "child":[
+                        ]
+                },
+                {
+                    "x":30,
+                    "type":"Text",
+                    "props":{"y":46,"x":97,"strokeColor":"#08bc83","stroke":2,"name":"reward","fontSize":50,"font":"ChalkBoard","color":"#08f824"},
+                    "nodeParent":22,
+                    "label":"Text(reward)",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":44,
+                    "child":[
+                        ]
                 }]
         },
         {

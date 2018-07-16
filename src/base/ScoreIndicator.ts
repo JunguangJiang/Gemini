@@ -58,6 +58,7 @@ class ScoreIndicator{
         return this._data;
     }
 
+    //更新计分器的UI界面
     updateUI():void{
         let data:any = {}
         let temp:number = this._data;
@@ -66,7 +67,6 @@ class ScoreIndicator{
             temp /= 10;
         }
         this._box.dataSource = data;
-        // console.log("当前分数为"+this._data);
     }
 
     //显示分数变化
@@ -84,7 +84,7 @@ class ScoreIndicator{
         Laya.timer.once(2000, this, this.closeScoreChange, [scoreChange]);
     }
 
-    //关闭分数显示
+    //关闭分数变化的显示
     closeScoreChange(scoreChange:number):void{
         console.log("关闭分数显示");
         if(scoreChange > 0){
