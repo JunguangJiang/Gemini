@@ -88,13 +88,8 @@ P 23B8D463 EndButton.png
 P 29CA414F NoSoundButton.png
 P 28BBC03C PauseButton.png
 P C81C1259 SelectButton.png
-P 74E420E1 SettingButton.png
 P C395CBD6 SoundButton.png
 D ui/fallingStone
-<<<<<<< HEAD
-=======
-R 6D88006A .DS_Store
->>>>>>> d99c5424fbd6342210061511197eb1251348b40c
 P 6F73ED82 fallingStone.png
 D ui/score
 P 60053BEA clip_number.png
