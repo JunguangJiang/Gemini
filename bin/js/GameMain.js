@@ -23,7 +23,11 @@ var GameMain = /** @class */ (function () {
             { url: "res/atlas/ui/arrow.atlas", type: Laya.Loader.ATLAS },
             { url: "res/atlas/ui/stone.atlas", type: Laya.Loader.ATLAS },
             { url: "res/atlas/ui/score.atlas", type: Laya.Loader.ATLAS },
-            { url: "res/atlas/ui/button.atlas", type: Laya.Loader.ATLAS }
+            { url: "res/atlas/ui/button.atlas", type: Laya.Loader.ATLAS },
+            { url: Game.StoneCollisionSound, type: Laya.Loader.SOUND },
+            { url: Game.BlackHoleCollisionSound, type: Laya.Loader.SOUND },
+            { url: Game.NewLevelSound, type: Laya.Loader.SOUND },
+            { url: Game.RewardSound, type: Laya.Loader.SOUND },
         ];
         Laya.loader.load(resArray, Laya.Handler.create(this, this.onLoaded)); //当资源加载完毕时，调用onLoaded
     }
