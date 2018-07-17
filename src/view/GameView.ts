@@ -186,8 +186,8 @@ class GameView extends ui.GameViewUI{
         }
 
         this.updateForces();//更新大小球的受力
-        this.detectBorder(this._bigBall);//检测与边缘的相对位置
-        this.detectBorder(this._smallBall);
+        this.detectBorder(this._bigBall, true);//检测与边缘的相对位置
+        this.detectBorder(this._smallBall, Game.playerNum === 2);//只有两个玩家时，才会惩罚小球的碰壁
         this._bigBall.update();//更新大球的位置和速度
         this._smallBall.update();//更新小球的位置和速度
         this.updateBackground();//根据当前球的位置更新背景
@@ -261,12 +261,14 @@ class GameView extends ui.GameViewUI{
     }
 
     //球与边缘的相对位置的检测与处理
-    detectBorder(ball:Ball):void{
+    detectBorder(ball:Ball, hasPenalty:Boolean=false):void{
         if( ( ((ball.x-ball.radius) <= 0) && ball.vx < 0 ) || 
             ( ((ball.x+ball.radius) >= this.runningView.width) && ball.vx > 0 )
             ){
             ball.collide(-1,1);
-            this._scoreIndicator.getPenalty(1*this._level+1);//碰壁惩罚
+            if(hasPenalty){
+                this._scoreIndicator.getPenalty(1*this._level+1);//碰壁惩罚
+            }
         }else if(
             (((ball.y+ball.radius) >= this.runningView.height) && ball.vy > 0)
         ){

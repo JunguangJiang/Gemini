@@ -40969,7 +40969,7 @@ var ScoreIndicator = /** @class */ (function () {
         }
         text.scaleX = text.scaleY = 0.2;
         Laya.Tween.to(text, { scaleX: 1, scaleY: 1 }, 1000, Laya.Ease.backOut);
-        Laya.timer.once(2000, this, this.closeScoreChange, [scoreChange]);
+        Laya.timer.once(2000, this, this.closeScoreChange, [scoreChange], false);
     };
     //关闭分数变化的显示
     ScoreIndicator.prototype.closeScoreChange = function (scoreChange) {
@@ -41002,13 +41002,13 @@ var Game;
 var MusicManager = /** @class */ (function () {
     function MusicManager() {
         this._level = 1;
+        Laya.SoundManager.setMusicVolume(1);
     }
     //根据等级播放背景音乐，level从1开始
     MusicManager.prototype.onPlayMusic = function (level) {
         console.log("播放音乐");
         this._level = Math.min(level, Game.BackgroundMusic.length);
         Laya.SoundManager.playMusic(Game.BackgroundMusic[this._level - 1], 1, new Laya.Handler(this, this.onComplete));
-        Laya.SoundManager.setMusicVolume(1);
     };
     //播放完背景音乐后调用
     MusicManager.prototype.onComplete = function () {
@@ -41127,7 +41127,7 @@ var Ball = /** @class */ (function () {
     };
     //对小球的位置和速度进行更新
     Ball.prototype.update = function () {
-        var deltaT = this._timer.get() / 1000.0 * 2;
+        var deltaT = this._timer.get() / 1000.0 * 4;
         this._timer.stop();
         this.x = this.x + this._vx * deltaT;
         this.y = this.y + this._vy * deltaT;
@@ -41168,8 +41168,8 @@ var Arrow = /** @class */ (function () {
         this._touchEnd = touchEnd;
         this._ballType = ballType;
         for (var i = 0; i < 2; i++) {
-            this._arrows[i].visible = true;
-            this._arrows[i].alpha = 0.3;
+            // this._arrows[i].visible = true;
+            // this._arrows[i].alpha=0.3;
             this._arrows[i].on(Laya.Event.MOUSE_DOWN, this, this.onMouseDown, [i]);
             this._arrows[i].on(Laya.Event.MOUSE_UP, this, this.onMouseUp, [i]);
         }
@@ -41211,8 +41211,8 @@ var BlackHole = /** @class */ (function (_super) {
     //绘制item
     BlackHole.prototype.drawItem = function () {
         this.item.loadAnimation("GameAnimation/BlackHole.ani");
-        this.item.scaleX = this._width / 60;
-        this.item.scaleY = this._height / 60;
+        this.item.scaleX = this._width / 100;
+        this.item.scaleY = this._height / 100;
         this.item.play();
     };
     //判断球是否与黑洞相撞，0为不相撞，1为相撞
@@ -41240,7 +41240,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Game;
 (function (Game) {
-    Game.fallingStoneSpeed = 5; //陨石下落的平均速度
+    Game.fallingStoneSpeed = 10 / 6; //陨石下落的平均速度
 })(Game || (Game = {}));
 var Stone = /** @class */ (function (_super) {
     __extends(Stone, _super);
@@ -41252,6 +41252,7 @@ var Stone = /** @class */ (function (_super) {
         _this._fallingStoneSpeed = Math.random() % Game.fallingStoneSpeed / 2 + Game.fallingStoneSpeed;
         _this._up = 0;
         _this._down = backgroundImage.height;
+        _this._hasInit = false;
         return _this;
     }
     //绘制item
@@ -41276,6 +41277,11 @@ var Stone = /** @class */ (function (_super) {
     //不断更新陨石的位置，只有当_isFalling为真时，位置才会改变
     Stone.prototype.update = function () {
         if (this.isFalling) {
+            if (!this._hasInit) { //保证陨石的初始化高度不会太低
+                if (this.item.y > (this._down * 0.8))
+                    this.item.y = this._up;
+                this._hasInit = true;
+            }
             this.item.y += this._fallingStoneSpeed;
             if (this.item.y >= this._down + this._height) {
                 this.item.y = this._up - this._height;
@@ -41360,7 +41366,7 @@ var ui;
             _super.prototype.createChildren.call(this);
             this.createView(ui.EndViewUI.uiView);
         };
-        EndViewUI.uiView = { "type": "View", "props": { "y": 0, "x": 0, "width": 800, "height": 600 }, "child": [{ "type": "Image", "props": { "y": 0, "x": 0, "width": 800, "var": "backgroundView", "skin": "ui/background/EndBackGround.jpg", "height": 600 }, "child": [{ "type": "Box", "props": { "y": 150, "x": 250, "width": 300, "visible": false, "var": "scoreView", "height": 60 }, "child": [{ "type": "Clip", "props": { "y": 16, "x": 246, "width": 30, "skin": "ui/else/clip_number.png", "name": "item3", "height": 40, "clipX": 10 } }, { "type": "Clip", "props": { "y": 16, "x": 202, "width": 30, "skin": "ui/else/clip_number.png", "name": "item2", "height": 40, "clipX": 10 } }, { "type": "Clip", "props": { "y": 16, "x": 157, "width": 30, "skin": "ui/else/clip_number.png", "name": "item1", "index": 0, "height": 40, "clipX": 10 } }, { "type": "Text", "props": { "y": 15, "x": 0, "width": 150, "valign": "middle", "text": "Score:", "height": 40, "fontSize": 40, "font": "SimSun", "color": "#ffff00", "bold": true, "alpha": 0.7, "align": "left" } }] }, { "type": "Image", "props": { "y": 308, "x": 60, "width": 100, "var": "startButton", "skin": "ui/button/SelectButton.png", "height": 100, "alpha": 1 }, "child": [{ "type": "Text", "props": { "y": 23, "x": 24, "width": 50, "text": "始", "strokeColor": "#000000", "overflow": "hidden", "height": 50, "fontSize": 40, "font": "Microsoft YaHei", "color": "#ffffff", "bold": true, "align": "center" } }] }, { "type": "Image", "props": { "y": 451, "x": 61, "width": 100, "var": "rankButton", "skin": "ui/button/SelectButton.png", "height": 100 }, "child": [{ "type": "Text", "props": { "y": 26, "x": 24, "width": 50, "text": "排", "overflow": "hidden", "height": 50, "fontSize": 40, "font": "Microsoft YaHei", "color": "#ffffff", "bold": true, "align": "center" } }] }] }] };
+        EndViewUI.uiView = { "type": "View", "props": { "y": 0, "x": 0, "width": 800, "height": 600 }, "child": [{ "type": "Image", "props": { "y": 0, "x": 0, "width": 800, "var": "backgroundView", "skin": "ui/background/EndBackGround.jpg", "mouseThrough": true, "height": 600, "disabled": false }, "child": [{ "type": "Image", "props": { "y": 430, "x": 50, "width": 100, "visible": true, "var": "rankButton", "skin": "ui/button/SelectButton.png", "mouseEnabled": true, "hitTestPrior": true, "height": 100, "disabled": false }, "child": [{ "type": "Text", "props": { "y": 26, "x": 24, "width": 50, "text": "排", "overflow": "hidden", "height": 50, "fontSize": 40, "font": "Microsoft YaHei", "color": "#ffffff", "bold": true, "align": "center" } }] }, { "type": "Image", "props": { "y": 300, "x": 50, "width": 100, "visible": true, "var": "startButton", "skin": "ui/button/SelectButton.png", "mouseEnabled": true, "hitTestPrior": true, "height": 100, "disabled": false, "alpha": 1 }, "child": [{ "type": "Text", "props": { "y": 23, "x": 24, "width": 50, "text": "始", "strokeColor": "#000000", "overflow": "hidden", "height": 50, "fontSize": 40, "font": "Microsoft YaHei", "color": "#ffffff", "bold": true, "align": "center" } }] }, { "type": "Box", "props": { "y": 150, "x": 250, "width": 300, "visible": false, "var": "scoreView", "height": 60 }, "child": [{ "type": "Clip", "props": { "y": 16, "x": 246, "width": 30, "skin": "ui/else/clip_number.png", "name": "item3", "height": 40, "clipX": 10 } }, { "type": "Clip", "props": { "y": 16, "x": 202, "width": 30, "skin": "ui/else/clip_number.png", "name": "item2", "height": 40, "clipX": 10 } }, { "type": "Clip", "props": { "y": 16, "x": 157, "width": 30, "skin": "ui/else/clip_number.png", "name": "item1", "index": 0, "height": 40, "clipX": 10 } }, { "type": "Text", "props": { "y": 15, "x": 0, "width": 150, "valign": "middle", "text": "Score:", "height": 40, "fontSize": 40, "font": "SimSun", "color": "#ffff00", "bold": true, "alpha": 0.7, "align": "left" } }] }] }] };
         return EndViewUI;
     }(View));
     ui.EndViewUI = EndViewUI;
@@ -41376,7 +41382,7 @@ var ui;
             _super.prototype.createChildren.call(this);
             this.createView(ui.GameViewUI.uiView);
         };
-        GameViewUI.uiView = { "type": "View", "props": { "y": 0, "x": 0, "width": 800, "height": 600 }, "child": [{ "type": "Box", "props": { "y": -2017, "x": 0, "width": 800, "visible": true, "var": "runningView", "height": 2617 }, "child": [{ "type": "Image", "props": { "y": 0, "x": 0, "width": 800, "var": "backgroundView", "skin": "ui/background/BackGround .jpg", "height": 2617 } }, { "type": "Animation", "props": { "y": 2582, "x": 145, "width": 30, "var": "smallBallView", "height": 30 } }, { "type": "Animation", "props": { "y": 2568, "x": 369, "width": 50, "var": "bigBallView", "height": 50 } }] }, { "type": "Box", "props": { "y": 494, "x": 389, "width": 669, "visible": true, "var": "arrowView", "scaleX": 1, "pivotY": 53, "pivotX": 324, "height": 105, "centerY": 193, "centerX": 5 }, "child": [{ "type": "Image", "props": { "x": 574, "width": 100, "skin": "ui/else/right.png", "pivotY": 0, "pivotX": 0, "name": "right", "height": 100 } }, { "type": "Image", "props": { "width": 100, "skin": "ui/else/left.png", "name": "left", "height": 100 } }] }, { "type": "Box", "props": { "y": 50, "x": 600, "width": 200, "visible": true, "var": "scoreView", "height": 60 }, "child": [{ "type": "Clip", "props": { "y": 7, "x": 126, "width": 30, "skin": "ui/else/clip_number.png", "name": "item3", "height": 40, "clipX": 10 } }, { "type": "Clip", "props": { "y": 7, "x": 82, "width": 30, "skin": "ui/else/clip_number.png", "name": "item2", "height": 40, "clipX": 10 } }, { "type": "Clip", "props": { "y": 7, "x": 37, "width": 30, "skin": "ui/else/clip_number.png", "name": "item1", "index": 0, "height": 40, "clipX": 10 } }, { "type": "Text", "props": { "y": -23, "x": 60, "width": 92, "var": "levelView", "text": "Level 1", "strokeColor": "#16d225", "italic": true, "height": 25, "fontSize": 25, "font": "Impact", "color": "#ff2f08", "bold": false, "alpha": 0.5, "align": "center" } }, { "type": "Image", "props": { "y": 0, "x": -30, "width": 50, "var": "settingButton", "skin": "ui/button/SettingButton.png", "height": 50, "alpha": 0.5 }, "child": [{ "type": "Image", "props": { "y": 140, "x": 0, "width": 50, "visible": false, "var": "pauseButton", "skin": "ui/button/PauseButton.png", "height": 50, "disabled": true } }, { "type": "Image", "props": { "y": 70, "x": 0, "width": 50, "visible": false, "var": "soundButton", "skin": "ui/button/NoSoundButton.png", "height": 50, "disabled": true } }, { "type": "Image", "props": { "y": 210, "x": 0, "width": 50, "visible": false, "var": "endButton", "skin": "ui/button/EndButton.png", "height": 50, "disabled": true } }] }, { "type": "Text", "props": { "y": 48, "x": 35, "strokeColor": "#f4720b", "stroke": 2, "name": "penalty", "fontSize": 50, "font": "ChalkBoard", "color": "#f82e08" } }, { "type": "Text", "props": { "y": 46, "x": 97, "strokeColor": "#08bc83", "stroke": 2, "name": "reward", "fontSize": 50, "font": "ChalkBoard", "color": "#08f824" } }] }, { "type": "Box", "props": { "y": 506, "x": 605, "width": 238, "visible": true, "var": "smallArrowView", "scaleX": 1, "pivotY": 53, "pivotX": 324, "height": 98, "centerY": 202, "centerX": 14 }, "child": [{ "type": "Image", "props": { "y": 0, "x": 181, "width": 70, "skin": "ui/else/right.png", "pivotY": 0, "pivotX": 0, "name": "right", "height": 70 } }, { "type": "Image", "props": { "y": 0, "x": -20, "width": 70, "skin": "ui/else/left.png", "name": "left", "height": 70 } }] }] };
+        GameViewUI.uiView = { "type": "View", "props": { "y": 0, "x": 0, "width": 800, "height": 600 }, "child": [{ "type": "Box", "props": { "y": -2017, "x": 0, "width": 800, "visible": true, "var": "runningView", "height": 2617 }, "child": [{ "type": "Image", "props": { "y": 0, "x": 0, "width": 800, "var": "backgroundView", "skin": "ui/background/BackGround .jpg", "height": 2617 } }, { "type": "Animation", "props": { "y": 2582, "x": 145, "width": 30, "var": "smallBallView", "height": 30 } }, { "type": "Animation", "props": { "y": 2568, "x": 369, "width": 50, "var": "bigBallView", "height": 50 } }] }, { "type": "Box", "props": { "width": 666, "visible": true, "var": "arrowView", "scaleX": 1, "pivotY": 53, "pivotX": 324, "height": 113, "centerY": 193, "centerX": 5 }, "child": [{ "type": "Image", "props": { "x": 574, "width": 100, "visible": true, "skin": "ui/else/right.png", "pivotY": 0, "pivotX": 0, "name": "rightShow", "height": 100, "alpha": 0.3 } }, { "type": "Image", "props": { "width": 100, "visible": true, "skin": "ui/else/left.png", "name": "leftShow", "height": 100, "alpha": 0.3 } }, { "type": "Image", "props": { "y": -180, "x": 480, "width": 240, "visible": true, "skin": "ui/else/right.png", "name": "right", "height": 330, "alpha": 0 } }, { "type": "Image", "props": { "y": -180, "x": -63, "width": 240, "visible": true, "skin": "ui/else/left.png", "name": "left", "height": 330, "alpha": 0 } }] }, { "type": "Box", "props": { "y": 50, "x": 600, "width": 200, "visible": true, "var": "scoreView", "height": 60 }, "child": [{ "type": "Clip", "props": { "y": 7, "x": 126, "width": 30, "skin": "ui/else/clip_number.png", "name": "item3", "height": 40, "clipX": 10 } }, { "type": "Clip", "props": { "y": 7, "x": 82, "width": 30, "skin": "ui/else/clip_number.png", "name": "item2", "height": 40, "clipX": 10 } }, { "type": "Clip", "props": { "y": 7, "x": 37, "width": 30, "skin": "ui/else/clip_number.png", "name": "item1", "index": 0, "height": 40, "clipX": 10 } }, { "type": "Text", "props": { "y": -23, "x": 60, "width": 92, "var": "levelView", "text": "Level 1", "strokeColor": "#16d225", "italic": true, "height": 25, "fontSize": 25, "font": "Impact", "color": "#ff2f08", "bold": false, "alpha": 0.5, "align": "center" } }, { "type": "Image", "props": { "y": 0, "x": -30, "width": 50, "var": "settingButton", "skin": "ui/button/SettingButton.png", "height": 50, "alpha": 0.5 }, "child": [{ "type": "Image", "props": { "y": 140, "x": 0, "width": 50, "visible": false, "var": "pauseButton", "skin": "ui/button/PauseButton.png", "height": 50, "disabled": true } }, { "type": "Image", "props": { "y": 70, "x": 0, "width": 50, "visible": false, "var": "soundButton", "skin": "ui/button/NoSoundButton.png", "height": 50, "disabled": true } }, { "type": "Image", "props": { "y": 210, "x": 0, "width": 50, "visible": false, "var": "endButton", "skin": "ui/button/EndButton.png", "height": 50, "disabled": true } }] }, { "type": "Text", "props": { "y": 48, "x": 35, "strokeColor": "#f4720b", "stroke": 2, "name": "penalty", "fontSize": 50, "font": "ChalkBoard", "color": "#f82e08" } }, { "type": "Text", "props": { "y": 46, "x": 97, "strokeColor": "#08bc83", "stroke": 2, "name": "reward", "fontSize": 50, "font": "ChalkBoard", "color": "#08f824" } }] }, { "type": "Box", "props": { "y": 506, "x": 605, "width": 238, "visible": true, "var": "smallArrowView", "scaleX": 1, "pivotY": 53, "pivotX": 324, "height": 98, "centerY": 202, "centerX": 14 }, "child": [{ "type": "Image", "props": { "y": 0, "x": 181, "width": 70, "visible": true, "skin": "ui/else/right.png", "pivotY": 0, "pivotX": 0, "name": "rightShow", "height": 70, "alpha": 0.3 } }, { "type": "Image", "props": { "y": 0, "x": -20, "width": 70, "visible": true, "skin": "ui/else/left.png", "name": "leftShow", "height": 70, "alpha": 0.3 } }, { "type": "Image", "props": { "y": -192, "x": 135, "width": 180, "visible": true, "skin": "ui/else/right.png", "name": "right", "height": 330, "alpha": 0 } }, { "type": "Image", "props": { "y": -192, "x": -74, "width": 192, "visible": true, "skin": "ui/else/left.png", "name": "left", "height": 330, "alpha": 0 } }] }] };
         return GameViewUI;
     }(View));
     ui.GameViewUI = GameViewUI;
@@ -41418,9 +41424,7 @@ var EndView = /** @class */ (function (_super) {
     __extends(EndView, _super);
     //构造函数
     function EndView() {
-        var _this = _super.call(this) || this;
-        _this.loadImage(Game.endBackGroundImage);
-        return _this;
+        return _super.call(this) || this;
     }
     //结束界面还原初始化设置
     EndView.prototype.init = function () {
@@ -41487,15 +41491,15 @@ var Game;
 (function (Game) {
     Game.debug = false; //是否处于调试模式
     Game.playerNum = 1; //玩家数目，可以取1或者2
-    Game.interval = 100; //刷新时间(单位：毫秒)
+    Game.interval = 16; //刷新时间(单位：毫秒)
     Game.gravity = 14; //重力加速度
     Game.liftCoefficient = Game.debug ? 1600 : 700; //升力系数,升力=liftCoefficient/(球心距离)
     Game.dragCoefficient = 0.001; //阻力系数，阻力=-dragCoefficient*速度^3
     Game.attractionCoefficient = 15000; //球之间的引力系数
     Game.randomForce = 10; //随机力的幅度
     Game.humanForce = 40; //人类施力的幅度
-    Game.smallBallRandomForcePeriod = 100; //小球受到随机力的周期
-    Game.bigBallRandomForcePeriod = 500; //大球受到随机力的周期
+    Game.smallBallRandomForcePeriod = 600; //小球受到随机力的周期
+    Game.bigBallRandomForcePeriod = 3000; //大球受到随机力的周期
     Game.initialY = 2600; //小球的初始高度
     Game.setting = false; //是否处于设置界面
     Game.sound = true; //是否有声音
@@ -41525,12 +41529,8 @@ var GameView = /** @class */ (function (_super) {
             this.smallArrowView.visible = false;
         }
         this._loopCount = 0;
-        this._level = 1;
         //障碍物类初始化与障碍物绘制
         this._barriersManagement = new BarriersManagement(this.backgroundView);
-        this.adjustBarrier();
-        this._barriersManagement.regenerateBarrier();
-        this._barriersManagement.drawBarriers();
         //计分器的初始化
         this._scoreIndicator = new ScoreIndicator(this.scoreView, 3, this.runningView.height, 0);
         //等级显示
@@ -41540,21 +41540,28 @@ var GameView = /** @class */ (function (_super) {
         this._musicManager.onPlayMusic(1); //播放等级1的音乐
         //创建按钮事件
         this.createButtonEvents();
+        this.enterLevel(1); //进入等级1
     };
-    //进入新的一级
-    GameView.prototype.enterNewLevel = function () {
-        this._level++;
+    //直接进入某一级
+    GameView.prototype.enterLevel = function (level) {
+        this._level = level;
         this.levelView.text = "level " + this._level;
-        this._scoreIndicator.getReward(20);
         this._scoreIndicator.clearHeight(); //计分器维护的高度归零
         this._bigBall.y = this._smallBall.y = Game.initialY; //让大球和小球都回到起点
         this._bigBall.stop();
         this._smallBall.stop();
+        //需要在此处绘制障碍物
+        //TODO,在此处修改接口
         this.adjustBarrier(); //调整障碍物的数量
         this._barriersManagement.regenerateBarrier(); //清除原先的障碍物
         this._barriersManagement.drawBarriers(); //绘制新的障碍物
+    };
+    //进入新的一级
+    GameView.prototype.enterNewLevel = function () {
+        this._level++;
+        this.enterLevel(this._level); //进入下一级
+        this._scoreIndicator.getReward(10 + 10 * this._level); //进入新的一级获得奖励
         this._musicManager.onPlaySound(Game.NewLevelSound); //播放过关音乐
-        // this._musicManager.onPlayMusic(this._level);//绘制新的音乐
     };
     //调整障碍物的数量
     GameView.prototype.adjustBarrier = function () {
@@ -41655,10 +41662,10 @@ var GameView = /** @class */ (function (_super) {
                         this._musicManager.onPlaySound(Game.StoneCollisionSound);
                         //根据陨石是否下落确定惩罚的分数
                         if (item.isFalling) {
-                            this._scoreIndicator.getPenalty(4);
+                            this._scoreIndicator.getPenalty(4 + 1 * (this._level - 1));
                         }
                         else {
-                            this._scoreIndicator.getPenalty(5);
+                            this._scoreIndicator.getPenalty(5 + 1 * (this._level - 1));
                         }
                         //移除该陨石
                         this.backgroundView.removeChild(item.item);
@@ -41678,7 +41685,7 @@ var GameView = /** @class */ (function (_super) {
                     var item = _e[_d];
                     if (item.detectCollisions(ball)) {
                         this._musicManager.onPlaySound(Game.RewardSound);
-                        this._scoreIndicator.getReward(8);
+                        this._scoreIndicator.getReward(6 + 1 * (this._level - 1));
                     }
                 }
                 break;
@@ -41689,6 +41696,7 @@ var GameView = /** @class */ (function (_super) {
         if ((((ball.x - ball.radius) <= 0) && ball.vx < 0) ||
             (((ball.x + ball.radius) >= this.runningView.width) && ball.vx > 0)) {
             ball.collide(-1, 1);
+            this._scoreIndicator.getPenalty(1 * this._level + 1); //碰壁惩罚
         }
         else if ((((ball.y + ball.radius) >= this.runningView.height) && ball.vy > 0)) {
             // console.log("碰到垂直边缘");
@@ -41731,7 +41739,7 @@ var GameView = /** @class */ (function (_super) {
     //让球受到随机力
     GameView.prototype.setRandomForce = function (ball) {
         if (Math.random() > 0.2) {
-            var Fx = (Math.random() - 0.5) * Game.randomForce / 2 + Game.randomForce;
+            var Fx = (Math.random() - 0.5) * Game.randomForce / 2;
             // console.log("水平力Fx="+Fx);
             ball.setForce(Fx, 0, "random");
         }
@@ -41847,9 +41855,7 @@ var StartView = /** @class */ (function (_super) {
     __extends(StartView, _super);
     //构造函数
     function StartView() {
-        var _this = _super.call(this) || this;
-        _this.loadImage(Game.startBackGroundImage, 0, 0, 800, 600);
-        return _this;
+        return _super.call(this) || this;
     }
     return StartView;
 }(ui.StartViewUI));
