@@ -74,7 +74,6 @@ class GameView extends ui.GameViewUI{
         }
 
         this._loopCount = 0;
-        this._level = 1;
 
         //障碍物类初始化与障碍物绘制
         this._barriersManagement=new BarriersManagement(this.backgroundView);
@@ -229,9 +228,9 @@ class GameView extends ui.GameViewUI{
                         this._musicManager.onPlaySound(Game.StoneCollisionSound);
                         //根据陨石是否下落确定惩罚的分数
                         if(item.isFalling){
-                            this._scoreIndicator.getPenalty(4);
+                            this._scoreIndicator.getPenalty(4 + 1 * (this._level - 1));
                         }else{
-                            this._scoreIndicator.getPenalty(5);
+                            this._scoreIndicator.getPenalty(5 + 1 * (this._level -1));
                         }
                         //移除该陨石
                         this.backgroundView.removeChild(item.item);
@@ -254,7 +253,7 @@ class GameView extends ui.GameViewUI{
                     if(item.detectCollisions(ball))
                     {
                         this._musicManager.onPlaySound(Game.RewardSound);
-                        this._scoreIndicator.getReward(8);
+                        this._scoreIndicator.getReward(6 + 1 * (this._level - 1));
                     }
                 }
                 break;
@@ -267,6 +266,7 @@ class GameView extends ui.GameViewUI{
             ( ((ball.x+ball.radius) >= this.runningView.width) && ball.vx > 0 )
             ){
             ball.collide(-1,1);
+            this._scoreIndicator.getPenalty(1*this._level+1);//碰壁惩罚
         }else if(
             (((ball.y+ball.radius) >= this.runningView.height) && ball.vy > 0)
         ){
