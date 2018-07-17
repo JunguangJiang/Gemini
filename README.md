@@ -23,7 +23,6 @@
 + 有游戏设置按钮（结束按钮、静音按钮、暂停按钮）。<br>
 + 不同的难度选择。<br>
 
--## 设计思路（2.0.1）
 ## 设计思路（3.0.1）
 ### 球类Ball
 分配：`江俊广`<br>
@@ -31,13 +30,12 @@
 **球的运动建模**。主要受力包括：重力、由于双子互相靠近产生的升力、与障碍物相撞时的冲力、垂直方向上双子互相的引力（防止双子离得太远）、随机的干扰力等。<br>
 能够根据外部受力和时间变化进行状态的改变（加速度、速度、位置、（旋转角度）、亮暗）。<br>
 
-### 障碍物类Barrier
+
 ### 障碍物类Barrier（抽象类）
 分配：`程嘉梁`<br>
 文件夹：`base`<br>
 **公有属性**：位置、大小、碰撞检测。<br>
 均需要随机生成位置，碰撞后的回调函数不同。<br>
-包括子类岩石类`Rock`和黑洞类`BlackHole`。<br>
 包括子类岩石类`Stone`、黑洞类`BlackHole`、星座类`Zodiac`（俊广实现）。<br>
 
 ### 游戏界面
@@ -54,9 +52,6 @@
 分配：`江俊广`，`程嘉梁`<br>
 文件夹：`view`<br>
 游戏入口函数类`GameMain`。<br>
-1、游戏开始界面类`GameStart`：开始界面背景、游戏模式选择、排行榜查看、是否读入存档。<br>
-2、游戏正式界面类`GameView`：管理全局的数据对象（帧动画、黑洞、障碍物、小球）。新的黑洞与障碍物的生成、全局各种力与碰撞的检测、根据得分判断游戏状态、游戏状态存储。<br>
-3、游戏结束界面类`GameEnd`：展示结束界面（分数）、可选择进入排行榜以及回到开始界面。<br>
 1、游戏开始界面类`StartView`：开始界面背景、游戏模式选择、排行榜查看。<br>
 2、游戏正式界面类`GameView`：管理全局的数据对象（帧动画、黑洞、障碍物、小球）。新的黑洞与障碍物的生成、全局各种力与碰撞的检测、根据得分判断游戏状态、游戏设置。<br>
 3、游戏结束界面类`EndView`：展示结束界面（分数）、可选择进入排行榜以及回到开始界面。<br>
@@ -65,12 +60,8 @@
 ### 一些有空再写的额外类
 分配：动态调整<br>
 文件夹：未定<br>
-排行榜类`Rank`，音效管理器`Music`。<br>
-1、`rank.js`（排行榜类）：存储服务器排行榜信息（存储为一个排行榜对象，其中成员为`ID:score`）、显示排行榜界面、可返回开始界面。<br>
-2、`music.js`（全局音效管理器类）：管理音乐的播放、暂停、静音。<br>
-排行榜类`Rank`<br>
 `rank.js`（排行榜类）：存储服务器排行榜信息（存储为一个排行榜对象，其中成员为`ID:score`）、显示排行榜界面、可返回开始界面。<br>
-注：游戏策略类似于跳一跳，因此不再对游戏进度进行存档。
+注：游戏策略类似于跳一跳，因此不再对游戏进度进行存档。<br>
 
 ### 素材的收集（包括图片、音乐）
 **图片**：旋转体（同一张图片不同比例的缩放得到大球和小球，绘制发光滤镜得到亮暗两种状态）、背景、障碍物、黑洞。<br>
@@ -81,17 +72,11 @@
 + 所有在UI视图中定义的变量名以View作为后缀，从而与自定义的变量名相区别。<br>
 
 ## 已创建的类与接口
-### Barriers（障碍物类）
 ### Barriers（障碍物类--抽象类，有子类BlackHole、Stone、Zodiac）
 **public property**
-+ `blackholes:Laya.Animation[]`：存储背景中黑洞的数组，每个元素是一个动画类`Laya.Animation`。
-+ `stones:Laya.Image[]`：存储背景中陨石的数组，每个元素是一个图片类`Laya.Image`。
 + `item`：该物体对应的动画或图像。
 
 **public method**
-+ `Barriers()`：构造函数，函数参数见代码。
-+ `regenerateBarrier(backgroundImage:Laya.Image)`：更新背景各障碍物的位置（在构造Barriers类对象的时候会先初始化一次）。
-+ `drawBarriers()`：将障碍物的动画和图像绘制到背景上。
 + `constructor(backgroundImage:Laya.Image,width:number,height:number,name:string)`：构造函数。
 + `randomGenerate(backgroundImage:Laya.Image)`：障碍物随机生成在背景某处。
 + `drawItem()`：将障碍物的动画或图像绘制到背景上。（abstract）
@@ -118,7 +103,6 @@
 
 ### ScoreIndicator(计分器)
 **public property**
-@ -106,8 +122,31 @@
 + `turnOff():void`:关闭声音
 + `turnOn():void`:重新打开声音
 
@@ -136,7 +120,6 @@
 ### GameView
 **public method**
 + `gamePause`:暂停游戏
-+ `gameRestart`:恢复此前暂停的游戏
 + `gameRestart`:恢复此前暂停的游戏
 
 ### EndView
@@ -169,9 +152,3 @@
 + `onPlaySound(url:string)`:播放特殊音效，url可取值见包括Game.BlackHoleCollisionSound(和黑洞撞击)，Game.StoneCollisionSound(和岩石撞击的声音)
 + `turnOff():void`:关闭声音
 + `turnOn():void`:重新打开声音
-
-### GameView
-**public method**
-+ `gamePause`:暂停游戏
-+ `gameRestart`:恢复此前暂停的游戏
-
