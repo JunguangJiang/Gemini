@@ -54,9 +54,6 @@ var GameView = /** @class */ (function (_super) {
         this._level = 1;
         //障碍物类初始化与障碍物绘制
         this._barriersManagement = new BarriersManagement(this.backgroundView);
-        this.adjustBarrier();
-        this._barriersManagement.regenerateBarrier();
-        this._barriersManagement.drawBarriers();
         //计分器的初始化
         this._scoreIndicator = new ScoreIndicator(this.scoreView, 3, this.runningView.height, 0);
         //等级显示
@@ -66,21 +63,28 @@ var GameView = /** @class */ (function (_super) {
         this._musicManager.onPlayMusic(1); //播放等级1的音乐
         //创建按钮事件
         this.createButtonEvents();
+        this.enterLevel(5); //进入等级1
     };
-    //进入新的一级
-    GameView.prototype.enterNewLevel = function () {
-        this._level++;
+    //直接进入某一级
+    GameView.prototype.enterLevel = function (level) {
+        this._level = level;
         this.levelView.text = "level " + this._level;
-        this._scoreIndicator.getReward(20);
         this._scoreIndicator.clearHeight(); //计分器维护的高度归零
         this._bigBall.y = this._smallBall.y = Game.initialY; //让大球和小球都回到起点
         this._bigBall.stop();
         this._smallBall.stop();
+        //需要在此处绘制障碍物
+        //TODO,在此处修改接口
         this.adjustBarrier(); //调整障碍物的数量
         this._barriersManagement.regenerateBarrier(); //清除原先的障碍物
         this._barriersManagement.drawBarriers(); //绘制新的障碍物
+    };
+    //进入新的一级
+    GameView.prototype.enterNewLevel = function () {
+        this._level++;
+        this.enterLevel(this._level); //进入下一级
+        this._scoreIndicator.getReward(10 + 10 * this._level); //进入新的一级获得奖励
         this._musicManager.onPlaySound(Game.NewLevelSound); //播放过关音乐
-        // this._musicManager.onPlayMusic(this._level);//绘制新的音乐
     };
     //调整障碍物的数量
     GameView.prototype.adjustBarrier = function () {
