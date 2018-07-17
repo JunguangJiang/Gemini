@@ -18,10 +18,12 @@ var Zodiac = /** @class */ (function (_super) {
         _this.item.clipX = 3;
         _this.item.clipY = 4;
         _this.item.index = type % 12;
+        _this.init();
         return _this;
     }
     //绘制item
     Zodiac.prototype.drawItem = function () {
+        console.log("drawing zodiac:" + this._isTouched);
         if (!this._isTouched) {
             this.item.skin = Game.zodiacLightImage;
             this.item.alpha = 0.3;
@@ -37,9 +39,10 @@ var Zodiac = /** @class */ (function (_super) {
     Zodiac.prototype.detectCollisions = function (ball) {
         if (this._bounds === null) {
             this._bounds = this.getInnerBounds(this.item.getBounds(), 0.8, 0.8);
-            // console.log("星座:" + this._bounds);
+            // console.log("星座:" + this._bounds+" 是否碰到:"+this._isTouched);
         }
         if (!this._isTouched && this._bounds.intersects(ball.animation.getBounds())) {
+            // console.log("碰到星座");
             this._isTouched = true;
             this.drawItem();
             return true;

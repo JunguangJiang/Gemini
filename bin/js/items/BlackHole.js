@@ -13,6 +13,7 @@ var BlackHole = /** @class */ (function (_super) {
     function BlackHole(backgroundImage, width, height, name) {
         var _this = _super.call(this, backgroundImage, width, height, name) || this;
         _this.item = new Laya.Animation();
+        _this.init();
         return _this;
     }
     //绘制item

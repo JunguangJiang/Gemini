@@ -53,6 +53,12 @@ var Barrier = /** @class */ (function () {
         itemRec = itemRec.setTo(itemRec.x + itemRec.width * (1 - xScale) / 2, itemRec.y + itemRec.height * (1 - yScale) / 2, itemRec.width * xScale, itemRec.height * yScale);
         return itemRec;
     };
+    //进入对象池之前的重新初始化
+    Barrier.prototype.init = function () {
+        this._isTouched = false;
+        this._bounds = null;
+    };
+    ;
     return Barrier;
 }());
 //# sourceMappingURL=Barrier.js.map

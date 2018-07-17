@@ -10,7 +10,6 @@ var BarrierParameter;
     BarrierParameter.stoneHeight = 100; //岩石高度
     BarrierParameter.fallingStoneRate = 0.1; //坠落的陨石的比例
     BarrierParameter.stoneStr = "stone"; //岩石对应标识符
-    BarrierParameter.fallingStoneStr = "fallingstone"; //陨石对应标识符
     BarrierParameter.zodiacNum = 12; //星座个数
     BarrierParameter.zodiacWidth = 100; //星座宽度
     BarrierParameter.zodiacHeight = 100; //星座高度
@@ -21,7 +20,6 @@ var BarriersManagement = /** @class */ (function () {
         this._backgroundImage = backgroundImage;
         this.blackHoles = [];
         this.stones = [];
-        this.fallingStones = [];
         this.zodiacs = [];
     }
     //生成障碍物
@@ -38,17 +36,10 @@ var BarriersManagement = /** @class */ (function () {
                 break;
             case BarrierParameter.stoneStr: //获取岩石对象
                 item = Laya.Pool.getItemByCreateFun(BarrierParameter.stoneStr, function () {
-                    var stone = new Stone(this._backgroundImage, BarrierParameter.stoneWidth, BarrierParameter.stoneHeight, BarrierParameter.stoneStr, false);
+                    var stone = new Stone(this._backgroundImage, BarrierParameter.stoneWidth, BarrierParameter.stoneHeight, BarrierParameter.stoneStr, Math.random() < BarrierParameter.fallingStoneRate);
                     return stone;
                 });
                 this.stones.push(item);
-                break;
-            case BarrierParameter.fallingStoneStr: //获取陨石对象
-                item = Laya.Pool.getItemByCreateFun(BarrierParameter.fallingStoneStr, function () {
-                    var fallingStone = new Stone(this._backgroundImage, BarrierParameter.stoneWidth, BarrierParameter.stoneHeight, BarrierParameter.fallingStoneStr, true);
-                    return fallingStone;
-                });
-                this.fallingStones.push(item);
                 break;
             case BarrierParameter.zodiacStr: //获取星座对象
                 item = Laya.Pool.getItemByCreateFun(BarrierParameter.zodiacStr, function () {
@@ -65,6 +56,7 @@ var BarriersManagement = /** @class */ (function () {
     };
     //回收障碍物
     BarriersManagement.prototype.remove = function (barrier) {
+        this._backgroundImage.removeChild(barrier.item); //从画布上移除应写在此处比较合适
         Laya.Pool.recover(barrier.name, barrier);
         switch (barrier.name) {
             case BarrierParameter.blackHoleStr: //回收黑洞对象
@@ -73,11 +65,8 @@ var BarriersManagement = /** @class */ (function () {
             case BarrierParameter.stoneStr: //回收岩石对象   
                 this.stones.splice(this.stones.indexOf(barrier), 1);
                 break;
-            case BarrierParameter.fallingStoneStr: //回收陨石对象
-                this.fallingStones.splice(this.fallingStones.indexOf(barrier), 1);
-                break;
             case BarrierParameter.zodiacStr: //回收星座对象
-                this.zodiacs.splice(this.fallingStones.indexOf(barrier), 1);
+                this.zodiacs.splice(this.zodiacs.indexOf(barrier), 1);
                 break;
             default:
                 break;
@@ -88,22 +77,14 @@ var BarriersManagement = /** @class */ (function () {
         for (var _i = 0, _a = this.blackHoles; _i < _a.length; _i++) {
             var blackhole = _a[_i];
             this.remove(blackhole);
-            backgroundImage.removeChild(blackhole.item);
         }
         for (var _b = 0, _c = this.stones; _b < _c.length; _b++) {
             var stone = _c[_b];
             this.remove(stone);
-            backgroundImage.removeChild(stone.item);
         }
-        for (var _d = 0, _e = this.fallingStones; _d < _e.length; _d++) {
-            var fallingStone = _e[_d];
-            this.remove(fallingStone);
-            backgroundImage.removeChild(fallingStone.item);
-        }
-        for (var _f = 0, _g = this.zodiacs; _f < _g.length; _f++) {
-            var zodiac = _g[_f];
+        for (var _d = 0, _e = this.zodiacs; _d < _e.length; _d++) {
+            var zodiac = _e[_d];
             this.remove(zodiac);
-            backgroundImage.removeChild(zodiac.item);
         }
     };
     //更新各障碍物在屏幕上的位置并绘制
@@ -114,24 +95,21 @@ var BarriersManagement = /** @class */ (function () {
         for (var i = 0; i < BarrierParameter.blackHolesNum; i++) {
             var blackhole = this.produce(BarrierParameter.blackHoleStr);
             blackhole.randomGenerate(this._backgroundImage);
+            blackhole.init();
             blackhole.drawItem();
         }
         //更新岩石
-        for (var i = 0; i < BarrierParameter.stonesNum * (1 - BarrierParameter.fallingStoneRate); i++) {
+        for (var i = 0; i < BarrierParameter.stonesNum; i++) {
             var stone = this.produce(BarrierParameter.stoneStr);
             stone.randomGenerate(this._backgroundImage);
+            stone.init();
             stone.drawItem();
-        }
-        //更新陨石
-        for (var i = 0; i < BarrierParameter.stonesNum * BarrierParameter.fallingStoneRate; i++) {
-            var fallingStone = this.produce(BarrierParameter.fallingStoneStr);
-            fallingStone.randomGenerate(this._backgroundImage);
-            fallingStone.drawItem();
         }
         //更新星座
         for (var i = 0; i < BarrierParameter.zodiacNum; i++) {
             var zodiac = this.produce(BarrierParameter.zodiacStr, i % 12);
             zodiac.randomGenerate(this._backgroundImage);
+            zodiac.init();
             zodiac.drawItem();
         }
     };
@@ -143,9 +121,6 @@ var BarriersManagement = /** @class */ (function () {
         this.stones.forEach(function (element) {
             element.update();
         });
-        this.fallingStones.forEach(function (element) {
-            element.update();
-        });
         this.zodiacs.forEach(function (element) {
             element.update();
         });
@@ -154,7 +129,6 @@ var BarriersManagement = /** @class */ (function () {
     BarriersManagement.prototype.clear = function () {
         Laya.Pool.clearBySign(BarrierParameter.blackHoleStr); //清除黑洞对象
         Laya.Pool.clearBySign(BarrierParameter.stoneStr); //清除岩石对象
-        Laya.Pool.clearBySign(BarrierParameter.fallingStoneStr); //清除陨石对象
         Laya.Pool.clearBySign(BarrierParameter.zodiacStr); //清除星座对象
     };
     return BarriersManagement;

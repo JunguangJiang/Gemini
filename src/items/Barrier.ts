@@ -78,4 +78,10 @@ abstract class Barrier<T extends Laya.Sprite>{
         itemRec=itemRec.setTo(itemRec.x+itemRec.width*(1-xScale)/2,itemRec.y+itemRec.height*(1-yScale)/2,itemRec.width*xScale,itemRec.height*yScale);
         return itemRec;
     }
+
+    //进入对象池之前的重新初始化
+    public init():void{
+        this._isTouched = false;
+        this._bounds = null;   
+    };
 }

@@ -53,8 +53,8 @@ var GameView = /** @class */ (function (_super) {
         this._loopCount = 0;
         //障碍物类初始化与障碍物绘制
         this._barriersManagement = new BarriersManagement(this.backgroundView);
-        this.adjustBarrier();
-        this._barriersManagement.update();
+        // this.adjustBarrier();
+        // this._barriersManagement.update();
         //计分器的初始化
         this._scoreIndicator = new ScoreIndicator(this.scoreView, 3, this.runningView.height, 0);
         //等级显示
@@ -191,8 +191,9 @@ var GameView = /** @class */ (function (_super) {
                             this._scoreIndicator.getPenalty(5 + 1 * (this._level - 1));
                         }
                         //移除该陨石
-                        this.backgroundView.removeChild(item.item);
-                        this._barriersManagement.stones.splice(this._barriersManagement.stones.indexOf(item), 1);
+                        this._barriersManagement.remove(item);
+                        // this.backgroundView.removeChild(item.item);
+                        // this._barriersManagement.stones.splice(this._barriersManagement.stones.indexOf(item),1);
                         //判断游戏是否结束
                         if (this._scoreIndicator.data <= 0) {
                             this.gameEnd();

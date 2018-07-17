@@ -14,10 +14,15 @@ class Stone extends Barrier<Laya.Image>{
         super(backgroundImage,width,height,name);
         this.item = new Laya.Image();
         this.isFalling = isFalling;
-        this._fallingStoneSpeed = Math.random()%Game.fallingStoneSpeed/2+Game.fallingStoneSpeed;
         this._up = 0;
         this._down = 2600; 
+        this.init();
+    }
+
+    public init():void{
+        this._isTouched = false;
         this._hasInit = false;
+        this._fallingStoneSpeed = Math.random()%Game.fallingStoneSpeed/2+Game.fallingStoneSpeed;
     }
 
     //绘制item
@@ -51,7 +56,7 @@ class Stone extends Barrier<Laya.Image>{
                 this._hasInit = true;
             }
             this.item.y += this._fallingStoneSpeed;
-            if(this.item.y >= this._down+this._height){
+            if(this.item.y >= this._down+this._height){//重复利用坠落的陨石
                 this.item.y = this._up-this._height;
             }
          }
