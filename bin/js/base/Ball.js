@@ -112,8 +112,8 @@ var Ball = /** @class */ (function () {
     Ball.prototype.drawNormalBall = function () {
         // this._animation.clear();
         this._animation.loadAnimation("GameAnimation/Ball.ani");
-        this._animation.scaleX = this._radius * 2 / 120;
-        this._animation.scaleY = this._radius * 2 / 120;
+        this._animation.scaleX = this._radius * 2 / 30;
+        this._animation.scaleY = this._radius * 2 / 30;
         this._animation.play();
     };
     //触摸时大球发光

@@ -2,12 +2,13 @@ namespace Game{
     export const MainHeight:number = 600;
     export const MainWidth: number = 800;
     export const serverResURL = "http://jjg15.iterator-traits.com/res";//服务器资源路径
-    export const startBackGroundImage = serverResURL + "/ui/background/StartBackGround.png";//开始背景图
-    export const endBackGroundImage = serverResURL + "/ui/background/EndBackGround.jpg";//结束背景图
-    export const zodiacLightImage:string= serverResURL + "/ui/zodiac/light.png";
-    export const zodiacYellowImage: string=serverResURL + "/ui/zodiac/yellow.png";
-    export const stoneImage: string = serverResURL + "/ui/stone.png";
-    export const fallingStoneImage: string = serverResURL + "/ui/fallingStone.png";
+    export const startBackGroundImage = "ui/background/StartBackGround.png";//开始背景图
+    export const backgroundImage = "ui/background/BackGround .jpg";//游戏背景图
+    export const endBackGroundImage = "ui/background/EndBackGround.jpg";//结束背景图
+    export const zodiacLightImage:string= "ui/else/light.png";
+    export const zodiacYellowImage: string= "ui/else/yellow.png";
+    export const stoneImage: string = "ui/else/stone.png";
+    export const fallingStoneImage: string = "ui/else/fallingStone.png";
 }
 // 程序入口
 class GameMain{
@@ -33,20 +34,22 @@ class GameMain{
         
         //加载资源
         let resArray: Array<any> = [
-            {url: "ui/background/BackGround .jpg", type:Laya.Loader.IMAGE},
+            {url: Game.backgroundImage, type:Laya.Loader.IMAGE},
             {url: Game.startBackGroundImage, type:Laya.Loader.IMAGE},
             {url: Game.endBackGroundImage, type:Laya.Loader.IMAGE},        
-            {url: Game.serverResURL + "/ui/blackhole.atlas", type:Laya.Loader.ATLAS},
-            {url:Game.serverResURL + "/ui/blackhole.png", type:Laya.Loader.IMAGE},
-            {url: Game.serverResURL+"/ui/star.atlas", type:Laya.Loader.ATLAS},
-            {url: Game.serverResURL+"/ui/star.png", type:Laya.Loader.IMAGE},
-            {url:"res/atlas/ui/arrow.atlas", type:Laya.Loader.ATLAS},
-            {url:"res/atlas/ui/score.atlas", type:Laya.Loader.ATLAS},
-            {url:"res/atlas/ui/button.atlas", type:Laya.Loader.ATLAS},
-            {url:Game.zodiacLightImage, type:Laya.Loader.IMAGE},
-            {url:Game.zodiacYellowImage, type:Laya.Loader.IMAGE},
-            {url:Game.stoneImage, type:Laya.Loader.IMAGE},
-            {url:Game.fallingStoneImage, type:Laya.Loader.IMAGE},
+
+            {url: "res/atlas/ui/button.atlas", type:Laya.Loader.ATLAS},
+            {url:"res/atlas/ui/button.png", type:Laya.Loader.IMAGE},
+
+            {url: "res/atlas/ui/blackhole.atlas", type:Laya.Loader.ATLAS},
+            {url:"res/atlas/ui/blackhole.png", type:Laya.Loader.IMAGE},
+            
+            {url: "res/atlas/ui/star.atlas", type:Laya.Loader.ATLAS},
+            {url: "res/atlas/ui/star.png", type:Laya.Loader.IMAGE},
+            
+            {url:"res/atlas/ui/else.atlas", type:Laya.Loader.ATLAS},
+            {url: "res/atlas/ui/else.png", type:Laya.Loader.IMAGE},
+
             {url:Game.StoneCollisionSound, type:Laya.Loader.SOUND},
             {url:Game.NewLevelSound, type:Laya.Loader.SOUND},
             {url:Game.RewardSound, type:Laya.Loader.SOUND},

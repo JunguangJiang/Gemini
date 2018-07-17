@@ -20,8 +20,8 @@ class Zodiac extends Barrier<Laya.Clip>{
             this.item.skin = Game.zodiacYellowImage;
             this.item.alpha = 0.7
         }
-        this.item.scaleX = this._width/160;
-        this.item.scaleY = this._height/160;
+        this.item.scaleX = this._width/100;
+        this.item.scaleY = this._height/100;
     }
 
     //判断小球是否与星座相接触

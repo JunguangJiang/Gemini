@@ -28,13 +28,13 @@ var Stone = /** @class */ (function (_super) {
     Stone.prototype.drawItem = function () {
         if (!this.isFalling) {
             this.item.loadImage(Game.stoneImage);
-            this.item.scaleX = this._width / 108;
-            this.item.scaleY = this._height / 191;
+            this.item.scaleX = this._width / 40;
+            this.item.scaleY = this._height / 55;
         }
         else {
             this.item.loadImage(Game.fallingStoneImage);
-            this.item.scaleX = this._width / 600;
-            this.item.scaleY = this._height / 800;
+            this.item.scaleX = this._width / 40;
+            this.item.scaleY = this._height / 55;
         }
     };
     //判断球是否与陨石相撞

@@ -1,12 +1,12 @@
 namespace Game{
-    export const SoundURLPrefix: string = "http://jjg15.iterator-traits.com/res/music/" //声音资源前缀
-    export const BlackHoleCollisionSound: string = SoundURLPrefix + "BlackHoleCollisionSound.wav";
-    export const StoneCollisionSound: string = SoundURLPrefix+"StoneCollisionSound.wav";
-    export const NewLevelSound: string = SoundURLPrefix+"NewLevelSound.wav"
-    export const RewardSound: string = SoundURLPrefix+"RewardSound.wav";
+    export const SoundURLPrefix: string = "music/" //声音资源前缀
+    export const BlackHoleCollisionSound: string = SoundURLPrefix + "BlackHoleCollisionSound.mp3";
+    export const StoneCollisionSound: string = SoundURLPrefix+"StoneCollisionSound.mp3";
+    export const NewLevelSound: string = SoundURLPrefix+"NewLevelSound.mp3"
+    export const RewardSound: string = SoundURLPrefix+"RewardSound.mp3";
     //背景音乐
     export const BackgroundMusic : Array<string> = [
-        "http://jjg15.iterator-traits.com/res/music/level1.wav"
+        SoundURLPrefix+"level1.mp3"
     ];
 }
 
