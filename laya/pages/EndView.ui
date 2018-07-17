@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":1,
-    "selecteID":5,
+    "selectedBox":8,
+    "selecteID":18,
     "props":{"y":0,"x":0,"width":800,"sceneColor":"#000000","height":600},
     "nodeParent":-1,
     "label":"View",
@@ -15,7 +15,7 @@
         {
             "x":15,
             "type":"Image",
-            "props":{"y":0,"x":0,"width":800,"var":"backgroundView","skin":"ui/background/EndBackGround.jpg","height":600},
+            "props":{"y":0,"x":0,"width":800,"var":"backgroundView","skin":"ui/background/EndBackGround.jpg","mouseThrough":true,"height":600,"disabled":false},
             "nodeParent":1,
             "label":"Image(backgroundView)",
             "isOpen":true,
@@ -26,65 +26,26 @@
             "child":[
                 {
                     "x":30,
-                    "type":"Box",
-                    "props":{"y":150,"x":250,"width":300,"visible":false,"var":"scoreView","height":60},
+                    "type":"Image",
+                    "props":{"y":430,"x":50,"width":100,"visible":true,"var":"rankButton","skin":"ui/button/SelectButton.png","mouseEnabled":true,"hitTestPrior":true,"height":100,"disabled":false},
                     "nodeParent":8,
-                    "label":"Box(scoreView)",
+                    "label":"Image(rankButton)",
                     "isOpen":true,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
-                    "compId":2,
+                    "compId":18,
                     "child":[
                         {
                             "x":45,
-                            "type":"Clip",
-                            "props":{"y":16,"x":246,"width":30,"skin":"ui/else/clip_number.png","name":"item3","height":40,"clipX":10},
-                            "nodeParent":2,
-                            "label":"Clip(item3)",
-                            "isDirectory":false,
-                            "isAniNode":true,
-                            "hasChild":false,
-                            "compId":3,
-                            "child":[
-                                ]
-                        },
-                        {
-                            "x":45,
-                            "type":"Clip",
-                            "props":{"y":16,"x":202,"width":30,"skin":"ui/else/clip_number.png","name":"item2","height":40,"clipX":10},
-                            "nodeParent":2,
-                            "label":"Clip(item2)",
-                            "isDirectory":false,
-                            "isAniNode":true,
-                            "hasChild":false,
-                            "compId":4,
-                            "child":[
-                                ]
-                        },
-                        {
-                            "x":45,
-                            "type":"Clip",
-                            "props":{"y":16,"x":157,"width":30,"skin":"ui/else/clip_number.png","name":"item1","index":0,"height":40,"clipX":10},
-                            "nodeParent":2,
-                            "label":"Clip(item1)",
-                            "isDirectory":false,
-                            "isAniNode":true,
-                            "hasChild":false,
-                            "compId":5,
-                            "child":[
-                                ]
-                        },
-                        {
-                            "x":45,
                             "type":"Text",
-                            "props":{"y":15,"x":0,"width":150,"valign":"middle","text":"Score:","height":40,"fontSize":40,"font":"SimSun","color":"#ffff00","bold":true,"alpha":0.7,"align":"left"},
-                            "nodeParent":2,
+                            "props":{"y":26,"x":24,"width":50,"text":"排","overflow":"hidden","height":50,"fontSize":40,"font":"Microsoft YaHei","color":"#ffffff","bold":true,"align":"center"},
+                            "nodeParent":18,
                             "label":"Text",
                             "isDirectory":false,
                             "isAniNode":true,
                             "hasChild":false,
-                            "compId":21,
+                            "compId":20,
                             "child":[
                                 ]
                         }]
@@ -92,7 +53,7 @@
                 {
                     "x":30,
                     "type":"Image",
-                    "props":{"y":308,"x":60,"width":100,"var":"startButton","skin":"ui/button/SelectButton.png","height":100,"alpha":1},
+                    "props":{"y":300,"x":50,"width":100,"visible":true,"var":"startButton","skin":"ui/button/SelectButton.png","mouseEnabled":true,"hitTestPrior":true,"height":100,"disabled":false,"alpha":1},
                     "nodeParent":8,
                     "label":"Image(startButton)",
                     "isOpen":true,
@@ -117,26 +78,61 @@
                 },
                 {
                     "x":30,
-                    "type":"Image",
-                    "props":{"y":451,"x":61,"width":100,"var":"rankButton","skin":"ui/button/SelectButton.png","height":100},
+                    "type":"Box",
+                    "props":{"y":150,"x":250,"width":300,"visible":false,"var":"scoreView","height":60},
                     "nodeParent":8,
-                    "label":"Image(rankButton)",
-                    "isOpen":true,
+                    "label":"Box(scoreView)",
+                    "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
-                    "compId":18,
+                    "compId":2,
                     "child":[
                         {
-                            "x":45,
+                            "type":"Clip",
+                            "props":{"y":16,"x":246,"width":30,"skin":"ui/else/clip_number.png","name":"item3","height":40,"clipX":10},
+                            "nodeParent":2,
+                            "label":"Clip(item3)",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":3,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "type":"Clip",
+                            "props":{"y":16,"x":202,"width":30,"skin":"ui/else/clip_number.png","name":"item2","height":40,"clipX":10},
+                            "nodeParent":2,
+                            "label":"Clip(item2)",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":4,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "type":"Clip",
+                            "props":{"y":16,"x":157,"width":30,"skin":"ui/else/clip_number.png","name":"item1","index":0,"height":40,"clipX":10},
+                            "nodeParent":2,
+                            "label":"Clip(item1)",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":5,
+                            "child":[
+                                ]
+                        },
+                        {
                             "type":"Text",
-                            "props":{"y":26,"x":24,"width":50,"text":"排","overflow":"hidden","height":50,"fontSize":40,"font":"Microsoft YaHei","color":"#ffffff","bold":true,"align":"center"},
-                            "nodeParent":18,
+                            "props":{"y":15,"x":0,"width":150,"valign":"middle","text":"Score:","height":40,"fontSize":40,"font":"SimSun","color":"#ffff00","bold":true,"alpha":0.7,"align":"left"},
+                            "nodeParent":2,
                             "label":"Text",
                             "isDirectory":false,
                             "isAniNode":true,
                             "hasChild":false,
-                            "compId":20,
+                            "compId":21,
                             "child":[
                                 ]
                         }]

@@ -67,7 +67,7 @@ class GameMain{
 
         GameMain.viewStack.addItem(GameMain.startView);
         GameMain.viewStack.addItem(GameMain.gameView);
-        GameMain.viewStack.addItem(GameMain.endView);       
+        GameMain.viewStack.addItem(GameMain.endView);  
 
         this.createEvents();
     }
