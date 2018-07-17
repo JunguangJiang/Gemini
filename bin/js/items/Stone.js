@@ -19,12 +19,16 @@ var Stone = /** @class */ (function (_super) {
         var _this = _super.call(this, backgroundImage, width, height, name) || this;
         _this.item = new Laya.Image();
         _this.isFalling = isFalling;
-        _this._fallingStoneSpeed = Math.random() % Game.fallingStoneSpeed / 2 + Game.fallingStoneSpeed;
         _this._up = 0;
         _this._down = 2600;
-        _this._hasInit = false;
+        _this.init();
         return _this;
     }
+    Stone.prototype.init = function () {
+        this._isTouched = false;
+        this._hasInit = false;
+        this._fallingStoneSpeed = Math.random() % Game.fallingStoneSpeed / 2 + Game.fallingStoneSpeed;
+    };
     //绘制item
     Stone.prototype.drawItem = function () {
         if (!this.isFalling) {
@@ -53,7 +57,7 @@ var Stone = /** @class */ (function (_super) {
                 this._hasInit = true;
             }
             this.item.y += this._fallingStoneSpeed;
-            if (this.item.y >= this._down + this._height) {
+            if (this.item.y >= this._down + this._height) { //重复利用坠落的陨石
                 this.item.y = this._up - this._height;
             }
         }

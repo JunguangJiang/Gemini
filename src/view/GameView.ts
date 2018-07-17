@@ -42,6 +42,9 @@ class GameView extends ui.GameViewUI{
     constructor()
     {
         super();
+
+        //初始化障碍物管理器
+        this._barriersManagement=new BarriersManagement(this.backgroundView);
     }
 
     //界面初始化
@@ -75,12 +78,6 @@ class GameView extends ui.GameViewUI{
 
         this._loopCount = 0;
 
-        //障碍物类初始化与障碍物绘制
-        this._barriersManagement=new BarriersManagement(this.backgroundView);
-        this.adjustBarrier();
-        this._barriersManagement.update();
-
-
         //计分器的初始化
         this._scoreIndicator = new ScoreIndicator(this.scoreView, 3, this.runningView.height, 0);
 
@@ -112,7 +109,6 @@ class GameView extends ui.GameViewUI{
         //TODO,在此处修改接口
         this.adjustBarrier();//调整障碍物的数量
         this._barriersManagement.update();
-        
     }
 
     //进入新的一级
@@ -236,8 +232,9 @@ class GameView extends ui.GameViewUI{
                             this._scoreIndicator.getPenalty(5 + 1 * (this._level -1));
                         }
                         //移除该陨石
-                        this.backgroundView.removeChild(item.item);
-                        this._barriersManagement.stones.splice(this._barriersManagement.stones.indexOf(item),1);
+                        this._barriersManagement.remove(item);
+                        // this.backgroundView.removeChild(item.item);
+                        // this._barriersManagement.stones.splice(this._barriersManagement.stones.indexOf(item),1);
 
                         //判断游戏是否结束
                         if(this._scoreIndicator.data<=0)
@@ -264,7 +261,7 @@ class GameView extends ui.GameViewUI{
     }
 
     //球与边缘的相对位置的检测与处理
-    detectBorder(ball:Ball, hasPenalty:Boolean=false):void{
+    detectBorder(ball:Ball, hasPenalty:boolean=false):void{
         if( ( ((ball.x-ball.radius) <= 0) && ball.vx < 0 ) || 
             ( ((ball.x+ball.radius) >= this.runningView.width) && ball.vx > 0 )
             ){

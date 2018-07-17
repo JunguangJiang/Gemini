@@ -18,6 +18,7 @@ var Zodiac = /** @class */ (function (_super) {
         _this.item.clipX = 3;
         _this.item.clipY = 4;
         _this.item.index = type % 12;
+        _this.init();
         return _this;
     }
     //绘制item
@@ -37,7 +38,6 @@ var Zodiac = /** @class */ (function (_super) {
     Zodiac.prototype.detectCollisions = function (ball) {
         if (this._bounds === null) {
             this._bounds = this.getInnerBounds(this.item.getBounds(), 0.8, 0.8);
-            // console.log("星座:" + this._bounds);
         }
         if (!this._isTouched && this._bounds.intersects(ball.animation.getBounds())) {
             this._isTouched = true;

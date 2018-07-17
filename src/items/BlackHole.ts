@@ -4,6 +4,7 @@ class BlackHole extends Barrier<Laya.Animation>{
     {
         super(backgroundImage,width,height,name);
         this.item = new Laya.Animation();
+        this.init();
     }
 
     //绘制item
