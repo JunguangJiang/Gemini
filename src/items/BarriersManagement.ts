@@ -66,7 +66,7 @@ class BarriersManagement{
             item=Laya.Pool.getItemByCreateFun(BarrierParameter.zodiacStr,function():Zodiac{
                  let zodiac:Zodiac=new Zodiac(this._backgroundImage,BarrierParameter.zodiacWidth,BarrierParameter.zodiacHeight,BarrierParameter.zodiacStr,zodiacNum);
                 return zodiac;               
-            })
+            });
             this.zodiacs.push(item);
             break;
         default:
