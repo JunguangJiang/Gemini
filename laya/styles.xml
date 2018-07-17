@@ -8,5 +8,12 @@
    <item name="ui/zodiac/yellow.png" type="Clip" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
    <item name="ui/background/EndBackGround.jpg" type="Image" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
    <item name="ui/button/SelectButton.png" type="Image" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
-   <item name="ui/fallingStone/fallingStone.png" type="Image" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
+   <item name="ui/stone/fallingStone.png" type="Image" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
+   <item name="ui/else/clip_number.png" type="Clip" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
+   <item name="ui/else/fallingStone.png" type="Image" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
+   <item name="ui/else/left.png" type="Image" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
+   <item name="ui/else/light.png" type="Image" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
+   <item name="ui/else/right.png" type="Image" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
+   <item name="ui/else/stone.png" type="Image" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
+   <item name="ui/else/yellow.png" type="Image" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
 </res>
