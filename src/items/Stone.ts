@@ -1,5 +1,5 @@
 namespace Game{
-    export const fallingStoneSpeed: number = 5;//陨石下落的平均速度
+    export const fallingStoneSpeed: number = 10/6;//陨石下落的平均速度
 }
 
 class Stone extends Barrier<Laya.Image>{

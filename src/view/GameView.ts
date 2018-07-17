@@ -2,7 +2,7 @@
 namespace Game{
     export const debug: boolean = false;//是否处于调试模式
     export let playerNum: number = 1;//玩家数目，可以取1或者2
-    export const interval:number = 100;//刷新时间(单位：毫秒)
+    export const interval:number = 16;//刷新时间(单位：毫秒)
 
     export const gravity:number = 14;//重力加速度
     export const liftCoefficient:number = debug?1600:700;//升力系数,升力=liftCoefficient/(球心距离)
@@ -10,8 +10,8 @@ namespace Game{
     export let attractionCoefficient:number=15000;//球之间的引力系数
     export let randomForce = 10;//随机力的幅度
     export const humanForce = 40;//人类施力的幅度
-    export let smallBallRandomForcePeriod = 100;//小球受到随机力的周期
-    export let bigBallRandomForcePeriod = 500;//大球受到随机力的周期
+    export let smallBallRandomForcePeriod = 600;//小球受到随机力的周期
+    export let bigBallRandomForcePeriod = 3000;//大球受到随机力的周期
 
     export const initialY = 2600;//小球的初始高度
 
@@ -328,7 +328,7 @@ class GameView extends ui.GameViewUI{
     //让球受到随机力
     setRandomForce(ball: Ball):void{
         if(Math.random()>0.2){
-            let Fx:number = (Math.random()-0.5)*Game.randomForce/2+Game.randomForce;
+            let Fx:number = (Math.random()-0.5)*Game.randomForce/2;
             // console.log("水平力Fx="+Fx);
             ball.setForce(Fx, 0, "random");
         }else{

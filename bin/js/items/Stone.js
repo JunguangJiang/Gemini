@@ -10,7 +10,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Game;
 (function (Game) {
-    Game.fallingStoneSpeed = 5; //陨石下落的平均速度
+    Game.fallingStoneSpeed = 10 / 6; //陨石下落的平均速度
 })(Game || (Game = {}));
 var Stone = /** @class */ (function (_super) {
     __extends(Stone, _super);

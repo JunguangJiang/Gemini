@@ -13,15 +13,15 @@ var Game;
 (function (Game) {
     Game.debug = false; //是否处于调试模式
     Game.playerNum = 1; //玩家数目，可以取1或者2
-    Game.interval = 100; //刷新时间(单位：毫秒)
+    Game.interval = 16; //刷新时间(单位：毫秒)
     Game.gravity = 14; //重力加速度
     Game.liftCoefficient = Game.debug ? 1600 : 700; //升力系数,升力=liftCoefficient/(球心距离)
     Game.dragCoefficient = 0.001; //阻力系数，阻力=-dragCoefficient*速度^3
     Game.attractionCoefficient = 15000; //球之间的引力系数
     Game.randomForce = 10; //随机力的幅度
     Game.humanForce = 40; //人类施力的幅度
-    Game.smallBallRandomForcePeriod = 100; //小球受到随机力的周期
-    Game.bigBallRandomForcePeriod = 500; //大球受到随机力的周期
+    Game.smallBallRandomForcePeriod = 600; //小球受到随机力的周期
+    Game.bigBallRandomForcePeriod = 3000; //大球受到随机力的周期
     Game.initialY = 2600; //小球的初始高度
     Game.setting = false; //是否处于设置界面
     Game.sound = true; //是否有声音
@@ -257,7 +257,7 @@ var GameView = /** @class */ (function (_super) {
     //让球受到随机力
     GameView.prototype.setRandomForce = function (ball) {
         if (Math.random() > 0.2) {
-            var Fx = (Math.random() - 0.5) * Game.randomForce / 2 + Game.randomForce;
+            var Fx = (Math.random() - 0.5) * Game.randomForce / 2;
             // console.log("水平力Fx="+Fx);
             ball.setForce(Fx, 0, "random");
         }
