@@ -18,6 +18,9 @@ abstract class Barrier<T extends Laya.Sprite>{
         this._bounds = null;
     }
 
+    //或取名字
+    get name():string{return this._name;}
+
     //item随机生成在背景某处
     public randomGenerate(backgroundImage:Laya.Image):void{
         if(this.item){

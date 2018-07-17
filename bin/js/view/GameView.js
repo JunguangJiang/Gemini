@@ -55,8 +55,7 @@ var GameView = /** @class */ (function (_super) {
         //障碍物类初始化与障碍物绘制
         this._barriersManagement = new BarriersManagement(this.backgroundView);
         this.adjustBarrier();
-        this._barriersManagement.regenerateBarrier();
-        this._barriersManagement.drawBarriers();
+        this._barriersManagement.update();
         //计分器的初始化
         this._scoreIndicator = new ScoreIndicator(this.scoreView, 3, this.runningView.height, 0);
         //等级显示
@@ -77,17 +76,15 @@ var GameView = /** @class */ (function (_super) {
         this._bigBall.stop();
         this._smallBall.stop();
         this.adjustBarrier(); //调整障碍物的数量
-        this._barriersManagement.regenerateBarrier(); //清除原先的障碍物
-        this._barriersManagement.drawBarriers(); //绘制新的障碍物
+        this._barriersManagement.update();
         this._musicManager.onPlaySound(Game.NewLevelSound); //播放过关音乐
-        // this._musicManager.onPlayMusic(this._level);//绘制新的音乐
     };
     //调整障碍物的数量
     GameView.prototype.adjustBarrier = function () {
-        this._barriersManagement._stonesNum = Math.min(12 + 4 * this._level, 30);
-        this._barriersManagement._blackHolesNum = Math.min(2 * this._level + 1, 10);
-        this._barriersManagement.fallingStoneRate = Math.min(0.1 * this._level, 0.8);
-        this._barriersManagement._zodiacNum = 15;
+        BarrierParameter.stonesNum = Math.min(12 + 4 * this._level, 30);
+        BarrierParameter.blackHolesNum = Math.min(2 * this._level + 1, 10);
+        BarrierParameter.fallingStoneRate = Math.min(0.1 * this._level, 0.8);
+        BarrierParameter.zodiacNum = 15;
     };
     //游戏开始
     GameView.prototype.gameStart = function () {
@@ -130,7 +127,7 @@ var GameView = /** @class */ (function (_super) {
     };
     //需要每隔单位时间进行一次调用的函数请写入以下函数体
     GameView.prototype.onLoop = function () {
-        this._barriersManagement.updateBarriers(); //更新当前障碍物的位置
+        this._barriersManagement.updateBarriers();
         //在任何模式下，
         this.detectCollisionsBetween(this._bigBall, "BlackHole"); //大球都会被黑洞吸入
         this.detectCollisionsBetween(this._bigBall, "Stone"); //大球都会被岩石击中

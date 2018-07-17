@@ -15,7 +15,7 @@ class Stone extends Barrier<Laya.Image>{
         this.isFalling = isFalling;
         this._fallingStoneSpeed = Math.random()%Game.fallingStoneSpeed/2+Game.fallingStoneSpeed;
         this._up = 0;
-        this._down = backgroundImage.height; 
+        this._down = 2600; 
     }
 
     //绘制item

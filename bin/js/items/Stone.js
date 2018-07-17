@@ -21,7 +21,7 @@ var Stone = /** @class */ (function (_super) {
         _this.isFalling = isFalling;
         _this._fallingStoneSpeed = Math.random() % Game.fallingStoneSpeed / 2 + Game.fallingStoneSpeed;
         _this._up = 0;
-        _this._down = backgroundImage.height;
+        _this._down = 2600;
         return _this;
     }
     //绘制item

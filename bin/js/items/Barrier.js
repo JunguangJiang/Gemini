@@ -7,6 +7,12 @@ var Barrier = /** @class */ (function () {
         this._isTouched = false;
         this._bounds = null;
     }
+    Object.defineProperty(Barrier.prototype, "name", {
+        //或取名字
+        get: function () { return this._name; },
+        enumerable: true,
+        configurable: true
+    });
     //item随机生成在背景某处
     Barrier.prototype.randomGenerate = function (backgroundImage) {
         var _this = this;
