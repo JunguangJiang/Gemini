@@ -10,8 +10,8 @@ class BlackHole extends Barrier<Laya.Animation>{
     public drawItem():void
     {
         this.item.loadAnimation("GameAnimation/BlackHole.ani");
-        this.item.scaleX=this._width/60;
-        this.item.scaleY=this._height/60;
+        this.item.scaleX=this._width/100;
+        this.item.scaleY=this._height/100;
         this.item.play();
     }
 

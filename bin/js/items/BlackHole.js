@@ -18,8 +18,8 @@ var BlackHole = /** @class */ (function (_super) {
     //绘制item
     BlackHole.prototype.drawItem = function () {
         this.item.loadAnimation("GameAnimation/BlackHole.ani");
-        this.item.scaleX = this._width / 60;
-        this.item.scaleY = this._height / 60;
+        this.item.scaleX = this._width / 100;
+        this.item.scaleY = this._height / 100;
         this.item.play();
     };
     //判断球是否与黑洞相撞，0为不相撞，1为相撞

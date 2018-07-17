@@ -22,7 +22,7 @@ class GameMain{
     {
         Laya.MiniAdpter.init();
         Laya.init(Game.MainWidth,Game.MainHeight);
-        
+            
         //设置屏幕自动平铺和旋转
         Laya.stage.scaleMode = Laya.Stage.SCALE_EXACTFIT;
         Laya.stage.screenMode = Laya.Stage.SCREEN_HORIZONTAL;
@@ -67,7 +67,7 @@ class GameMain{
 
         GameMain.viewStack.addItem(GameMain.startView);
         GameMain.viewStack.addItem(GameMain.gameView);
-        GameMain.viewStack.addItem(GameMain.endView);       
+        GameMain.viewStack.addItem(GameMain.endView);  
 
         this.createEvents();
     }
