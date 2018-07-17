@@ -17,7 +17,7 @@ var BlackHole = /** @class */ (function (_super) {
     }
     //绘制item
     BlackHole.prototype.drawItem = function () {
-        this.item.loadAnimation("res/GameAnimation/BlackHole.ani");
+        this.item.loadAnimation("GameAnimation/BlackHole.ani");
         this.item.scaleX = this._width / 60;
         this.item.scaleY = this._height / 60;
         this.item.play();

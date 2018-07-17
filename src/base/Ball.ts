@@ -106,7 +106,7 @@ class Ball{
     public drawNormalBall()
     {
         // this._animation.clear();
-        this._animation.loadAnimation("res/GameAnimation/Ball.ani");
+        this._animation.loadAnimation("GameAnimation/Ball.ani");
         this._animation.scaleX=this._radius*2/30;
         this._animation.scaleY=this._radius*2/30;
         this._animation.play();

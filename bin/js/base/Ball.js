@@ -111,7 +111,7 @@ var Ball = /** @class */ (function () {
     //进行小球动画的加载和绘制
     Ball.prototype.drawNormalBall = function () {
         // this._animation.clear();
-        this._animation.loadAnimation("res/GameAnimation/Ball.ani");
+        this._animation.loadAnimation("GameAnimation/Ball.ani");
         this._animation.scaleX = this._radius * 2 / 30;
         this._animation.scaleY = this._radius * 2 / 30;
         this._animation.play();

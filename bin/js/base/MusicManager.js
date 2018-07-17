@@ -1,13 +1,13 @@
 var Game;
 (function (Game) {
-    Game.SoundURLPrefix = "http://jjg15.iterator-traits.com/res/music/"; //声音资源前缀
-    Game.BlackHoleCollisionSound = Game.SoundURLPrefix + "BlackHoleCollisionSound.wav";
-    Game.StoneCollisionSound = Game.SoundURLPrefix + "StoneCollisionSound.wav";
-    Game.NewLevelSound = Game.SoundURLPrefix + "NewLevelSound.wav";
-    Game.RewardSound = Game.SoundURLPrefix + "RewardSound.wav";
+    Game.SoundURLPrefix = "music/"; //声音资源前缀
+    Game.BlackHoleCollisionSound = Game.SoundURLPrefix + "BlackHoleCollisionSound.mp3";
+    Game.StoneCollisionSound = Game.SoundURLPrefix + "StoneCollisionSound.mp3";
+    Game.NewLevelSound = Game.SoundURLPrefix + "NewLevelSound.mp3";
+    Game.RewardSound = Game.SoundURLPrefix + "RewardSound.mp3";
     //背景音乐
     Game.BackgroundMusic = [
-        "http://jjg15.iterator-traits.com/res/music/level1.wav"
+        Game.SoundURLPrefix + "level1.mp3"
     ];
 })(Game || (Game = {}));
 //全局的音乐管理器
