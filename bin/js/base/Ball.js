@@ -92,7 +92,7 @@ var Ball = /** @class */ (function () {
     };
     //对小球的位置和速度进行更新
     Ball.prototype.update = function () {
-        var deltaT = this._timer.get() / 1000.0 * 2;
+        var deltaT = this._timer.get() / 1000.0 * 4;
         this._timer.stop();
         this.x = this.x + this._vx * deltaT;
         this.y = this.y + this._vy * deltaT;

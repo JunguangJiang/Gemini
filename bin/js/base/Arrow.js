@@ -8,8 +8,8 @@ var Arrow = /** @class */ (function () {
         this._touchEnd = touchEnd;
         this._ballType = ballType;
         for (var i = 0; i < 2; i++) {
-            this._arrows[i].visible = true;
-            this._arrows[i].alpha = 0.3;
+            // this._arrows[i].visible = true;
+            // this._arrows[i].alpha=0.3;
             this._arrows[i].on(Laya.Event.MOUSE_DOWN, this, this.onMouseDown, [i]);
             this._arrows[i].on(Laya.Event.MOUSE_UP, this, this.onMouseUp, [i]);
         }

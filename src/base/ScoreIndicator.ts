@@ -81,7 +81,7 @@ class ScoreIndicator{
         }
         text.scaleX = text.scaleY = 0.2;
         Laya.Tween.to(text, {scaleX:1, scaleY:1}, 1000, Laya.Ease.backOut);
-        Laya.timer.once(2000, this, this.closeScoreChange, [scoreChange]);
+        Laya.timer.once(2000, this, this.closeScoreChange, [scoreChange], false);
     }
 
     //关闭分数变化的显示

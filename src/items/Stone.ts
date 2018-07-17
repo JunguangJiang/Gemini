@@ -1,5 +1,5 @@
 namespace Game{
-    export const fallingStoneSpeed: number = 5;//陨石下落的平均速度
+    export const fallingStoneSpeed: number = 10/6;//陨石下落的平均速度
 }
 
 class Stone extends Barrier<Laya.Image>{
@@ -7,6 +7,7 @@ class Stone extends Barrier<Laya.Image>{
     private _fallingStoneSpeed: number;//坠落速度
     private _up: number;//最高处
     private _down: number;//最低处
+    private _hasInit: boolean;//是否完成位置的初始化
 
     constructor(backgroundImage:Laya.Image,width:number,height:number,name:string, isFalling:boolean=false)
     {
@@ -16,6 +17,7 @@ class Stone extends Barrier<Laya.Image>{
         this._fallingStoneSpeed = Math.random()%Game.fallingStoneSpeed/2+Game.fallingStoneSpeed;
         this._up = 0;
         this._down = 2600; 
+        this._hasInit = false;
     }
 
     //绘制item
@@ -43,6 +45,11 @@ class Stone extends Barrier<Laya.Image>{
      //不断更新陨石的位置，只有当_isFalling为真时，位置才会改变
      public update(){
          if(this.isFalling){
+            if(!this._hasInit){//保证陨石的初始化高度不会太低
+                if(this.item.y > (this._down * 0.8))
+                    this.item.y = this._up;
+                this._hasInit = true;
+            }
             this.item.y += this._fallingStoneSpeed;
             if(this.item.y >= this._down+this._height){
                 this.item.y = this._up-this._height;
