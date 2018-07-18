@@ -2,7 +2,7 @@
     "x":0,
     "type":"Dialog",
     "selectedBox":1,
-    "selecteID":9,
+    "selecteID":13,
     "props":{"width":800,"height":600},
     "nodeParent":-1,
     "label":"Dialog",
@@ -28,7 +28,7 @@
         {
             "x":15,
             "type":"Image",
-            "props":{"y":100,"x":50,"width":700,"skin":"ui/background/HelpBackGround .jpg","height":400},
+            "props":{"y":100,"x":50,"width":700,"skin":"ui/background/HelpBackGround .jpg","height":450},
             "nodeParent":1,
             "label":"Image",
             "isOpen":true,
@@ -52,7 +52,7 @@
                         {
                             "x":45,
                             "type":"Sprite",
-                            "props":{"y":0,"x":0,"width":620,"var":"contentImageMask","renderType":"mask","mouseEnabled":false,"height":330},
+                            "props":{"y":0,"x":0,"width":620,"var":"contentImageMask","renderType":"mask","mouseEnabled":false,"height":376},
                             "nodeParent":12,
                             "label":"Sprite(contentImageMask)",
                             "isOpen":true,
@@ -64,7 +64,7 @@
                                 {
                                     "x":60,
                                     "type":"Rect",
-                                    "props":{"y":0,"x":0,"width":620,"lineWidth":1,"height":330,"fillColor":"#ff0000"},
+                                    "props":{"y":0,"x":0,"width":620,"lineWidth":1,"height":379,"fillColor":"#ff0000"},
                                     "nodeParent":13,
                                     "label":"Rect",
                                     "isDirectory":false,
