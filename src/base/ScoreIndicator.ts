@@ -1,6 +1,6 @@
 namespace Game{
     export const rewardPerUnitHeight:number = 1;//第一关中的单位奖励
-    export const heightDivision:number = 100;//第一关对总高度的一个划分
+    export const heightDivision:number = 20;//第一关对总高度的一个划分
 }
 
 //双子游戏的计分器
@@ -29,9 +29,7 @@ class ScoreIndicator{
 
     //根据高度的变化记录奖励
     updateHeight(height:number):void{
-        // console.log("height="+height);
         let newRewardNum: number = Math.floor(height/this._totalHeight*Game.heightDivision);
-        // console.log("newRewardNum="+newRewardNum);
         if(newRewardNum > this._rewardNum){
             this._data += Game.rewardPerUnitHeight * (newRewardNum - this._rewardNum);
             this._rewardNum = newRewardNum;
@@ -80,13 +78,12 @@ class ScoreIndicator{
             text.text = ""+scoreChange;
         }
         text.scaleX = text.scaleY = 0.2;
-        Laya.Tween.to(text, {scaleX:1, scaleY:1}, 1000, Laya.Ease.backOut);
-        Laya.timer.once(2000, this, this.closeScoreChange, [scoreChange], false);
+        Laya.Tween.to(text, {scaleX:1, scaleY:1}, 1000, Laya.Ease.backOut);//分数变化以弹出的方式显示
+        Laya.timer.once(2000, this, this.closeScoreChange, [scoreChange], false);//经过2s后消失
     }
 
     //关闭分数变化的显示
     closeScoreChange(scoreChange:number):void{
-        console.log("关闭分数显示");
         if(scoreChange > 0){
             let text: Laya.Text = this._box.getChildByName("reward") as Laya.Text;
             text.text = "";

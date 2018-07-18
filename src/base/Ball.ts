@@ -11,22 +11,25 @@ class Ball{
     private _ax: number;
     private _ay: number;
 
+    //记录暂停前的加速度
+    private _last_ax: number;
+    private _last_ay: number;
+
     private _timer: Timer;//时钟
     constructor(radius: number, x:number, y:number,ballView:Laya.Animation){
         this._animation=ballView;
         this._radius = radius;
-        this.stop();
         this._timer = new Timer();
         this._forces = new Laya.Dictionary();//记录所有的受力
         this.x = x; this.y = y; //设置小球的位置
+        this._vx = this._vy = this._ax = this._ay = 0;
         //绘制动画并加入背景中
         this.drawNormalBall();
-        this.drawShinyBall();       
     }
 
     //使小球静止
     stop():void{
-        this._vx = this._vy = this._ax = this._ay = 0;
+        this._vx = this._vy = 0;
     }
 
     //设置球的当前位置(球心)
@@ -105,16 +108,31 @@ class Ball{
     //进行小球动画的加载和绘制
     public drawNormalBall()
     {
-        // this._animation.clear();
         this._animation.loadAnimation("GameAnimation/Ball.ani");
         this._animation.scaleX=this._radius*2/30;
         this._animation.scaleY=this._radius*2/30;
         this._animation.play();
+    } 
+
+    //让小球受到阻力
+    setDragForce():void{
+        let VSquare:number = Math.pow(this.vx, 2) + Math.pow(this.vy,2);
+        this.setForce(
+            -VSquare * this.vx * Game.dragCoefficient, 
+            -VSquare * this.vy * Game.dragCoefficient, 
+            "drag");
     }
 
-    //触摸时大球发光
-    public drawShinyBall()
-    {
-        //发光滤镜实现
-    }    
+    //让球受到随机力
+    setRandomForce():void{
+        if(Math.random()>0.2){
+            let Fx:number = (Math.random()-0.5)*Game.randomForce/2;
+            this.setForce(Fx, 0, "random");
+        }else{
+            let Fy:number = (Math.random()-0.5)*Game.randomForce/2+Game.randomForce;
+            this.setForce(0,Fy/3, "random");
+        }
+        let forceTime:number = Math.random() * 3000 + 1000;//持续时间也是随机的
+        Laya.timer.once(forceTime, this, this.removeForce, ["random"], false);
+    }
 }

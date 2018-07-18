@@ -44,6 +44,21 @@ var ui;
     ui.GameViewUI = GameViewUI;
 })(ui || (ui = {}));
 (function (ui) {
+    var HelpViewUI = /** @class */ (function (_super) {
+        __extends(HelpViewUI, _super);
+        function HelpViewUI() {
+            return _super.call(this) || this;
+        }
+        HelpViewUI.prototype.createChildren = function () {
+            _super.prototype.createChildren.call(this);
+            this.createView(ui.HelpViewUI.uiView);
+        };
+        HelpViewUI.uiView = { "type": "Dialog", "props": { "width": 800, "height": 600 }, "child": [{ "type": "Image", "props": { "y": 125, "x": 742, "var": "returnButton", "skin": "ui/button/EndButton.png", "hitTestPrior": true, "alpha": 0.5 } }, { "type": "Image", "props": { "y": 100, "x": 50, "width": 700, "skin": "ui/background/HelpBackGround .jpg", "height": 400 }, "child": [{ "type": "Image", "props": { "y": 30, "x": 40, "var": "contentImage", "skin": "ui/background/ContentImage.png", "scaleY": 1, "scaleX": 1, "mouseThrough": true, "hitTestPrior": false }, "child": [{ "type": "Sprite", "props": { "y": 0, "x": 0, "width": 620, "var": "contentImageMask", "renderType": "mask", "mouseEnabled": false, "height": 330 }, "child": [{ "type": "Rect", "props": { "y": 0, "x": 0, "width": 620, "lineWidth": 1, "height": 330, "fillColor": "#ff0000" } }] }] }] }] };
+        return HelpViewUI;
+    }(Dialog));
+    ui.HelpViewUI = HelpViewUI;
+})(ui || (ui = {}));
+(function (ui) {
     var StartViewUI = /** @class */ (function (_super) {
         __extends(StartViewUI, _super);
         function StartViewUI() {
@@ -54,7 +69,7 @@ var ui;
             _super.prototype.createChildren.call(this);
             this.createView(ui.StartViewUI.uiView);
         };
-        StartViewUI.uiView = { "type": "View", "props": { "y": 0, "x": 0, "width": 800, "height": 600 }, "child": [{ "type": "Image", "props": { "y": 0, "x": 0, "width": 800, "var": "backgroundView", "skin": "ui/background/StartBackGround.png", "height": 600 }, "child": [{ "type": "Image", "props": { "y": 150, "x": 150, "width": 100, "var": "onePlayerButton", "skin": "ui/button/SelectButton.png", "height": 100, "alpha": 1 }, "child": [{ "type": "Text", "props": { "y": 23, "x": 24, "width": 50, "text": "单", "strokeColor": "#000000", "overflow": "hidden", "height": 50, "fontSize": 40, "font": "Microsoft YaHei", "color": "#ffffff", "bold": true, "align": "center" } }] }, { "type": "Image", "props": { "y": 200, "x": 500, "width": 100, "var": "twoPlayersButton", "skin": "ui/button/SelectButton.png", "height": 100 }, "child": [{ "type": "Text", "props": { "y": 26, "x": 24, "width": 50, "text": "双", "overflow": "hidden", "height": 50, "fontSize": 40, "font": "Microsoft YaHei", "color": "#ffffff", "bold": true, "align": "center" } }] }, { "type": "Image", "props": { "y": 450, "x": 350, "width": 100, "var": "rankButton", "skin": "ui/button/SelectButton.png", "height": 100 }, "child": [{ "type": "Text", "props": { "y": 23, "x": 23, "width": 50, "text": "排", "overflow": "hidden", "height": 50, "fontSize": 40, "font": "Microsoft YaHei", "color": "#ffffff", "bold": true, "align": "center" } }] }] }] };
+        StartViewUI.uiView = { "type": "View", "props": { "y": 0, "x": 0, "width": 800, "height": 600 }, "child": [{ "type": "Image", "props": { "y": 0, "x": 0, "width": 800, "var": "backgroundView", "skin": "ui/background/StartBackGround.png", "height": 600 }, "child": [{ "type": "Image", "props": { "y": 150, "x": 150, "width": 100, "var": "onePlayerButton", "skin": "ui/button/SelectButton.png", "height": 100, "alpha": 1 }, "child": [{ "type": "Text", "props": { "y": 23, "x": 24, "width": 50, "text": "单", "strokeColor": "#000000", "overflow": "hidden", "height": 50, "fontSize": 40, "font": "Microsoft YaHei", "color": "#ffffff", "bold": true, "align": "center" } }] }, { "type": "Image", "props": { "y": 200, "x": 500, "width": 100, "var": "twoPlayersButton", "skin": "ui/button/SelectButton.png", "height": 100 }, "child": [{ "type": "Text", "props": { "y": 26, "x": 24, "width": 50, "text": "双", "overflow": "hidden", "height": 50, "fontSize": 40, "font": "Microsoft YaHei", "color": "#ffffff", "bold": true, "align": "center" } }] }, { "type": "Image", "props": { "y": 450, "x": 350, "width": 100, "var": "helpButton", "skin": "ui/button/SelectButton.png", "height": 100 }, "child": [{ "type": "Text", "props": { "y": 23, "x": 23, "width": 50, "text": "帮", "overflow": "hidden", "height": 50, "fontSize": 40, "font": "Microsoft YaHei", "color": "#ffffff", "bold": true, "align": "center" } }] }] }] };
         return StartViewUI;
     }(View));
     ui.StartViewUI = StartViewUI;

@@ -100,13 +100,12 @@ class GameView extends ui.GameViewUI{
         this.levelView.text = "level "+ this._level;
 
         this._scoreIndicator.clearHeight();//计分器维护的高度归零
+        this._scoreIndicator.getReward(Math.min(5+3*(this._level-1),30));//进入新的一级获得奖励
 
         this._bigBall.y = this._smallBall.y = Game.initialY;//让大球和小球都回到起点
         this._bigBall.stop(); 
         this._smallBall.stop();
 
-        //需要在此处绘制障碍物
-        //TODO,在此处修改接口
         this.adjustBarrier();//调整障碍物的数量
         this._barriersManagement.update();
     }
@@ -115,16 +114,15 @@ class GameView extends ui.GameViewUI{
     enterNewLevel():void{
         this._level++;
         this.enterLevel(this._level);//进入下一级
-        this._scoreIndicator.getReward(10+10*this._level);//进入新的一级获得奖励
         this._musicManager.onPlaySound(Game.NewLevelSound);//播放过关音乐
     }
 
     //调整障碍物的数量
     adjustBarrier():void{
-        BarrierParameter.stonesNum = Math.min(12 + 4 * this._level,30);
-        BarrierParameter.blackHolesNum = Math.min(2 * this._level + 1,10);
-        BarrierParameter.fallingStoneRate = Math.min(0.1 * this._level, 0.8);
-        BarrierParameter.zodiacNum = 15;
+        BarrierParameter.stonesNum = Math.min(22 + 1 * this._level,40);
+        BarrierParameter.blackHolesNum = Math.min(1 * this._level+2,13);
+        BarrierParameter.fallingStoneRate = Math.min(0.05 * this._level+0.2, 0.9);
+        BarrierParameter.zodiacNum = Math.min(3+1*(this._level-1), 20);
     }
 
     //游戏开始
@@ -185,17 +183,21 @@ class GameView extends ui.GameViewUI{
         }
 
         this.updateForces();//更新大小球的受力
-        this.detectBorder(this._bigBall, true);//检测与边缘的相对位置
+        this.detectBorder(this._bigBall, true);//检测与边缘的相对位置，总是惩罚大球的碰壁
         this.detectBorder(this._smallBall, Game.playerNum === 2);//只有两个玩家时，才会惩罚小球的碰壁
         this._bigBall.update();//更新大球的位置和速度
         this._smallBall.update();//更新小球的位置和速度
         this.updateBackground();//根据当前球的位置更新背景
         this._loopCount++;
-        if(this._level === 1){
+        if(this._level === 1){//第一关根据高度奖励
             this._scoreIndicator.updateHeight(-(this._bigBall.y-this.runningView.height+this._bigBall.radius));
         }
         //不断更新游戏分数,最小值为0
         Game.score=Math.max(this._scoreIndicator.data,0);
+
+        if(this._level > 1 &&  this.hasTouchedAllZodiacs()){//除了第一关，如果触碰到了所有的星座
+            this.enterNewLevel();//则进入下一关
+        }
     }
 
     //根据当前球的位置更新背景
@@ -227,17 +229,15 @@ class GameView extends ui.GameViewUI{
                         this._musicManager.onPlaySound(Game.StoneCollisionSound);
                         //根据陨石是否下落确定惩罚的分数
                         if(item.isFalling){
-                            this._scoreIndicator.getPenalty(4 + 1 * (this._level - 1));
+                            this._scoreIndicator.getPenalty(Math.min(4 + 1 * (this._level - 1),13));
                         }else{
-                            this._scoreIndicator.getPenalty(5 + 1 * (this._level -1));
+                            this._scoreIndicator.getPenalty(Math.min(5 + 1 * (this._level -1), 14));
                         }
                         //移除该陨石
                         this._barriersManagement.remove(item);
-                        // this.backgroundView.removeChild(item.item);
-                        // this._barriersManagement.stones.splice(this._barriersManagement.stones.indexOf(item),1);
 
                         //判断游戏是否结束
-                        if(this._scoreIndicator.data<=0)
+                        if(this._scoreIndicator.data<0)
                         {
                             this.gameEnd();
                             return;
@@ -253,7 +253,7 @@ class GameView extends ui.GameViewUI{
                     if(item.detectCollisions(ball))
                     {
                         this._musicManager.onPlaySound(Game.RewardSound);
-                        this._scoreIndicator.getReward(6 + 1 * (this._level - 1));
+                        this._scoreIndicator.getReward(Math.min( Math.floor(3 + 0.2 * (this._level - 1) ) ,5));
                     }
                 }
                 break;
@@ -264,20 +264,23 @@ class GameView extends ui.GameViewUI{
     detectBorder(ball:Ball, hasPenalty:boolean=false):void{
         if( ( ((ball.x-ball.radius) <= 0) && ball.vx < 0 ) || 
             ( ((ball.x+ball.radius) >= this.runningView.width) && ball.vx > 0 )
-            ){
+            ){//碰到水平边缘
             ball.collide(-1,1);
             if(hasPenalty){
-                this._scoreIndicator.getPenalty(1*this._level+1);//碰壁惩罚
+                this._scoreIndicator.getPenalty(Math.min(Math.floor(0.5*this._level+1),5));//碰壁惩罚
             }
         }else if(
             (((ball.y+ball.radius) >= this.runningView.height) && ball.vy > 0)
-        ){
-            // console.log("碰到垂直边缘");
+        ){//碰到底下
             ball.collide(1, -0.9);
         }else if(
             (((ball.y-ball.radius) <= 0) && ball.vy < 0)
-        ){
-            this.enterNewLevel();//进入新的一个回合
+        ){//碰到最上方
+            if(this._level === 1)//等级1中
+                this.enterNewLevel();//进入新的一个回合
+            else{
+                ball.collide(1, -1);
+            }
         }
     }
 
@@ -296,16 +299,8 @@ class GameView extends ui.GameViewUI{
         this._smallBall.setForce(0, -lift, "lift");
 
         //处理由于球运动产生的阻力
-        let bigVSquare:number = Math.pow(this._bigBall.vx, 2) + Math.pow(this._bigBall.vy,2);
-        this._bigBall.setForce(
-            -bigVSquare * this._bigBall.vx * Game.dragCoefficient, 
-            -bigVSquare * this._bigBall.vy * Game.dragCoefficient, 
-            "drag");
-        let smallVSquare:number = Math.pow(this._smallBall.vx, 2) + Math.pow(this._smallBall.vy, 2);
-        this._smallBall.setForce(
-            -smallVSquare * this._smallBall.vx * Game.dragCoefficient, 
-            -smallVSquare * this._smallBall.vy * Game.dragCoefficient, 
-            "drag");
+        this._smallBall.setDragForce();
+        this._bigBall.setDragForce();
 
         //处理两个小球之间的引力
         effectiveDistance = Math.min(effectiveDistance, minDistance*3);
@@ -322,30 +317,14 @@ class GameView extends ui.GameViewUI{
         )
 
         //随机受力
-        if(!Game.debug){
+        if(!Game.debug){//在非调试模式下随机受力
             if(this._loopCount % Game.smallBallRandomForcePeriod === 0){
-                this.setRandomForce(this._smallBall);
+                this._smallBall.setRandomForce();
             }
             if(this._loopCount % Game.bigBallRandomForcePeriod === 0){
-                this.setRandomForce(this._bigBall);
+                this._bigBall.setRandomForce();
             }   
         }
-    }
-
-    //让球受到随机力
-    setRandomForce(ball: Ball):void{
-        if(Math.random()>0.2){
-            let Fx:number = (Math.random()-0.5)*Game.randomForce/2;
-            // console.log("水平力Fx="+Fx);
-            ball.setForce(Fx, 0, "random");
-        }else{
-            let Fy:number = (Math.random()-0.5)*Game.randomForce/2+Game.randomForce;
-            // console.log("垂直力Fx="+Fy);
-            ball.setForce(0,Fy/3, "random");
-        }
-        let forceTime:number = Math.random() * 3000 + 1000;//持续时间也是随机的
-        Laya.timer.once(forceTime, ball, ball.removeForce, ["random"]);
-        // console.log(ball.radius+" ball get random force for "+forceTime+"s");
     }
 
     //当触摸开始时调用
@@ -442,4 +421,12 @@ class GameView extends ui.GameViewUI{
         }
     }
 
+    //判断是否点亮了所有的星座
+    public hasTouchedAllZodiacs():boolean{
+        let flag:boolean=true;
+        this._barriersManagement.zodiacs.forEach(element => {
+            flag = flag && element.isTouched;
+        });
+        return flag;
+    }
 }

@@ -6,6 +6,8 @@ var Game;
     Game.startBackGroundImage = "ui/background/StartBackGround.png"; //开始背景图
     Game.backgroundImage = "ui/background/BackGround .jpg"; //游戏背景图
     Game.endBackGroundImage = "ui/background/EndBackGround.jpg"; //结束背景图
+    Game.helpBackGroundImage = "ui/background/HelpBackGround.jpg"; //帮助界面图
+    Game.contentImage = "ui/background/ContentImage.png"; //帮助界面内容图
     Game.zodiacLightImage = "ui/else/light.png";
     Game.zodiacYellowImage = "ui/else/yellow.png";
     Game.stoneImage = "ui/else/stone.png";
@@ -28,6 +30,8 @@ var GameMain = /** @class */ (function () {
             { url: Game.backgroundImage, type: Laya.Loader.IMAGE },
             { url: Game.startBackGroundImage, type: Laya.Loader.IMAGE },
             { url: Game.endBackGroundImage, type: Laya.Loader.IMAGE },
+            { url: Game.helpBackGroundImage, type: Laya.Loader.IMAGE },
+            { url: Game.contentImage, type: Laya.Loader.IMAGE },
             { url: "res/atlas/ui/button.atlas", type: Laya.Loader.ATLAS },
             { url: "res/atlas/ui/button.png", type: Laya.Loader.IMAGE },
             { url: "res/atlas/ui/blackhole.atlas", type: Laya.Loader.ATLAS },
@@ -48,6 +52,7 @@ var GameMain = /** @class */ (function () {
         GameMain.gameView = new GameView();
         GameMain.startView = new StartView();
         GameMain.endView = new EndView();
+        GameMain.helpView = new HelpView();
         GameMain.viewStack.addItem(GameMain.startView);
         GameMain.viewStack.addItem(GameMain.gameView);
         GameMain.viewStack.addItem(GameMain.endView);
@@ -71,13 +76,16 @@ var GameMain = /** @class */ (function () {
             GameMain.startView.twoPlayersButton.scale(1, 1);
         });
         GameMain.startView.twoPlayersButton.on(Laya.Event.CLICK, this, this.toTwoPlayersGameView);
-        //开始界面排行榜查看按钮
-        GameMain.startView.rankButton.on(Laya.Event.MOUSE_MOVE, this, function () {
-            GameMain.startView.rankButton.scale(1.1, 1.1);
+        //开始界面游戏说明查看按钮
+        GameMain.startView.helpButton.on(Laya.Event.MOUSE_MOVE, this, function () {
+            GameMain.startView.helpButton.scale(1.1, 1.1);
         });
-        GameMain.startView.rankButton.on(Laya.Event.MOUSE_OUT, this, function () {
-            GameMain.startView.rankButton.scale(1, 1);
+        GameMain.startView.helpButton.on(Laya.Event.MOUSE_OUT, this, function () {
+            GameMain.startView.helpButton.scale(1, 1);
         });
+        GameMain.startView.helpButton.on(Laya.Event.CLICK, this, this.toHelpView);
+        //帮助界面中返回开始界面按钮
+        GameMain.helpView.returnButton.on(Laya.Event.CLICK, this, this.outHelpView);
         //游戏界面结束按钮
         GameMain.gameView.endButton.on(Laya.Event.CLICK, this, this.toEndView);
         //结束界面回到开始界面的按钮
@@ -120,6 +128,18 @@ var GameMain = /** @class */ (function () {
     //到开始界面
     GameMain.prototype.toStartView = function () {
         GameMain.viewStack.selectedIndex = 0;
+    };
+    //到帮助界面
+    GameMain.prototype.toHelpView = function () {
+        Laya.stage.addChild(GameMain.helpView);
+        GameMain.helpView.init();
+        GameMain.helpView.popup();
+    };
+    //离开帮助界面
+    GameMain.prototype.outHelpView = function () {
+        GameMain.helpView.close();
+        Laya.stage.removeChild(GameMain.helpView);
+        this.toStartView();
     };
     return GameMain;
 }());

@@ -52,11 +52,14 @@ var BarriersManagement = /** @class */ (function () {
                 item = null;
                 break;
         }
+        if (item) { //如果成功获取对象
+            item.init(); //则对其重新进行初始化
+        }
         return item;
     };
     //回收障碍物
     BarriersManagement.prototype.remove = function (barrier) {
-        this._backgroundImage.removeChild(barrier.item); //从画布上移除应写在此处比较合适
+        this._backgroundImage.removeChild(barrier.item); //从画布上移除
         Laya.Pool.recover(barrier.name, barrier);
         switch (barrier.name) {
             case BarrierParameter.blackHoleStr: //回收黑洞对象
@@ -92,21 +95,18 @@ var BarriersManagement = /** @class */ (function () {
         for (var i = 0; i < BarrierParameter.blackHolesNum; i++) {
             var blackhole = this.produce(BarrierParameter.blackHoleStr);
             blackhole.randomGenerate(this._backgroundImage);
-            blackhole.init();
             blackhole.drawItem();
         }
         //更新岩石
         for (var i = 0; i < BarrierParameter.stonesNum; i++) {
             var stone = this.produce(BarrierParameter.stoneStr);
             stone.randomGenerate(this._backgroundImage);
-            stone.init();
             stone.drawItem();
         }
         //更新星座
         for (var i = 0; i < BarrierParameter.zodiacNum; i++) {
             var zodiac = this.produce(BarrierParameter.zodiacStr, i % 12);
             zodiac.randomGenerate(this._backgroundImage);
-            zodiac.init();
             zodiac.drawItem();
         }
     };

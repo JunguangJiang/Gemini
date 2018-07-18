@@ -5,8 +5,8 @@ abstract class Barrier<T extends Laya.Sprite>{
     protected _width:number;//item宽度
     protected _height:number;//item高度
     protected _name:string;//item的名字
+    
     protected _isTouched: boolean;//是否被触碰到
-
     protected _bounds:Laya.Rectangle;//接触的有效边界
 
     constructor(backgroundImage:Laya.Image,width:number,height:number,name:string)
@@ -14,11 +14,9 @@ abstract class Barrier<T extends Laya.Sprite>{
         this._width=width;
         this._height=height;
         this._name=name;
-        this._isTouched = false;
-        this._bounds = null;
     }
 
-    //或取名字
+    //取名字
     get name():string{return this._name;}
 
     //item随机生成在背景某处
@@ -79,7 +77,7 @@ abstract class Barrier<T extends Laya.Sprite>{
         return itemRec;
     }
 
-    //进入对象池之前的重新初始化
+    //重新初始化，用于回收利用
     public init():void{
         this._isTouched = false;
         this._bounds = null;   

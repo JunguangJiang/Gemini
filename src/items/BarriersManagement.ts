@@ -29,7 +29,6 @@ class BarriersManagement{
         this.blackHoles=[];
         this.stones=[];
         this.zodiacs=[];
-
     }
 
     //生成障碍物
@@ -47,7 +46,7 @@ class BarriersManagement{
             break;
         case BarrierParameter.stoneStr://获取岩石对象
              item=Laya.Pool.getItemByCreateFun(BarrierParameter.stoneStr,function():Stone{
-                let stone:Stone=new Stone(this._backgroundImage,BarrierParameter.stoneWidth,BarrierParameter.stoneHeight,BarrierParameter.stoneStr,Math.random()<BarrierParameter.fallingStoneRate);               
+                let stone:Stone=new Stone(this._backgroundImage,BarrierParameter.stoneWidth,BarrierParameter.stoneHeight,BarrierParameter.stoneStr,Math.random()<BarrierParameter.fallingStoneRate);
                 return stone;
             });
             this.stones.push(item);      
@@ -63,13 +62,16 @@ class BarriersManagement{
             item=null;
             break;
         }
+        if(item){//如果成功获取对象
+            item.init();//则对其重新进行初始化
+        }
         return item;
     }
 
     //回收障碍物
     public remove(barrier:any):void
     {
-        this._backgroundImage.removeChild(barrier.item);//从画布上移除应写在此处比较合适
+        this._backgroundImage.removeChild(barrier.item);//从画布上移除
         Laya.Pool.recover(barrier.name,barrier);
         switch(barrier.name)
         {
@@ -115,7 +117,6 @@ class BarriersManagement{
         {
             let blackhole:BlackHole=this.produce(BarrierParameter.blackHoleStr);
             blackhole.randomGenerate(this._backgroundImage);
-            blackhole.init();
             blackhole.drawItem();
         }
 
@@ -124,7 +125,6 @@ class BarriersManagement{
         {
             let stone:Stone=this.produce(BarrierParameter.stoneStr);
             stone.randomGenerate(this._backgroundImage);
-            stone.init();
             stone.drawItem();
         }     
 
@@ -132,7 +132,6 @@ class BarriersManagement{
         for(let i=0; i<BarrierParameter.zodiacNum; i++){
             let zodiac: Zodiac=this.produce(BarrierParameter.zodiacStr,i%12);
             zodiac.randomGenerate(this._backgroundImage);
-            zodiac.init();
             zodiac.drawItem();
         }
     }

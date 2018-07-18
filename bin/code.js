@@ -40707,92 +40707,117 @@ if (typeof define === 'function' && define.amd){
         }
     });
 }
+//与障碍物相关的参数
+var BarrierParameter;
+(function (BarrierParameter) {
+    BarrierParameter.blackHolesNum = 5; //黑洞个数
+    BarrierParameter.blackHoleWidth = 100; //黑洞宽度
+    BarrierParameter.blackHoleHeight = 100; //黑洞高度
+    BarrierParameter.blackHoleStr = "blackhole"; //黑洞对应标识符
+    BarrierParameter.stonesNum = 10; //岩石个数
+    BarrierParameter.stoneWidth = 50; //岩石宽度
+    BarrierParameter.stoneHeight = 100; //岩石高度
+    BarrierParameter.fallingStoneRate = 0.1; //坠落的陨石的比例
+    BarrierParameter.stoneStr = "stone"; //岩石对应标识符
+    BarrierParameter.zodiacNum = 12; //星座个数
+    BarrierParameter.zodiacWidth = 75; //星座宽度
+    BarrierParameter.zodiacHeight = 75; //星座高度
+    BarrierParameter.zodiacStr = "zodiac"; //星座对应标识符    
+})(BarrierParameter || (BarrierParameter = {}));
 var BarriersManagement = /** @class */ (function () {
-    function BarriersManagement(backgroundImage, fallingStoneRate, blackHolesNum, blackHoleWidth, blackHoleHeight, blackHoleName, stonesNum, stoneWidth, stoneHeight, stoneName, zodiacsNum, zodiacWidth, zodiacHeight, zodiacName) {
-        if (fallingStoneRate === void 0) { fallingStoneRate = 0; }
-        if (blackHolesNum === void 0) { blackHolesNum = 10; }
-        if (blackHoleWidth === void 0) { blackHoleWidth = 100; }
-        if (blackHoleHeight === void 0) { blackHoleHeight = 100; }
-        if (blackHoleName === void 0) { blackHoleName = "blackhole"; }
-        if (stonesNum === void 0) { stonesNum = 16; }
-        if (stoneWidth === void 0) { stoneWidth = 50; }
-        if (stoneHeight === void 0) { stoneHeight = 100; }
-        if (stoneName === void 0) { stoneName = "stone"; }
-        if (zodiacsNum === void 0) { zodiacsNum = 12; }
-        if (zodiacWidth === void 0) { zodiacWidth = 100; }
-        if (zodiacHeight === void 0) { zodiacHeight = 100; }
-        if (zodiacName === void 0) { zodiacName = "zodiac"; }
+    function BarriersManagement(backgroundImage) {
         this._backgroundImage = backgroundImage;
-        /*黑洞初始化*/
         this.blackHoles = [];
-        this._blackHolesNum = blackHolesNum;
-        this._blackHoleWidth = blackHoleWidth;
-        this._blackHoleHeight = blackHoleHeight;
-        this._blackHoleName = blackHoleName;
-        /*陨石初始化*/
         this.stones = [];
-        this._stonesNum = stonesNum;
-        this._stoneWidth = stoneWidth;
-        this._stoneHeight = stoneHeight;
-        this._stoneName = stoneName;
-        /* 星座的初始化 */
         this.zodiacs = [];
-        this._zodiacNum = zodiacsNum;
-        this._zodiacWidth = zodiacWidth;
-        this._zodiacHeight = zodiacHeight;
-        this._zodiacName = zodiacName;
-        this.fallingStoneRate = fallingStoneRate;
     }
-    //清除所有的障碍物
-    BarriersManagement.prototype.clear = function () {
-        // this.blackHoles.slice(0);
-        this.blackHoles = [];
-        while (this._backgroundImage.removeChildByName(this._blackHoleName))
-            ;
-        // this.stones.slice(0);
-        this.stones = [];
-        while (this._backgroundImage.removeChildByName(this._stoneName))
-            ;
-        // this.zodiacs.slice(0);
-        this.zodiacs = [];
-        while (this._backgroundImage.removeChildByName(this._zodiacName))
-            ;
+    //生成障碍物
+    BarriersManagement.prototype.produce = function (barrierType, zodiacNum) {
+        if (zodiacNum === void 0) { zodiacNum = 0; }
+        var item;
+        switch (barrierType) {
+            case BarrierParameter.blackHoleStr: //获取黑洞对象
+                item = Laya.Pool.getItemByCreateFun(BarrierParameter.blackHoleStr, function () {
+                    var blackhole = new BlackHole(this._backgroundImage, BarrierParameter.blackHoleWidth, BarrierParameter.blackHoleHeight, BarrierParameter.blackHoleStr);
+                    return blackhole;
+                });
+                this.blackHoles.push(item);
+                break;
+            case BarrierParameter.stoneStr: //获取岩石对象
+                item = Laya.Pool.getItemByCreateFun(BarrierParameter.stoneStr, function () {
+                    var stone = new Stone(this._backgroundImage, BarrierParameter.stoneWidth, BarrierParameter.stoneHeight, BarrierParameter.stoneStr, Math.random() < BarrierParameter.fallingStoneRate);
+                    return stone;
+                });
+                this.stones.push(item);
+                break;
+            case BarrierParameter.zodiacStr: //获取星座对象
+                item = Laya.Pool.getItemByCreateFun(BarrierParameter.zodiacStr, function () {
+                    var zodiac = new Zodiac(this._backgroundImage, BarrierParameter.zodiacWidth, BarrierParameter.zodiacHeight, BarrierParameter.zodiacStr, zodiacNum);
+                    return zodiac;
+                });
+                this.zodiacs.push(item);
+                break;
+            default:
+                item = null;
+                break;
+        }
+        if (item) { //如果成功获取对象
+            item.init(); //则对其重新进行初始化
+        }
+        return item;
     };
-    //重新生成屏幕上所有障碍物
-    BarriersManagement.prototype.regenerateBarrier = function () {
-        //初始化
-        this.clear();
-        //生成黑洞数组
-        for (var i = 0; i < this._blackHolesNum; i++) {
-            var blackhole = new BlackHole(this._backgroundImage, this._blackHoleWidth, this._blackHoleHeight, this._blackHoleName);
+    //回收障碍物
+    BarriersManagement.prototype.remove = function (barrier) {
+        this._backgroundImage.removeChild(barrier.item); //从画布上移除
+        Laya.Pool.recover(barrier.name, barrier);
+        switch (barrier.name) {
+            case BarrierParameter.blackHoleStr: //回收黑洞对象
+                this.blackHoles.splice(this.blackHoles.indexOf(barrier), 1);
+                break;
+            case BarrierParameter.stoneStr: //回收岩石对象   
+                this.stones.splice(this.stones.indexOf(barrier), 1);
+                break;
+            case BarrierParameter.zodiacStr: //回收星座对象
+                this.zodiacs.splice(this.zodiacs.indexOf(barrier), 1);
+                break;
+            default:
+                break;
+        }
+    };
+    //回收背景上所有障碍物
+    BarriersManagement.prototype.removeFromBackground = function (backgroundImage) {
+        while (this.blackHoles.length > 0) {
+            this.remove(this.blackHoles[0]);
+        }
+        while (this.stones.length > 0) {
+            this.remove(this.stones[0]);
+        }
+        while (this.zodiacs.length > 0) {
+            this.remove(this.zodiacs[0]);
+        }
+    };
+    //更新各障碍物在屏幕上的位置并绘制
+    BarriersManagement.prototype.update = function () {
+        //回收所有元素
+        this.removeFromBackground(this._backgroundImage);
+        //更新黑洞
+        for (var i = 0; i < BarrierParameter.blackHolesNum; i++) {
+            var blackhole = this.produce(BarrierParameter.blackHoleStr);
             blackhole.randomGenerate(this._backgroundImage);
-            this.blackHoles.push(blackhole);
+            blackhole.drawItem();
         }
-        //生成陨石数组
-        for (var i = 0; i < this._stonesNum; i++) {
-            var isFalling = Math.random() <= this.fallingStoneRate;
-            var stone = new Stone(this._backgroundImage, this._stoneWidth, this._stoneHeight, this._stoneName, isFalling);
+        //更新岩石
+        for (var i = 0; i < BarrierParameter.stonesNum; i++) {
+            var stone = this.produce(BarrierParameter.stoneStr);
             stone.randomGenerate(this._backgroundImage);
-            this.stones.push(stone);
+            stone.drawItem();
         }
-        //生成星座数组
-        for (var i = 0; i < this._zodiacNum; i++) {
-            var zodiac = new Zodiac(this._backgroundImage, this._zodiacWidth, this._zodiacHeight, this._zodiacName, i % 12);
+        //更新星座
+        for (var i = 0; i < BarrierParameter.zodiacNum; i++) {
+            var zodiac = this.produce(BarrierParameter.zodiacStr, i % 12);
             zodiac.randomGenerate(this._backgroundImage);
-            this.zodiacs.push(zodiac);
+            zodiac.drawItem();
         }
-    };
-    //绘制各障碍物的动画或图像
-    BarriersManagement.prototype.drawBarriers = function () {
-        this.blackHoles.forEach(function (element) {
-            element.drawItem();
-        });
-        this.stones.forEach(function (element) {
-            element.drawItem();
-        });
-        this.zodiacs.forEach(function (element) {
-            element.drawItem();
-        });
     };
     //刷新各障碍物的动画或图像
     BarriersManagement.prototype.updateBarriers = function () {
@@ -40806,6 +40831,12 @@ var BarriersManagement = /** @class */ (function () {
             element.update();
         });
     };
+    //清除所有的障碍物
+    BarriersManagement.prototype.clear = function () {
+        Laya.Pool.clearBySign(BarrierParameter.blackHoleStr); //清除黑洞对象
+        Laya.Pool.clearBySign(BarrierParameter.stoneStr); //清除岩石对象
+        Laya.Pool.clearBySign(BarrierParameter.zodiacStr); //清除星座对象
+    };
     return BarriersManagement;
 }());
 //# sourceMappingURL=BarriersManagement.js.map
@@ -40815,9 +40846,13 @@ var Barrier = /** @class */ (function () {
         this._width = width;
         this._height = height;
         this._name = name;
-        this._isTouched = false;
-        this._bounds = null;
     }
+    Object.defineProperty(Barrier.prototype, "name", {
+        //取名字
+        get: function () { return this._name; },
+        enumerable: true,
+        configurable: true
+    });
     //item随机生成在背景某处
     Barrier.prototype.randomGenerate = function (backgroundImage) {
         var _this = this;
@@ -40853,11 +40888,17 @@ var Barrier = /** @class */ (function () {
     ;
     //更新item的位置等
     Barrier.prototype.update = function () { }; //默认情况下什么都不做
-    //获得图片区域内的一个有效区域,xScale和yScale分别为水平和竖直方向的缩放率
+    //获得图片区域内的一个有效区域,xScale和yScale分别为水平和竖直方向的缩放率
     Barrier.prototype.getInnerBounds = function (itemRec, xScale, yScale) {
         itemRec = itemRec.setTo(itemRec.x + itemRec.width * (1 - xScale) / 2, itemRec.y + itemRec.height * (1 - yScale) / 2, itemRec.width * xScale, itemRec.height * yScale);
         return itemRec;
     };
+    //重新初始化，用于回收利用
+    Barrier.prototype.init = function () {
+        this._isTouched = false;
+        this._bounds = null;
+    };
+    ;
     return Barrier;
 }());
 //# sourceMappingURL=Barrier.js.map
@@ -40898,7 +40939,7 @@ var Timer = /** @class */ (function () {
 var Game;
 (function (Game) {
     Game.rewardPerUnitHeight = 1; //第一关中的单位奖励
-    Game.heightDivision = 100; //第一关对总高度的一个划分
+    Game.heightDivision = 20; //第一关对总高度的一个划分
 })(Game || (Game = {}));
 //双子游戏的计分器
 var ScoreIndicator = /** @class */ (function () {
@@ -40917,9 +40958,7 @@ var ScoreIndicator = /** @class */ (function () {
     };
     //根据高度的变化记录奖励
     ScoreIndicator.prototype.updateHeight = function (height) {
-        // console.log("height="+height);
         var newRewardNum = Math.floor(height / this._totalHeight * Game.heightDivision);
-        // console.log("newRewardNum="+newRewardNum);
         if (newRewardNum > this._rewardNum) {
             this._data += Game.rewardPerUnitHeight * (newRewardNum - this._rewardNum);
             this._rewardNum = newRewardNum;
@@ -40968,12 +41007,11 @@ var ScoreIndicator = /** @class */ (function () {
             text.text = "" + scoreChange;
         }
         text.scaleX = text.scaleY = 0.2;
-        Laya.Tween.to(text, { scaleX: 1, scaleY: 1 }, 1000, Laya.Ease.backOut);
-        Laya.timer.once(2000, this, this.closeScoreChange, [scoreChange], false);
+        Laya.Tween.to(text, { scaleX: 1, scaleY: 1 }, 1000, Laya.Ease.backOut); //分数变化以弹出的方式显示
+        Laya.timer.once(2000, this, this.closeScoreChange, [scoreChange], false); //经过2s后消失
     };
     //关闭分数变化的显示
     ScoreIndicator.prototype.closeScoreChange = function (scoreChange) {
-        console.log("关闭分数显示");
         if (scoreChange > 0) {
             var text = this._box.getChildByName("reward");
             text.text = "";
@@ -41038,18 +41076,17 @@ var Ball = /** @class */ (function () {
     function Ball(radius, x, y, ballView) {
         this._animation = ballView;
         this._radius = radius;
-        this.stop();
         this._timer = new Timer();
         this._forces = new Laya.Dictionary(); //记录所有的受力
         this.x = x;
         this.y = y; //设置小球的位置
+        this._vx = this._vy = this._ax = this._ay = 0;
         //绘制动画并加入背景中
         this.drawNormalBall();
-        this.drawShinyBall();
     }
     //使小球静止
     Ball.prototype.stop = function () {
-        this._vx = this._vy = this._ax = this._ay = 0;
+        this._vx = this._vy = 0;
     };
     Object.defineProperty(Ball.prototype, "x", {
         //获取球的当前位置（球心）
@@ -41145,15 +41182,28 @@ var Ball = /** @class */ (function () {
     };
     //进行小球动画的加载和绘制
     Ball.prototype.drawNormalBall = function () {
-        // this._animation.clear();
         this._animation.loadAnimation("GameAnimation/Ball.ani");
         this._animation.scaleX = this._radius * 2 / 30;
         this._animation.scaleY = this._radius * 2 / 30;
         this._animation.play();
     };
-    //触摸时大球发光
-    Ball.prototype.drawShinyBall = function () {
-        //发光滤镜实现
+    //让小球受到阻力
+    Ball.prototype.setDragForce = function () {
+        var VSquare = Math.pow(this.vx, 2) + Math.pow(this.vy, 2);
+        this.setForce(-VSquare * this.vx * Game.dragCoefficient, -VSquare * this.vy * Game.dragCoefficient, "drag");
+    };
+    //让球受到随机力
+    Ball.prototype.setRandomForce = function () {
+        if (Math.random() > 0.2) {
+            var Fx = (Math.random() - 0.5) * Game.randomForce / 2;
+            this.setForce(Fx, 0, "random");
+        }
+        else {
+            var Fy = (Math.random() - 0.5) * Game.randomForce / 2 + Game.randomForce;
+            this.setForce(0, Fy / 3, "random");
+        }
+        var forceTime = Math.random() * 3000 + 1000; //持续时间也是随机的
+        Laya.timer.once(forceTime, this, this.removeForce, ["random"], false);
     };
     return Ball;
 }());
@@ -41168,8 +41218,6 @@ var Arrow = /** @class */ (function () {
         this._touchEnd = touchEnd;
         this._ballType = ballType;
         for (var i = 0; i < 2; i++) {
-            // this._arrows[i].visible = true;
-            // this._arrows[i].alpha=0.3;
             this._arrows[i].on(Laya.Event.MOUSE_DOWN, this, this.onMouseDown, [i]);
             this._arrows[i].on(Laya.Event.MOUSE_UP, this, this.onMouseUp, [i]);
         }
@@ -41206,6 +41254,7 @@ var BlackHole = /** @class */ (function (_super) {
     function BlackHole(backgroundImage, width, height, name) {
         var _this = _super.call(this, backgroundImage, width, height, name) || this;
         _this.item = new Laya.Animation();
+        _this.init();
         return _this;
     }
     //绘制item
@@ -41217,11 +41266,9 @@ var BlackHole = /** @class */ (function (_super) {
     };
     //判断球是否与黑洞相撞，0为不相撞，1为相撞
     BlackHole.prototype.detectCollisions = function (ball) {
-        if (this._bounds === null) {
-            this._bounds = this.getInnerBounds(this.item.getBounds(), 0.25, 0.25);
-        }
         if (this._isTouched)
             return false; //如果已经碰撞，则不再判断
+        this._bounds = this.getInnerBounds(this.item.getBounds(), 0.25, 0.25); //计算有效边界
         //判断球是否进入黑洞
         return this._bounds.intersects(ball.animation.getBounds());
     };
@@ -41240,32 +41287,38 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Game;
 (function (Game) {
-    Game.fallingStoneSpeed = 10 / 6; //陨石下落的平均速度
+    Game.fallingStoneSpeed = 2; //陨石下落的平均速度
 })(Game || (Game = {}));
+//岩石类
 var Stone = /** @class */ (function (_super) {
     __extends(Stone, _super);
     function Stone(backgroundImage, width, height, name, isFalling) {
         if (isFalling === void 0) { isFalling = false; }
         var _this = _super.call(this, backgroundImage, width, height, name) || this;
-        _this.item = new Laya.Image();
+        _this.item = new Laya.Image(); //重新绘制一个图片
         _this.isFalling = isFalling;
-        _this._fallingStoneSpeed = Math.random() % Game.fallingStoneSpeed / 2 + Game.fallingStoneSpeed;
         _this._up = 0;
-        _this._down = backgroundImage.height;
-        _this._hasInit = false;
+        _this._down = Game.initialY;
+        _this.init();
         return _this;
     }
+    Stone.prototype.init = function () {
+        this._isTouched = false;
+        this._hasInit = false;
+        this.isFalling = Math.random() < BarrierParameter.fallingStoneRate;
+        this._fallingStoneSpeed = Math.random() % Game.fallingStoneSpeed / 2 + Game.fallingStoneSpeed;
+    };
     //绘制item
     Stone.prototype.drawItem = function () {
         if (!this.isFalling) {
-            this.item.loadImage(Game.stoneImage);
+            this.item.skin = Game.stoneImage;
             this.item.scaleX = this._width / 40;
-            this.item.scaleY = this._height / 55;
+            this.item.scaleY = this._height / 85;
         }
         else {
-            this.item.loadImage(Game.fallingStoneImage);
-            this.item.scaleX = this._width / 40;
-            this.item.scaleY = this._height / 55;
+            this.item.skin = Game.fallingStoneImage;
+            this.item.scaleX = this._width / 30;
+            this.item.scaleY = this._height / 100;
         }
     };
     //判断球是否与陨石相撞
@@ -41282,8 +41335,8 @@ var Stone = /** @class */ (function (_super) {
                     this.item.y = this._up;
                 this._hasInit = true;
             }
-            this.item.y += this._fallingStoneSpeed;
-            if (this.item.y >= this._down + this._height) {
+            this.item.y += this._fallingStoneSpeed; //不断坠落
+            if (this.item.y >= this._down + this._height) { //重复利用坠落的陨石
                 this.item.y = this._up - this._height;
             }
         }
@@ -41311,8 +41364,16 @@ var Zodiac = /** @class */ (function (_super) {
         _this.item.clipX = 3;
         _this.item.clipY = 4;
         _this.item.index = type % 12;
+        _this.init();
         return _this;
     }
+    Object.defineProperty(Zodiac.prototype, "isTouched", {
+        get: function () {
+            return this._isTouched;
+        },
+        enumerable: true,
+        configurable: true
+    });
     //绘制item
     Zodiac.prototype.drawItem = function () {
         if (!this._isTouched) {
@@ -41323,16 +41384,15 @@ var Zodiac = /** @class */ (function (_super) {
             this.item.skin = Game.zodiacYellowImage;
             this.item.alpha = 0.7;
         }
-        this.item.scaleX = this._width / 100;
-        this.item.scaleY = this._height / 100;
+        this.item.scaleX = this._width / 60;
+        this.item.scaleY = this._height / 60;
     };
     //判断小球是否与星座相接触
     Zodiac.prototype.detectCollisions = function (ball) {
-        if (this._bounds === null) {
-            this._bounds = this.getInnerBounds(this.item.getBounds(), 0.8, 0.8);
-            // console.log("星座:" + this._bounds);
-        }
-        if (!this._isTouched && this._bounds.intersects(ball.animation.getBounds())) {
+        if (this._isTouched)
+            return false; //如果已经碰撞，则不再判断
+        this._bounds = this.getInnerBounds(this.item.getBounds(), 0.25, 0.25); //计算有效边界
+        if (this._bounds.intersects(ball.animation.getBounds())) {
             this._isTouched = true;
             this.drawItem();
             return true;
@@ -41510,7 +41570,10 @@ var GameView = /** @class */ (function (_super) {
     __extends(GameView, _super);
     //构造函数
     function GameView() {
-        return _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        //初始化障碍物管理器
+        _this._barriersManagement = new BarriersManagement(_this.backgroundView);
+        return _this;
     }
     //界面初始化
     GameView.prototype.init = function () {
@@ -41529,8 +41592,6 @@ var GameView = /** @class */ (function (_super) {
             this.smallArrowView.visible = false;
         }
         this._loopCount = 0;
-        //障碍物类初始化与障碍物绘制
-        this._barriersManagement = new BarriersManagement(this.backgroundView);
         //计分器的初始化
         this._scoreIndicator = new ScoreIndicator(this.scoreView, 3, this.runningView.height, 0);
         //等级显示
@@ -41547,28 +41608,25 @@ var GameView = /** @class */ (function (_super) {
         this._level = level;
         this.levelView.text = "level " + this._level;
         this._scoreIndicator.clearHeight(); //计分器维护的高度归零
+        this._scoreIndicator.getReward(Math.min(5 + 3 * (this._level - 1), 30)); //进入新的一级获得奖励
         this._bigBall.y = this._smallBall.y = Game.initialY; //让大球和小球都回到起点
         this._bigBall.stop();
         this._smallBall.stop();
-        //需要在此处绘制障碍物
-        //TODO,在此处修改接口
         this.adjustBarrier(); //调整障碍物的数量
-        this._barriersManagement.regenerateBarrier(); //清除原先的障碍物
-        this._barriersManagement.drawBarriers(); //绘制新的障碍物
+        this._barriersManagement.update();
     };
     //进入新的一级
     GameView.prototype.enterNewLevel = function () {
         this._level++;
         this.enterLevel(this._level); //进入下一级
-        this._scoreIndicator.getReward(10 + 10 * this._level); //进入新的一级获得奖励
         this._musicManager.onPlaySound(Game.NewLevelSound); //播放过关音乐
     };
     //调整障碍物的数量
     GameView.prototype.adjustBarrier = function () {
-        this._barriersManagement._stonesNum = Math.min(12 + 4 * this._level, 30);
-        this._barriersManagement._blackHolesNum = Math.min(2 * this._level + 1, 10);
-        this._barriersManagement.fallingStoneRate = Math.min(0.1 * this._level, 0.8);
-        this._barriersManagement._zodiacNum = 15;
+        BarrierParameter.stonesNum = Math.min(22 + 1 * this._level, 40);
+        BarrierParameter.blackHolesNum = Math.min(1 * this._level + 2, 13);
+        BarrierParameter.fallingStoneRate = Math.min(0.05 * this._level + 0.2, 0.9);
+        BarrierParameter.zodiacNum = Math.min(3 + 1 * (this._level - 1), 20);
     };
     //游戏开始
     GameView.prototype.gameStart = function () {
@@ -41611,7 +41669,7 @@ var GameView = /** @class */ (function (_super) {
     };
     //需要每隔单位时间进行一次调用的函数请写入以下函数体
     GameView.prototype.onLoop = function () {
-        this._barriersManagement.updateBarriers(); //更新当前障碍物的位置
+        this._barriersManagement.updateBarriers();
         //在任何模式下，
         this.detectCollisionsBetween(this._bigBall, "BlackHole"); //大球都会被黑洞吸入
         this.detectCollisionsBetween(this._bigBall, "Stone"); //大球都会被岩石击中
@@ -41621,17 +41679,20 @@ var GameView = /** @class */ (function (_super) {
             this.detectCollisionsBetween(this._smallBall, "Stone"); //被岩石击中
         }
         this.updateForces(); //更新大小球的受力
-        this.detectBorder(this._bigBall); //检测与边缘的相对位置
-        this.detectBorder(this._smallBall);
+        this.detectBorder(this._bigBall, true); //检测与边缘的相对位置，总是惩罚大球的碰壁
+        this.detectBorder(this._smallBall, Game.playerNum === 2); //只有两个玩家时，才会惩罚小球的碰壁
         this._bigBall.update(); //更新大球的位置和速度
         this._smallBall.update(); //更新小球的位置和速度
         this.updateBackground(); //根据当前球的位置更新背景
         this._loopCount++;
-        if (this._level === 1) {
+        if (this._level === 1) { //第一关根据高度奖励
             this._scoreIndicator.updateHeight(-(this._bigBall.y - this.runningView.height + this._bigBall.radius));
         }
         //不断更新游戏分数,最小值为0
         Game.score = Math.max(this._scoreIndicator.data, 0);
+        if (this._level > 1 && this.hasTouchedAllZodiacs()) { //除了第一关，如果触碰到了所有的星座
+            this.enterNewLevel(); //则进入下一关
+        }
     };
     //根据当前球的位置更新背景
     GameView.prototype.updateBackground = function () {
@@ -41662,16 +41723,15 @@ var GameView = /** @class */ (function (_super) {
                         this._musicManager.onPlaySound(Game.StoneCollisionSound);
                         //根据陨石是否下落确定惩罚的分数
                         if (item.isFalling) {
-                            this._scoreIndicator.getPenalty(4 + 1 * (this._level - 1));
+                            this._scoreIndicator.getPenalty(Math.min(4 + 1 * (this._level - 1), 13));
                         }
                         else {
-                            this._scoreIndicator.getPenalty(5 + 1 * (this._level - 1));
+                            this._scoreIndicator.getPenalty(Math.min(5 + 1 * (this._level - 1), 14));
                         }
                         //移除该陨石
-                        this.backgroundView.removeChild(item.item);
-                        this._barriersManagement.stones.splice(this._barriersManagement.stones.indexOf(item), 1);
+                        this._barriersManagement.remove(item);
                         //判断游戏是否结束
-                        if (this._scoreIndicator.data <= 0) {
+                        if (this._scoreIndicator.data < 0) {
                             this.gameEnd();
                             return;
                         }
@@ -41685,25 +41745,31 @@ var GameView = /** @class */ (function (_super) {
                     var item = _e[_d];
                     if (item.detectCollisions(ball)) {
                         this._musicManager.onPlaySound(Game.RewardSound);
-                        this._scoreIndicator.getReward(6 + 1 * (this._level - 1));
+                        this._scoreIndicator.getReward(Math.min(Math.floor(3 + 0.2 * (this._level - 1)), 5));
                     }
                 }
                 break;
         }
     };
     //球与边缘的相对位置的检测与处理
-    GameView.prototype.detectBorder = function (ball) {
+    GameView.prototype.detectBorder = function (ball, hasPenalty) {
+        if (hasPenalty === void 0) { hasPenalty = false; }
         if ((((ball.x - ball.radius) <= 0) && ball.vx < 0) ||
-            (((ball.x + ball.radius) >= this.runningView.width) && ball.vx > 0)) {
+            (((ball.x + ball.radius) >= this.runningView.width) && ball.vx > 0)) { //碰到水平边缘
             ball.collide(-1, 1);
-            this._scoreIndicator.getPenalty(1 * this._level + 1); //碰壁惩罚
+            if (hasPenalty) {
+                this._scoreIndicator.getPenalty(Math.min(Math.floor(0.5 * this._level + 1), 5)); //碰壁惩罚
+            }
         }
-        else if ((((ball.y + ball.radius) >= this.runningView.height) && ball.vy > 0)) {
-            // console.log("碰到垂直边缘");
+        else if ((((ball.y + ball.radius) >= this.runningView.height) && ball.vy > 0)) { //碰到底下
             ball.collide(1, -0.9);
         }
-        else if ((((ball.y - ball.radius) <= 0) && ball.vy < 0)) {
-            this.enterNewLevel(); //进入新的一个回合
+        else if ((((ball.y - ball.radius) <= 0) && ball.vy < 0)) { //碰到最上方
+            if (this._level === 1) //等级1中
+                this.enterNewLevel(); //进入新的一个回合
+            else {
+                ball.collide(1, -1);
+            }
         }
     };
     //更新球的受力，主要是两个球之间的作用力
@@ -41717,40 +41783,22 @@ var GameView = /** @class */ (function (_super) {
         this._bigBall.setForce(0, -lift, "lift");
         this._smallBall.setForce(0, -lift, "lift");
         //处理由于球运动产生的阻力
-        var bigVSquare = Math.pow(this._bigBall.vx, 2) + Math.pow(this._bigBall.vy, 2);
-        this._bigBall.setForce(-bigVSquare * this._bigBall.vx * Game.dragCoefficient, -bigVSquare * this._bigBall.vy * Game.dragCoefficient, "drag");
-        var smallVSquare = Math.pow(this._smallBall.vx, 2) + Math.pow(this._smallBall.vy, 2);
-        this._smallBall.setForce(-smallVSquare * this._smallBall.vx * Game.dragCoefficient, -smallVSquare * this._smallBall.vy * Game.dragCoefficient, "drag");
+        this._smallBall.setDragForce();
+        this._bigBall.setDragForce();
         //处理两个小球之间的引力
         effectiveDistance = Math.min(effectiveDistance, minDistance * 3);
         var attraction = Game.attractionCoefficient / (Math.pow(effectiveDistance, 3));
         this._bigBall.setForce((this._smallBall.x - this._bigBall.x) * attraction, (this._smallBall.y - this._bigBall.y) * attraction, "attraction");
         this._smallBall.setForce((this._bigBall.x - this._smallBall.x) * attraction, (this._bigBall.y - this._smallBall.y) * attraction, "attraction");
         //随机受力
-        if (!Game.debug) {
+        if (!Game.debug) { //在非调试模式下随机受力
             if (this._loopCount % Game.smallBallRandomForcePeriod === 0) {
-                this.setRandomForce(this._smallBall);
+                this._smallBall.setRandomForce();
             }
             if (this._loopCount % Game.bigBallRandomForcePeriod === 0) {
-                this.setRandomForce(this._bigBall);
+                this._bigBall.setRandomForce();
             }
         }
-    };
-    //让球受到随机力
-    GameView.prototype.setRandomForce = function (ball) {
-        if (Math.random() > 0.2) {
-            var Fx = (Math.random() - 0.5) * Game.randomForce / 2;
-            // console.log("水平力Fx="+Fx);
-            ball.setForce(Fx, 0, "random");
-        }
-        else {
-            var Fy = (Math.random() - 0.5) * Game.randomForce / 2 + Game.randomForce;
-            // console.log("垂直力Fx="+Fy);
-            ball.setForce(0, Fy / 3, "random");
-        }
-        var forceTime = Math.random() * 3000 + 1000; //持续时间也是随机的
-        Laya.timer.once(forceTime, ball, ball.removeForce, ["random"]);
-        // console.log(ball.radius+" ball get random force for "+forceTime+"s");
     };
     //当触摸开始时调用
     GameView.prototype.onTouchStart = function (data) {
@@ -41836,6 +41884,14 @@ var GameView = /** @class */ (function (_super) {
             //播放音乐TODO：
             Laya.SoundManager.muted = false;
         }
+    };
+    //判断是否点亮了所有的星座
+    GameView.prototype.hasTouchedAllZodiacs = function () {
+        var flag = true;
+        this._barriersManagement.zodiacs.forEach(function (element) {
+            flag = flag && element.isTouched;
+        });
+        return flag;
     };
     return GameView;
 }(ui.GameViewUI));
