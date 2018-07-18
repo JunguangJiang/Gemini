@@ -30,7 +30,6 @@ var BarriersManagement = /** @class */ (function () {
             case BarrierParameter.blackHoleStr: //获取黑洞对象
                 item = Laya.Pool.getItemByCreateFun(BarrierParameter.blackHoleStr, function () {
                     var blackhole = new BlackHole(this._backgroundImage, BarrierParameter.blackHoleWidth, BarrierParameter.blackHoleHeight, BarrierParameter.blackHoleStr);
-                    console.log(1);
                     return blackhole;
                 });
                 this.blackHoles.push(item);
@@ -38,7 +37,6 @@ var BarriersManagement = /** @class */ (function () {
             case BarrierParameter.stoneStr: //获取岩石对象
                 item = Laya.Pool.getItemByCreateFun(BarrierParameter.stoneStr, function () {
                     var stone = new Stone(this._backgroundImage, BarrierParameter.stoneWidth, BarrierParameter.stoneHeight, BarrierParameter.stoneStr, Math.random() < BarrierParameter.fallingStoneRate);
-                    console.log(2);
                     return stone;
                 });
                 this.stones.push(item);
@@ -46,7 +44,6 @@ var BarriersManagement = /** @class */ (function () {
             case BarrierParameter.zodiacStr: //获取星座对象
                 item = Laya.Pool.getItemByCreateFun(BarrierParameter.zodiacStr, function () {
                     var zodiac = new Zodiac(this._backgroundImage, BarrierParameter.zodiacWidth, BarrierParameter.zodiacHeight, BarrierParameter.zodiacStr, zodiacNum);
-                    console.log(3);
                     return zodiac;
                 });
                 this.zodiacs.push(item);
@@ -78,15 +75,12 @@ var BarriersManagement = /** @class */ (function () {
     //回收背景上所有障碍物
     BarriersManagement.prototype.removeFromBackground = function (backgroundImage) {
         while (this.blackHoles.length > 0) {
-            console.log(this.blackHoles[0]);
             this.remove(this.blackHoles[0]);
         }
         while (this.stones.length > 0) {
-            console.log(this.stones[0]);
             this.remove(this.stones[0]);
         }
         while (this.zodiacs.length > 0) {
-            console.log(this.zodiacs[0]);
             this.remove(this.zodiacs[0]);
         }
     };

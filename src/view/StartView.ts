@@ -4,6 +4,8 @@ class StartView extends ui.StartViewUI{
     constructor()
     {
         super();
+
+        
     }
 
 }
