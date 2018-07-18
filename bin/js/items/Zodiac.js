@@ -21,6 +21,13 @@ var Zodiac = /** @class */ (function (_super) {
         _this.init();
         return _this;
     }
+    Object.defineProperty(Zodiac.prototype, "isTouched", {
+        get: function () {
+            return this._isTouched;
+        },
+        enumerable: true,
+        configurable: true
+    });
     //绘制item
     Zodiac.prototype.drawItem = function () {
         if (!this._isTouched) {
@@ -31,8 +38,8 @@ var Zodiac = /** @class */ (function (_super) {
             this.item.skin = Game.zodiacYellowImage;
             this.item.alpha = 0.7;
         }
-        this.item.scaleX = this._width / 80;
-        this.item.scaleY = this._height / 80;
+        this.item.scaleX = this._width / 60;
+        this.item.scaleY = this._height / 60;
     };
     //判断小球是否与星座相接触
     Zodiac.prototype.detectCollisions = function (ball) {

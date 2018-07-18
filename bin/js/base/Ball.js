@@ -3,17 +3,17 @@ var Ball = /** @class */ (function () {
     function Ball(radius, x, y, ballView) {
         this._animation = ballView;
         this._radius = radius;
-        this.stop();
         this._timer = new Timer();
         this._forces = new Laya.Dictionary(); //记录所有的受力
         this.x = x;
         this.y = y; //设置小球的位置
+        this._vx = this._vy = this._ax = this._ay = 0;
         //绘制动画并加入背景中
         this.drawNormalBall();
     }
     //使小球静止
     Ball.prototype.stop = function () {
-        this._vx = this._vy = this._ax = this._ay = 0;
+        this._vx = this._vy = 0;
     };
     Object.defineProperty(Ball.prototype, "x", {
         //获取球的当前位置（球心）
@@ -113,6 +113,24 @@ var Ball = /** @class */ (function () {
         this._animation.scaleX = this._radius * 2 / 30;
         this._animation.scaleY = this._radius * 2 / 30;
         this._animation.play();
+    };
+    //让小球受到阻力
+    Ball.prototype.setDragForce = function () {
+        var VSquare = Math.pow(this.vx, 2) + Math.pow(this.vy, 2);
+        this.setForce(-VSquare * this.vx * Game.dragCoefficient, -VSquare * this.vy * Game.dragCoefficient, "drag");
+    };
+    //让球受到随机力
+    Ball.prototype.setRandomForce = function () {
+        if (Math.random() > 0.2) {
+            var Fx = (Math.random() - 0.5) * Game.randomForce / 2;
+            this.setForce(Fx, 0, "random");
+        }
+        else {
+            var Fy = (Math.random() - 0.5) * Game.randomForce / 2 + Game.randomForce;
+            this.setForce(0, Fy / 3, "random");
+        }
+        var forceTime = Math.random() * 3000 + 1000; //持续时间也是随机的
+        Laya.timer.once(forceTime, this, this.removeForce, ["random"], false);
     };
     return Ball;
 }());

@@ -12,6 +12,10 @@ class Zodiac extends Barrier<Laya.Clip>{
         this.init();
     }
 
+    public get isTouched(){//判断星座是否被触碰
+        return this._isTouched;
+    }
+
     //绘制item
     public drawItem():void{
         if(!this._isTouched){
@@ -21,8 +25,8 @@ class Zodiac extends Barrier<Laya.Clip>{
             this.item.skin = Game.zodiacYellowImage;
             this.item.alpha = 0.7
         }
-        this.item.scaleX = this._width/80;
-        this.item.scaleY = this._height/80;
+        this.item.scaleX = this._width/60;
+        this.item.scaleY = this._height/60;
     }
 
     //判断小球是否与星座相接触

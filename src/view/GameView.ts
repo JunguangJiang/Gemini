@@ -5,7 +5,7 @@ namespace Game{
     export const interval:number = 16;//刷新时间(单位：毫秒)
 
     export const gravity:number = 14;//重力加速度
-    export const liftCoefficient:number = debug?1600:700;//升力系数,升力=liftCoefficient/(球心距离)
+    export const liftCoefficient:number = debug?1600:690;//升力系数,升力=liftCoefficient/(球心距离)
     export const dragCoefficient:number = 0.001;//阻力系数，阻力=-dragCoefficient*速度^3
     export let attractionCoefficient:number=15000;//球之间的引力系数
     export let randomForce = 10;//随机力的幅度
@@ -91,7 +91,7 @@ class GameView extends ui.GameViewUI{
         //创建按钮事件
         this.createButtonEvents();
 
-        this.enterLevel(1);//进入等级1
+        this.enterLevel(10);//进入等级1
     }
 
     //直接进入某一级
@@ -100,6 +100,7 @@ class GameView extends ui.GameViewUI{
         this.levelView.text = "level "+ this._level;
 
         this._scoreIndicator.clearHeight();//计分器维护的高度归零
+        this._scoreIndicator.getReward(Math.min(10+5*this._level,60));//进入新的一级获得奖励
 
         this._bigBall.y = this._smallBall.y = Game.initialY;//让大球和小球都回到起点
         this._bigBall.stop(); 
@@ -113,16 +114,15 @@ class GameView extends ui.GameViewUI{
     enterNewLevel():void{
         this._level++;
         this.enterLevel(this._level);//进入下一级
-        this._scoreIndicator.getReward(10+10*this._level);//进入新的一级获得奖励
         this._musicManager.onPlaySound(Game.NewLevelSound);//播放过关音乐
     }
 
     //调整障碍物的数量
     adjustBarrier():void{
-        BarrierParameter.stonesNum = Math.min(12 + 4 * this._level,30);
-        BarrierParameter.blackHolesNum = Math.min(2 * this._level + 1,10);
-        BarrierParameter.fallingStoneRate = Math.min(0.1 * this._level, 0.8);
-        BarrierParameter.zodiacNum = 15;
+        BarrierParameter.stonesNum = Math.min(12 + 1 * this._level,30);
+        BarrierParameter.blackHolesNum = Math.min(1 * this._level-1,11);
+        BarrierParameter.fallingStoneRate = Math.min(0.05 * this._level, 0.8);
+        BarrierParameter.zodiacNum = Math.min(3+1*(this._level-1), 15);
     }
 
     //游戏开始
@@ -194,6 +194,10 @@ class GameView extends ui.GameViewUI{
         }
         //不断更新游戏分数,最小值为0
         Game.score=Math.max(this._scoreIndicator.data,0);
+
+        if(this._level > 1 &&  this.hasTouchedAllZodiacs()){//除了第一关，如果触碰到了所有的星座
+            this.enterNewLevel();//则进入下一关
+        }
     }
 
     //根据当前球的位置更新背景
@@ -225,9 +229,9 @@ class GameView extends ui.GameViewUI{
                         this._musicManager.onPlaySound(Game.StoneCollisionSound);
                         //根据陨石是否下落确定惩罚的分数
                         if(item.isFalling){
-                            this._scoreIndicator.getPenalty(4 + 1 * (this._level - 1));
+                            this._scoreIndicator.getPenalty(Math.min(4 + 1 * (this._level - 1),13));
                         }else{
-                            this._scoreIndicator.getPenalty(5 + 1 * (this._level -1));
+                            this._scoreIndicator.getPenalty(Math.min(5 + 1 * (this._level -1), 14));
                         }
                         //移除该陨石
                         this._barriersManagement.remove(item);
@@ -249,7 +253,7 @@ class GameView extends ui.GameViewUI{
                     if(item.detectCollisions(ball))
                     {
                         this._musicManager.onPlaySound(Game.RewardSound);
-                        this._scoreIndicator.getReward(6 + 1 * (this._level - 1));
+                        this._scoreIndicator.getReward(Math.min( Math.floor(3 + 0.5 * (this._level - 1) ) ,8));
                     }
                 }
                 break;
@@ -263,7 +267,7 @@ class GameView extends ui.GameViewUI{
             ){//碰到水平边缘
             ball.collide(-1,1);
             if(hasPenalty){
-                this._scoreIndicator.getPenalty(1*this._level+1);//碰壁惩罚
+                this._scoreIndicator.getPenalty(Math.min(Math.floor(0.5*this._level+1),5));//碰壁惩罚
             }
         }else if(
             (((ball.y+ball.radius) >= this.runningView.height) && ball.vy > 0)
@@ -272,7 +276,11 @@ class GameView extends ui.GameViewUI{
         }else if(
             (((ball.y-ball.radius) <= 0) && ball.vy < 0)
         ){//碰到最上方
-            this.enterNewLevel();//进入新的一个回合
+            if(this._level === 1)//等级1中
+                this.enterNewLevel();//进入新的一个回合
+            else{
+                ball.collide(1, -1);
+            }
         }
     }
 
@@ -291,8 +299,8 @@ class GameView extends ui.GameViewUI{
         this._smallBall.setForce(0, -lift, "lift");
 
         //处理由于球运动产生的阻力
-        this.setDragForce(this._smallBall);
-        this.setDragForce(this._bigBall);
+        this._smallBall.setDragForce();
+        this._bigBall.setDragForce();
 
         //处理两个小球之间的引力
         effectiveDistance = Math.min(effectiveDistance, minDistance*3);
@@ -311,34 +319,12 @@ class GameView extends ui.GameViewUI{
         //随机受力
         if(!Game.debug){//在非调试模式下随机受力
             if(this._loopCount % Game.smallBallRandomForcePeriod === 0){
-                this.setRandomForce(this._smallBall);
+                this._smallBall.setRandomForce();
             }
             if(this._loopCount % Game.bigBallRandomForcePeriod === 0){
-                this.setRandomForce(this._bigBall);
+                this._bigBall.setRandomForce();
             }   
         }
-    }
-
-    //让小球受到阻力
-    setDragForce(ball:Ball):void{
-        let VSquare:number = Math.pow(ball.vx, 2) + Math.pow(ball.vy,2);
-        ball.setForce(
-            -VSquare * ball.vx * Game.dragCoefficient, 
-            -VSquare * ball.vy * Game.dragCoefficient, 
-            "drag");
-    }
-
-    //让球受到随机力
-    setRandomForce(ball: Ball):void{
-        if(Math.random()>0.2){
-            let Fx:number = (Math.random()-0.5)*Game.randomForce/2;
-            ball.setForce(Fx, 0, "random");
-        }else{
-            let Fy:number = (Math.random()-0.5)*Game.randomForce/2+Game.randomForce;
-            ball.setForce(0,Fy/3, "random");
-        }
-        let forceTime:number = Math.random() * 3000 + 1000;//持续时间也是随机的
-        Laya.timer.once(forceTime, ball, ball.removeForce, ["random"]);
     }
 
     //当触摸开始时调用
@@ -435,4 +421,12 @@ class GameView extends ui.GameViewUI{
         }
     }
 
+    //判断是否点亮了所有的星座
+    public hasTouchedAllZodiacs():boolean{
+        let flag:boolean=true;
+        this._barriersManagement.zodiacs.forEach(element => {
+            flag = flag && element.isTouched;
+        });
+        return flag;
+    }
 }
