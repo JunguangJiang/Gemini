@@ -1,7 +1,8 @@
 namespace Game{
-    export const fallingStoneSpeed: number = 10/6;//陨石下落的平均速度
+    export const fallingStoneSpeed: number = 10.0/6.0;//陨石下落的平均速度
 }
 
+//岩石类
 class Stone extends Barrier<Laya.Image>{
     public isFalling:boolean;//是否正在坠落
     private _fallingStoneSpeed: number;//坠落速度
@@ -12,16 +13,17 @@ class Stone extends Barrier<Laya.Image>{
     constructor(backgroundImage:Laya.Image,width:number,height:number,name:string, isFalling:boolean=false)
     {
         super(backgroundImage,width,height,name);
-        this.item = new Laya.Image();
+        this.item = new Laya.Image();//重新绘制一个图片
         this.isFalling = isFalling;
         this._up = 0;
-        this._down = 2600; 
+        this._down = Game.initialY; 
         this.init();
     }
 
     public init():void{
         this._isTouched = false;
         this._hasInit = false;
+        this.isFalling = Math.random() < BarrierParameter.fallingStoneRate;
         this._fallingStoneSpeed = Math.random()%Game.fallingStoneSpeed/2+Game.fallingStoneSpeed;
     }
 
@@ -29,13 +31,13 @@ class Stone extends Barrier<Laya.Image>{
     public drawItem():void
     {
         if(!this.isFalling){
-            this.item.loadImage(Game.stoneImage);
-            this.item.scaleX=this._width/40;
-            this.item.scaleY=this._height/55;
+            this.item.skin = Game.stoneImage;
+            this.item.scaleX=this._width/65;
+            this.item.scaleY=this._height/85;
         }else{
-            this.item.loadImage(Game.fallingStoneImage);
-            this.item.scaleX=this._width/40;
-            this.item.scaleY=this._height/55;
+            this.item.skin = Game.fallingStoneImage;
+            this.item.scaleX=this._width/45;
+            this.item.scaleY=this._height/100;
         }
     }
 
@@ -55,7 +57,7 @@ class Stone extends Barrier<Laya.Image>{
                     this.item.y = this._up;
                 this._hasInit = true;
             }
-            this.item.y += this._fallingStoneSpeed;
+            this.item.y += this._fallingStoneSpeed;//不断坠落
             if(this.item.y >= this._down+this._height){//重复利用坠落的陨石
                 this.item.y = this._up-this._height;
             }

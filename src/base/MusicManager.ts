@@ -22,7 +22,7 @@ class MusicManager{
     onPlayMusic(level:number){
         console.log("播放音乐");
         this._level = Math.min(level, Game.BackgroundMusic.length);
-        Laya.SoundManager.playMusic(Game.BackgroundMusic[this._level-1], 1, new Laya.Handler(this, this.onComplete));    
+        Laya.SoundManager.playMusic(Game.BackgroundMusic[this._level-1], 1, new Laya.Handler(this, this.onComplete));   
     }
 
     //播放完背景音乐后调用

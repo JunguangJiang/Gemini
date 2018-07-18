@@ -10,36 +10,38 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Game;
 (function (Game) {
-    Game.fallingStoneSpeed = 10 / 6; //陨石下落的平均速度
+    Game.fallingStoneSpeed = 10.0 / 6.0; //陨石下落的平均速度
 })(Game || (Game = {}));
+//岩石类
 var Stone = /** @class */ (function (_super) {
     __extends(Stone, _super);
     function Stone(backgroundImage, width, height, name, isFalling) {
         if (isFalling === void 0) { isFalling = false; }
         var _this = _super.call(this, backgroundImage, width, height, name) || this;
-        _this.item = new Laya.Image();
+        _this.item = new Laya.Image(); //重新绘制一个图片
         _this.isFalling = isFalling;
         _this._up = 0;
-        _this._down = 2600;
+        _this._down = Game.initialY;
         _this.init();
         return _this;
     }
     Stone.prototype.init = function () {
         this._isTouched = false;
         this._hasInit = false;
+        this.isFalling = Math.random() < BarrierParameter.fallingStoneRate;
         this._fallingStoneSpeed = Math.random() % Game.fallingStoneSpeed / 2 + Game.fallingStoneSpeed;
     };
     //绘制item
     Stone.prototype.drawItem = function () {
         if (!this.isFalling) {
-            this.item.loadImage(Game.stoneImage);
-            this.item.scaleX = this._width / 40;
-            this.item.scaleY = this._height / 55;
+            this.item.skin = Game.stoneImage;
+            this.item.scaleX = this._width / 65;
+            this.item.scaleY = this._height / 85;
         }
         else {
-            this.item.loadImage(Game.fallingStoneImage);
-            this.item.scaleX = this._width / 40;
-            this.item.scaleY = this._height / 55;
+            this.item.skin = Game.fallingStoneImage;
+            this.item.scaleX = this._width / 45;
+            this.item.scaleY = this._height / 100;
         }
     };
     //判断球是否与陨石相撞
@@ -56,7 +58,7 @@ var Stone = /** @class */ (function (_super) {
                     this.item.y = this._up;
                 this._hasInit = true;
             }
-            this.item.y += this._fallingStoneSpeed;
+            this.item.y += this._fallingStoneSpeed; //不断坠落
             if (this.item.y >= this._down + this._height) { //重复利用坠落的陨石
                 this.item.y = this._up - this._height;
             }

@@ -20,9 +20,7 @@ var ScoreIndicator = /** @class */ (function () {
     };
     //根据高度的变化记录奖励
     ScoreIndicator.prototype.updateHeight = function (height) {
-        // console.log("height="+height);
         var newRewardNum = Math.floor(height / this._totalHeight * Game.heightDivision);
-        // console.log("newRewardNum="+newRewardNum);
         if (newRewardNum > this._rewardNum) {
             this._data += Game.rewardPerUnitHeight * (newRewardNum - this._rewardNum);
             this._rewardNum = newRewardNum;
@@ -71,12 +69,11 @@ var ScoreIndicator = /** @class */ (function () {
             text.text = "" + scoreChange;
         }
         text.scaleX = text.scaleY = 0.2;
-        Laya.Tween.to(text, { scaleX: 1, scaleY: 1 }, 1000, Laya.Ease.backOut);
-        Laya.timer.once(2000, this, this.closeScoreChange, [scoreChange], false);
+        Laya.Tween.to(text, { scaleX: 1, scaleY: 1 }, 1000, Laya.Ease.backOut); //分数变化以弹出的方式显示
+        Laya.timer.once(2000, this, this.closeScoreChange, [scoreChange], false); //经过2s后消失
     };
     //关闭分数变化的显示
     ScoreIndicator.prototype.closeScoreChange = function (scoreChange) {
-        console.log("关闭分数显示");
         if (scoreChange > 0) {
             var text = this._box.getChildByName("reward");
             text.text = "";

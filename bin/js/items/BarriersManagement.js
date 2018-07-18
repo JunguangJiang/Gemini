@@ -30,7 +30,6 @@ var BarriersManagement = /** @class */ (function () {
             case BarrierParameter.blackHoleStr: //获取黑洞对象
                 item = Laya.Pool.getItemByCreateFun(BarrierParameter.blackHoleStr, function () {
                     var blackhole = new BlackHole(this._backgroundImage, BarrierParameter.blackHoleWidth, BarrierParameter.blackHoleHeight, BarrierParameter.blackHoleStr);
-                    console.log(1);
                     return blackhole;
                 });
                 this.blackHoles.push(item);
@@ -38,7 +37,6 @@ var BarriersManagement = /** @class */ (function () {
             case BarrierParameter.stoneStr: //获取岩石对象
                 item = Laya.Pool.getItemByCreateFun(BarrierParameter.stoneStr, function () {
                     var stone = new Stone(this._backgroundImage, BarrierParameter.stoneWidth, BarrierParameter.stoneHeight, BarrierParameter.stoneStr, Math.random() < BarrierParameter.fallingStoneRate);
-                    console.log(2);
                     return stone;
                 });
                 this.stones.push(item);
@@ -46,7 +44,6 @@ var BarriersManagement = /** @class */ (function () {
             case BarrierParameter.zodiacStr: //获取星座对象
                 item = Laya.Pool.getItemByCreateFun(BarrierParameter.zodiacStr, function () {
                     var zodiac = new Zodiac(this._backgroundImage, BarrierParameter.zodiacWidth, BarrierParameter.zodiacHeight, BarrierParameter.zodiacStr, zodiacNum);
-                    console.log(3);
                     return zodiac;
                 });
                 this.zodiacs.push(item);
@@ -55,11 +52,14 @@ var BarriersManagement = /** @class */ (function () {
                 item = null;
                 break;
         }
+        if (item) { //如果成功获取对象
+            item.init(); //则对其重新进行初始化
+        }
         return item;
     };
     //回收障碍物
     BarriersManagement.prototype.remove = function (barrier) {
-        this._backgroundImage.removeChild(barrier.item); //从画布上移除应写在此处比较合适
+        this._backgroundImage.removeChild(barrier.item); //从画布上移除
         Laya.Pool.recover(barrier.name, barrier);
         switch (barrier.name) {
             case BarrierParameter.blackHoleStr: //回收黑洞对象
@@ -78,15 +78,12 @@ var BarriersManagement = /** @class */ (function () {
     //回收背景上所有障碍物
     BarriersManagement.prototype.removeFromBackground = function (backgroundImage) {
         while (this.blackHoles.length > 0) {
-            console.log(this.blackHoles[0]);
             this.remove(this.blackHoles[0]);
         }
         while (this.stones.length > 0) {
-            console.log(this.stones[0]);
             this.remove(this.stones[0]);
         }
         while (this.zodiacs.length > 0) {
-            console.log(this.zodiacs[0]);
             this.remove(this.zodiacs[0]);
         }
     };
@@ -98,21 +95,18 @@ var BarriersManagement = /** @class */ (function () {
         for (var i = 0; i < BarrierParameter.blackHolesNum; i++) {
             var blackhole = this.produce(BarrierParameter.blackHoleStr);
             blackhole.randomGenerate(this._backgroundImage);
-            blackhole.init();
             blackhole.drawItem();
         }
         //更新岩石
         for (var i = 0; i < BarrierParameter.stonesNum; i++) {
             var stone = this.produce(BarrierParameter.stoneStr);
             stone.randomGenerate(this._backgroundImage);
-            stone.init();
             stone.drawItem();
         }
         //更新星座
         for (var i = 0; i < BarrierParameter.zodiacNum; i++) {
             var zodiac = this.produce(BarrierParameter.zodiacStr, i % 12);
             zodiac.randomGenerate(this._backgroundImage);
-            zodiac.init();
             zodiac.drawItem();
         }
     };

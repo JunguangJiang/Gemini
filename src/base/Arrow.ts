@@ -17,8 +17,6 @@ class Arrow{
         this._ballType = ballType;
 
         for(let i:number=0; i<2; i++){
-            // this._arrows[i].visible = true;
-            // this._arrows[i].alpha=0.3;
             this._arrows[i].on(Laya.Event.MOUSE_DOWN, this, this.onMouseDown, [i]);
             this._arrows[i].on(Laya.Event.MOUSE_UP, this, this.onMouseUp, [i]);
         }
@@ -39,6 +37,4 @@ class Arrow{
             ballType: this._ballType
         });
     }
-
-    //经过一定时间后可以将箭头隐藏
 }

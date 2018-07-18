@@ -4,11 +4,9 @@ var Barrier = /** @class */ (function () {
         this._width = width;
         this._height = height;
         this._name = name;
-        this._isTouched = false;
-        this._bounds = null;
     }
     Object.defineProperty(Barrier.prototype, "name", {
-        //或取名字
+        //取名字
         get: function () { return this._name; },
         enumerable: true,
         configurable: true
@@ -53,7 +51,7 @@ var Barrier = /** @class */ (function () {
         itemRec = itemRec.setTo(itemRec.x + itemRec.width * (1 - xScale) / 2, itemRec.y + itemRec.height * (1 - yScale) / 2, itemRec.width * xScale, itemRec.height * yScale);
         return itemRec;
     };
-    //进入对象池之前的重新初始化
+    //重新初始化，用于回收利用
     Barrier.prototype.init = function () {
         this._isTouched = false;
         this._bounds = null;
