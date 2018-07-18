@@ -1,7 +1,7 @@
 var Game;
 (function (Game) {
     Game.rewardPerUnitHeight = 1; //第一关中的单位奖励
-    Game.heightDivision = 100; //第一关对总高度的一个划分
+    Game.heightDivision = 20; //第一关对总高度的一个划分
 })(Game || (Game = {}));
 //双子游戏的计分器
 var ScoreIndicator = /** @class */ (function () {

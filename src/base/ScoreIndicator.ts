@@ -1,6 +1,6 @@
 namespace Game{
     export const rewardPerUnitHeight:number = 1;//第一关中的单位奖励
-    export const heightDivision:number = 100;//第一关对总高度的一个划分
+    export const heightDivision:number = 20;//第一关对总高度的一个划分
 }
 
 //双子游戏的计分器

@@ -1,5 +1,5 @@
 namespace Game{
-    export const fallingStoneSpeed: number = 10.0/6.0;//陨石下落的平均速度
+    export const fallingStoneSpeed: number = 2;//陨石下落的平均速度
 }
 
 //岩石类
@@ -32,11 +32,11 @@ class Stone extends Barrier<Laya.Image>{
     {
         if(!this.isFalling){
             this.item.skin = Game.stoneImage;
-            this.item.scaleX=this._width/65;
+            this.item.scaleX=this._width/40;
             this.item.scaleY=this._height/85;
         }else{
             this.item.skin = Game.fallingStoneImage;
-            this.item.scaleX=this._width/45;
+            this.item.scaleX=this._width/30;
             this.item.scaleY=this._height/100;
         }
     }

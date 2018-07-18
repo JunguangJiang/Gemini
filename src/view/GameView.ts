@@ -5,7 +5,7 @@ namespace Game{
     export const interval:number = 16;//刷新时间(单位：毫秒)
 
     export const gravity:number = 14;//重力加速度
-    export const liftCoefficient:number = debug?1600:690;//升力系数,升力=liftCoefficient/(球心距离)
+    export const liftCoefficient:number = debug?1600:700;//升力系数,升力=liftCoefficient/(球心距离)
     export const dragCoefficient:number = 0.001;//阻力系数，阻力=-dragCoefficient*速度^3
     export let attractionCoefficient:number=15000;//球之间的引力系数
     export let randomForce = 10;//随机力的幅度
@@ -91,7 +91,7 @@ class GameView extends ui.GameViewUI{
         //创建按钮事件
         this.createButtonEvents();
 
-        this.enterLevel(10);//进入等级1
+        this.enterLevel(1);//进入等级1
     }
 
     //直接进入某一级
@@ -100,7 +100,7 @@ class GameView extends ui.GameViewUI{
         this.levelView.text = "level "+ this._level;
 
         this._scoreIndicator.clearHeight();//计分器维护的高度归零
-        this._scoreIndicator.getReward(Math.min(10+5*this._level,60));//进入新的一级获得奖励
+        this._scoreIndicator.getReward(Math.min(5+3*(this._level-1),30));//进入新的一级获得奖励
 
         this._bigBall.y = this._smallBall.y = Game.initialY;//让大球和小球都回到起点
         this._bigBall.stop(); 
@@ -119,10 +119,10 @@ class GameView extends ui.GameViewUI{
 
     //调整障碍物的数量
     adjustBarrier():void{
-        BarrierParameter.stonesNum = Math.min(12 + 1 * this._level,30);
-        BarrierParameter.blackHolesNum = Math.min(1 * this._level-1,11);
-        BarrierParameter.fallingStoneRate = Math.min(0.05 * this._level, 0.8);
-        BarrierParameter.zodiacNum = Math.min(3+1*(this._level-1), 15);
+        BarrierParameter.stonesNum = Math.min(22 + 1 * this._level,40);
+        BarrierParameter.blackHolesNum = Math.min(1 * this._level+2,13);
+        BarrierParameter.fallingStoneRate = Math.min(0.05 * this._level+0.2, 0.9);
+        BarrierParameter.zodiacNum = Math.min(3+1*(this._level-1), 20);
     }
 
     //游戏开始
@@ -253,7 +253,7 @@ class GameView extends ui.GameViewUI{
                     if(item.detectCollisions(ball))
                     {
                         this._musicManager.onPlaySound(Game.RewardSound);
-                        this._scoreIndicator.getReward(Math.min( Math.floor(3 + 0.5 * (this._level - 1) ) ,8));
+                        this._scoreIndicator.getReward(Math.min( Math.floor(3 + 0.2 * (this._level - 1) ) ,5));
                     }
                 }
                 break;

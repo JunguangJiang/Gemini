@@ -10,7 +10,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Game;
 (function (Game) {
-    Game.fallingStoneSpeed = 10.0 / 6.0; //陨石下落的平均速度
+    Game.fallingStoneSpeed = 2; //陨石下落的平均速度
 })(Game || (Game = {}));
 //岩石类
 var Stone = /** @class */ (function (_super) {
@@ -35,12 +35,12 @@ var Stone = /** @class */ (function (_super) {
     Stone.prototype.drawItem = function () {
         if (!this.isFalling) {
             this.item.skin = Game.stoneImage;
-            this.item.scaleX = this._width / 65;
+            this.item.scaleX = this._width / 40;
             this.item.scaleY = this._height / 85;
         }
         else {
             this.item.skin = Game.fallingStoneImage;
-            this.item.scaleX = this._width / 45;
+            this.item.scaleX = this._width / 30;
             this.item.scaleY = this._height / 100;
         }
     };
