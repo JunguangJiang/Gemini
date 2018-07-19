@@ -7,10 +7,10 @@
 		"minified": true,
 		"newFeature": true
 	},
-	"compileType": "game",
+	"compileType": "miniprogram",
 	"libVersion": "game",
-	"appid": "touristappid",
-	"projectname": "%E5%8F%8C%E5%AD%905",
+	"appid": "wx88080c982e4d3606",
+	"projectname": "%E5%8F%8C%E5%AD%90%E5%B0%8F%E6%B8%B8%E6%88%8F",
 	"condition": {
 		"search": {
 			"current": -1,
@@ -28,6 +28,5 @@
 			"current": -1,
 			"list": []
 		}
-	},
-	"isGameTourist": true
+	}
 }

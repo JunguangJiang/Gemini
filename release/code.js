@@ -40902,6 +40902,23 @@ var Barrier = /** @class */ (function () {
     return Barrier;
 }());
 //# sourceMappingURL=Barrier.js.map
+//游戏提示栏
+var Tips = /** @class */ (function () {
+    function Tips(text) {
+        this.text = text;
+    }
+    //设置文本内容
+    Tips.prototype.setText = function (tips) {
+        this.text.text = tips;
+        Laya.timer.once(5000, this, this.unsetText, [], false);
+    };
+    //清楚文本内容
+    Tips.prototype.unsetText = function () {
+        this.text.text = "";
+    };
+    return Tips;
+}());
+//# sourceMappingURL=Tips.js.map
 //计时器类
 var Timer = /** @class */ (function () {
     function Timer() {
@@ -41426,7 +41443,7 @@ var ui;
             _super.prototype.createChildren.call(this);
             this.createView(ui.EndViewUI.uiView);
         };
-        EndViewUI.uiView = { "type": "View", "props": { "y": 0, "x": 0, "width": 800, "height": 600 }, "child": [{ "type": "Image", "props": { "y": 0, "x": 0, "width": 800, "var": "backgroundView", "skin": "ui/background/EndBackGround.jpg", "mouseThrough": true, "height": 600, "disabled": false }, "child": [{ "type": "Image", "props": { "y": 430, "x": 50, "width": 100, "visible": true, "var": "rankButton", "skin": "ui/button/SelectButton.png", "mouseEnabled": true, "hitTestPrior": true, "height": 100, "disabled": false }, "child": [{ "type": "Text", "props": { "y": 26, "x": 24, "width": 50, "text": "排", "overflow": "hidden", "height": 50, "fontSize": 40, "font": "Microsoft YaHei", "color": "#ffffff", "bold": true, "align": "center" } }] }, { "type": "Image", "props": { "y": 300, "x": 50, "width": 100, "visible": true, "var": "startButton", "skin": "ui/button/SelectButton.png", "mouseEnabled": true, "hitTestPrior": true, "height": 100, "disabled": false, "alpha": 1 }, "child": [{ "type": "Text", "props": { "y": 23, "x": 24, "width": 50, "text": "始", "strokeColor": "#000000", "overflow": "hidden", "height": 50, "fontSize": 40, "font": "Microsoft YaHei", "color": "#ffffff", "bold": true, "align": "center" } }] }, { "type": "Box", "props": { "y": 150, "x": 250, "width": 300, "visible": false, "var": "scoreView", "height": 60 }, "child": [{ "type": "Clip", "props": { "y": 16, "x": 246, "width": 30, "skin": "ui/else/clip_number.png", "name": "item3", "height": 40, "clipX": 10 } }, { "type": "Clip", "props": { "y": 16, "x": 202, "width": 30, "skin": "ui/else/clip_number.png", "name": "item2", "height": 40, "clipX": 10 } }, { "type": "Clip", "props": { "y": 16, "x": 157, "width": 30, "skin": "ui/else/clip_number.png", "name": "item1", "index": 0, "height": 40, "clipX": 10 } }, { "type": "Text", "props": { "y": 15, "x": 0, "width": 150, "valign": "middle", "text": "Score:", "height": 40, "fontSize": 40, "font": "SimSun", "color": "#ffff00", "bold": true, "alpha": 0.7, "align": "left" } }] }] }] };
+        EndViewUI.uiView = { "type": "View", "props": { "y": 0, "x": 0, "width": 800, "height": 600 }, "child": [{ "type": "Image", "props": { "y": 0, "x": 0, "width": 800, "var": "backgroundView", "skin": "ui/background/EndBackGround.jpg", "mouseThrough": true, "height": 600, "disabled": false }, "child": [{ "type": "Image", "props": { "y": 376, "x": 66, "width": 100, "visible": true, "var": "startButton", "skin": "ui/button/SelectButton.png", "mouseEnabled": true, "hitTestPrior": true, "height": 100, "disabled": false, "alpha": 1 }, "child": [{ "type": "Text", "props": { "y": 23, "x": 24, "width": 50, "text": "始", "strokeColor": "#000000", "overflow": "hidden", "height": 50, "fontSize": 40, "font": "Microsoft YaHei", "color": "#ffffff", "bold": true, "align": "center" } }] }, { "type": "Box", "props": { "y": 190, "x": 250, "width": 300, "visible": false, "var": "scoreView", "height": 60 }, "child": [{ "type": "Clip", "props": { "y": 16, "x": 246, "width": 30, "skin": "ui/else/clip_number.png", "name": "item3", "height": 40, "clipX": 10 } }, { "type": "Clip", "props": { "y": 16, "x": 202, "width": 30, "skin": "ui/else/clip_number.png", "name": "item2", "height": 40, "clipX": 10 } }, { "type": "Clip", "props": { "y": 16, "x": 157, "width": 30, "skin": "ui/else/clip_number.png", "name": "item1", "index": 0, "height": 40, "clipX": 10 } }, { "type": "Text", "props": { "y": 15, "x": 0, "width": 150, "valign": "middle", "text": "Score:", "height": 40, "fontSize": 40, "font": "SimSun", "color": "#ffff00", "bold": true, "alpha": 0.7, "align": "left" } }] }, { "type": "Box", "props": { "y": 130, "x": 250, "width": 300, "visible": false, "var": "levelView", "height": 60 }, "child": [{ "type": "Clip", "props": { "y": 16, "x": 246, "width": 30, "skin": "ui/else/clip_number.png", "name": "item3", "height": 40, "clipX": 10 } }, { "type": "Clip", "props": { "y": 16, "x": 202, "width": 30, "skin": "ui/else/clip_number.png", "name": "item2", "height": 40, "clipX": 10 } }, { "type": "Clip", "props": { "y": 16, "x": 157, "width": 30, "skin": "ui/else/clip_number.png", "name": "item1", "index": 0, "height": 40, "clipX": 10 } }, { "type": "Text", "props": { "y": 15, "x": 0, "width": 150, "valign": "middle", "text": "Level:", "height": 40, "fontSize": 40, "font": "SimSun", "color": "#ffff00", "bold": true, "alpha": 0.7, "align": "left" } }] }] }] };
         return EndViewUI;
     }(View));
     ui.EndViewUI = EndViewUI;
@@ -41442,10 +41459,25 @@ var ui;
             _super.prototype.createChildren.call(this);
             this.createView(ui.GameViewUI.uiView);
         };
-        GameViewUI.uiView = { "type": "View", "props": { "y": 0, "x": 0, "width": 800, "height": 600 }, "child": [{ "type": "Box", "props": { "y": -2017, "x": 0, "width": 800, "visible": true, "var": "runningView", "height": 2617 }, "child": [{ "type": "Image", "props": { "y": 0, "x": 0, "width": 800, "var": "backgroundView", "skin": "ui/background/BackGround .jpg", "height": 2617 } }, { "type": "Animation", "props": { "y": 2582, "x": 145, "width": 30, "var": "smallBallView", "height": 30 } }, { "type": "Animation", "props": { "y": 2568, "x": 369, "width": 50, "var": "bigBallView", "height": 50 } }] }, { "type": "Box", "props": { "width": 666, "visible": true, "var": "arrowView", "scaleX": 1, "pivotY": 53, "pivotX": 324, "height": 113, "centerY": 193, "centerX": 5 }, "child": [{ "type": "Image", "props": { "x": 574, "width": 100, "visible": true, "skin": "ui/else/right.png", "pivotY": 0, "pivotX": 0, "name": "rightShow", "height": 100, "alpha": 0.3 } }, { "type": "Image", "props": { "width": 100, "visible": true, "skin": "ui/else/left.png", "name": "leftShow", "height": 100, "alpha": 0.3 } }, { "type": "Image", "props": { "y": -180, "x": 480, "width": 240, "visible": true, "skin": "ui/else/right.png", "name": "right", "height": 330, "alpha": 0 } }, { "type": "Image", "props": { "y": -180, "x": -63, "width": 240, "visible": true, "skin": "ui/else/left.png", "name": "left", "height": 330, "alpha": 0 } }] }, { "type": "Box", "props": { "y": 50, "x": 600, "width": 200, "visible": true, "var": "scoreView", "height": 60 }, "child": [{ "type": "Clip", "props": { "y": 7, "x": 126, "width": 30, "skin": "ui/else/clip_number.png", "name": "item3", "height": 40, "clipX": 10 } }, { "type": "Clip", "props": { "y": 7, "x": 82, "width": 30, "skin": "ui/else/clip_number.png", "name": "item2", "height": 40, "clipX": 10 } }, { "type": "Clip", "props": { "y": 7, "x": 37, "width": 30, "skin": "ui/else/clip_number.png", "name": "item1", "index": 0, "height": 40, "clipX": 10 } }, { "type": "Text", "props": { "y": -23, "x": 60, "width": 92, "var": "levelView", "text": "Level 1", "strokeColor": "#16d225", "italic": true, "height": 25, "fontSize": 25, "font": "Impact", "color": "#ff2f08", "bold": false, "alpha": 0.5, "align": "center" } }, { "type": "Image", "props": { "y": 0, "x": -30, "width": 50, "var": "settingButton", "skin": "ui/button/SettingButton.png", "height": 50, "alpha": 0.5 }, "child": [{ "type": "Image", "props": { "y": 140, "x": 0, "width": 50, "visible": false, "var": "pauseButton", "skin": "ui/button/PauseButton.png", "height": 50, "disabled": true } }, { "type": "Image", "props": { "y": 70, "x": 0, "width": 50, "visible": false, "var": "soundButton", "skin": "ui/button/NoSoundButton.png", "height": 50, "disabled": true } }, { "type": "Image", "props": { "y": 210, "x": 0, "width": 50, "visible": false, "var": "endButton", "skin": "ui/button/EndButton.png", "height": 50, "disabled": true } }] }, { "type": "Text", "props": { "y": 48, "x": 35, "strokeColor": "#f4720b", "stroke": 2, "name": "penalty", "fontSize": 50, "font": "ChalkBoard", "color": "#f82e08" } }, { "type": "Text", "props": { "y": 46, "x": 97, "strokeColor": "#08bc83", "stroke": 2, "name": "reward", "fontSize": 50, "font": "ChalkBoard", "color": "#08f824" } }] }, { "type": "Box", "props": { "y": 506, "x": 605, "width": 238, "visible": true, "var": "smallArrowView", "scaleX": 1, "pivotY": 53, "pivotX": 324, "height": 98, "centerY": 202, "centerX": 14 }, "child": [{ "type": "Image", "props": { "y": 0, "x": 181, "width": 70, "visible": true, "skin": "ui/else/right.png", "pivotY": 0, "pivotX": 0, "name": "rightShow", "height": 70, "alpha": 0.3 } }, { "type": "Image", "props": { "y": 0, "x": -20, "width": 70, "visible": true, "skin": "ui/else/left.png", "name": "leftShow", "height": 70, "alpha": 0.3 } }, { "type": "Image", "props": { "y": -192, "x": 135, "width": 180, "visible": true, "skin": "ui/else/right.png", "name": "right", "height": 330, "alpha": 0 } }, { "type": "Image", "props": { "y": -192, "x": -74, "width": 192, "visible": true, "skin": "ui/else/left.png", "name": "left", "height": 330, "alpha": 0 } }] }] };
+        GameViewUI.uiView = { "type": "View", "props": { "y": 0, "x": 0, "width": 800, "height": 600 }, "child": [{ "type": "Box", "props": { "y": -2017, "x": 0, "width": 800, "visible": true, "var": "runningView", "height": 2617 }, "child": [{ "type": "Image", "props": { "y": 0, "x": 0, "width": 800, "var": "backgroundView", "skin": "ui/background/BackGround .jpg", "height": 2617 } }, { "type": "Animation", "props": { "y": 2582, "x": 145, "width": 30, "var": "smallBallView", "height": 30 } }, { "type": "Animation", "props": { "y": 2568, "x": 369, "width": 50, "var": "bigBallView", "height": 50 } }] }, { "type": "Box", "props": { "width": 666, "visible": true, "var": "arrowView", "scaleX": 1, "pivotY": 53, "pivotX": 324, "height": 113, "centerY": 193, "centerX": 5 }, "child": [{ "type": "Image", "props": { "x": 574, "width": 100, "visible": true, "skin": "ui/else/right.png", "pivotY": 0, "pivotX": 0, "name": "rightShow", "height": 100, "alpha": 0.5 } }, { "type": "Image", "props": { "width": 100, "visible": true, "skin": "ui/else/left.png", "name": "leftShow", "height": 100, "alpha": 0.5 } }, { "type": "Image", "props": { "y": -180, "x": 480, "width": 240, "visible": true, "skin": "ui/else/right.png", "name": "right", "height": 330, "alpha": 0 } }, { "type": "Image", "props": { "y": -180, "x": -63, "width": 240, "visible": true, "skin": "ui/else/left.png", "name": "left", "height": 330, "alpha": 0 } }] }, { "type": "Box", "props": { "y": 50, "x": 600, "width": 200, "visible": true, "var": "scoreView", "height": 60 }, "child": [{ "type": "Clip", "props": { "y": 7, "x": 126, "width": 30, "skin": "ui/else/clip_number.png", "name": "item3", "height": 40, "clipX": 10 } }, { "type": "Clip", "props": { "y": 7, "x": 82, "width": 30, "skin": "ui/else/clip_number.png", "name": "item2", "height": 40, "clipX": 10 } }, { "type": "Clip", "props": { "y": 7, "x": 37, "width": 30, "skin": "ui/else/clip_number.png", "name": "item1", "index": 0, "height": 40, "clipX": 10 } }, { "type": "Text", "props": { "y": -23, "x": 60, "width": 92, "var": "levelView", "text": "Level 1", "strokeColor": "#16d225", "italic": true, "height": 25, "fontSize": 25, "font": "Impact", "color": "#ff2f08", "bold": false, "alpha": 0.5, "align": "center" } }, { "type": "Image", "props": { "y": 0, "x": -30, "width": 50, "var": "settingButton", "skin": "ui/button/SettingButton.png", "height": 50, "alpha": 0.5 }, "child": [{ "type": "Image", "props": { "y": 140, "x": 0, "width": 50, "visible": false, "var": "pauseButton", "skin": "ui/button/PauseButton.png", "height": 50, "disabled": true, "alpha": 0.7 } }, { "type": "Image", "props": { "y": 70, "x": 0, "width": 50, "visible": false, "var": "soundButton", "skin": "ui/button/NoSoundButton.png", "height": 50, "disabled": true, "alpha": 0.7 } }, { "type": "Image", "props": { "y": 210, "x": 0, "width": 50, "visible": false, "var": "endButton", "skin": "ui/button/EndButton.png", "height": 50, "disabled": true, "alpha": 0.7 } }] }, { "type": "Text", "props": { "y": 48, "x": 35, "strokeColor": "#f4720b", "stroke": 2, "name": "penalty", "fontSize": 50, "font": "ChalkBoard", "color": "#f82e08" } }, { "type": "Text", "props": { "y": 46, "x": 97, "strokeColor": "#08bc83", "stroke": 2, "name": "reward", "fontSize": 50, "font": "ChalkBoard", "color": "#08f824" } }] }, { "type": "Box", "props": { "y": 506, "x": 605, "width": 238, "visible": true, "var": "smallArrowView", "scaleX": 1, "pivotY": 53, "pivotX": 324, "height": 98, "centerY": 202, "centerX": 14 }, "child": [{ "type": "Image", "props": { "y": 0, "x": 181, "width": 70, "visible": true, "skin": "ui/else/right.png", "pivotY": 0, "pivotX": 0, "name": "rightShow", "height": 70, "alpha": 0.5 } }, { "type": "Image", "props": { "y": 0, "x": -20, "width": 70, "visible": true, "skin": "ui/else/left.png", "name": "leftShow", "height": 70, "alpha": 0.5 } }, { "type": "Image", "props": { "y": -35, "x": 135, "width": 180, "visible": true, "skin": "ui/else/right.png", "name": "right", "height": 180, "alpha": 0 } }, { "type": "Image", "props": { "y": -35, "x": -65, "width": 180, "visible": true, "skin": "ui/else/left.png", "name": "left", "height": 180, "alpha": 0 } }] }, { "type": "Text", "props": { "y": 25, "x": 48, "var": "tipsView", "text": "目标：升到最高处~", "strokeColor": "#f86f04", "stroke": 2, "italic": false, "fontSize": 30, "font": "Microsoft YaHei", "color": "#ffffff", "alpha": 0.7 } }] };
         return GameViewUI;
     }(View));
     ui.GameViewUI = GameViewUI;
+})(ui || (ui = {}));
+(function (ui) {
+    var HelpViewUI = /** @class */ (function (_super) {
+        __extends(HelpViewUI, _super);
+        function HelpViewUI() {
+            return _super.call(this) || this;
+        }
+        HelpViewUI.prototype.createChildren = function () {
+            _super.prototype.createChildren.call(this);
+            this.createView(ui.HelpViewUI.uiView);
+        };
+        HelpViewUI.uiView = { "type": "Dialog", "props": { "width": 800, "height": 600 }, "child": [{ "type": "Image", "props": { "y": 125, "x": 742, "var": "returnButton", "skin": "ui/button/EndButton.png", "hitTestPrior": true, "alpha": 0.5 } }, { "type": "Image", "props": { "y": 100, "x": 50, "width": 700, "skin": "ui/background/HelpBackGround.jpg", "height": 450 }, "child": [{ "type": "Image", "props": { "y": 30, "x": 40, "var": "contentImage", "skin": "ui/background/ContentImage.png", "scaleY": 1, "scaleX": 1, "mouseThrough": true, "hitTestPrior": false }, "child": [{ "type": "Sprite", "props": { "y": 0, "x": 0, "width": 620, "var": "contentImageMask", "renderType": "mask", "mouseEnabled": false, "height": 376 }, "child": [{ "type": "Rect", "props": { "y": 0, "x": 0, "width": 620, "lineWidth": 1, "height": 379, "fillColor": "#ff0000" } }] }] }] }] };
+        return HelpViewUI;
+    }(Dialog));
+    ui.HelpViewUI = HelpViewUI;
 })(ui || (ui = {}));
 (function (ui) {
     var StartViewUI = /** @class */ (function (_super) {
@@ -41458,7 +41490,7 @@ var ui;
             _super.prototype.createChildren.call(this);
             this.createView(ui.StartViewUI.uiView);
         };
-        StartViewUI.uiView = { "type": "View", "props": { "y": 0, "x": 0, "width": 800, "height": 600 }, "child": [{ "type": "Image", "props": { "y": 0, "x": 0, "width": 800, "var": "backgroundView", "skin": "ui/background/StartBackGround.png", "height": 600 }, "child": [{ "type": "Image", "props": { "y": 150, "x": 150, "width": 100, "var": "onePlayerButton", "skin": "ui/button/SelectButton.png", "height": 100, "alpha": 1 }, "child": [{ "type": "Text", "props": { "y": 23, "x": 24, "width": 50, "text": "单", "strokeColor": "#000000", "overflow": "hidden", "height": 50, "fontSize": 40, "font": "Microsoft YaHei", "color": "#ffffff", "bold": true, "align": "center" } }] }, { "type": "Image", "props": { "y": 200, "x": 500, "width": 100, "var": "twoPlayersButton", "skin": "ui/button/SelectButton.png", "height": 100 }, "child": [{ "type": "Text", "props": { "y": 26, "x": 24, "width": 50, "text": "双", "overflow": "hidden", "height": 50, "fontSize": 40, "font": "Microsoft YaHei", "color": "#ffffff", "bold": true, "align": "center" } }] }, { "type": "Image", "props": { "y": 450, "x": 350, "width": 100, "var": "rankButton", "skin": "ui/button/SelectButton.png", "height": 100 }, "child": [{ "type": "Text", "props": { "y": 23, "x": 23, "width": 50, "text": "排", "overflow": "hidden", "height": 50, "fontSize": 40, "font": "Microsoft YaHei", "color": "#ffffff", "bold": true, "align": "center" } }] }] }] };
+        StartViewUI.uiView = { "type": "View", "props": { "y": 0, "x": 0, "width": 800, "height": 600 }, "child": [{ "type": "Image", "props": { "y": 0, "x": 0, "width": 800, "var": "backgroundView", "skin": "ui/background/StartBackGround.png", "height": 600 }, "child": [{ "type": "ComboBox", "props": { "y": 170, "x": 250, "width": 300, "visibleNum": 6, "visible": false, "var": "levelSelectedBox", "stateNum": 3, "skin": "ui/else/combobox.png", "selectedIndex": 0, "mouseEnabled": false, "labels": "容易,普通,困难,令人发狂,地狱", "labelSize": 40, "labelFont": "SimSun", "labelBold": true, "itemSize": 40, "height": 60, "alpha": 0.7 } }, { "type": "Sprite", "props": { "y": 0, "x": 0, "visible": true, "var": "buttonsManagement", "mouseEnabled": true }, "child": [{ "type": "Image", "props": { "y": 150, "x": 150, "width": 100, "var": "onePlayerButton", "skin": "ui/button/SelectButton.png", "height": 100, "alpha": 1 }, "child": [{ "type": "Text", "props": { "y": 23, "x": 24, "width": 50, "text": "单", "strokeColor": "#000000", "overflow": "hidden", "height": 50, "fontSize": 40, "font": "Microsoft YaHei", "color": "#ffffff", "bold": true, "align": "center" } }] }, { "type": "Image", "props": { "y": 200, "x": 500, "width": 100, "var": "twoPlayersButton", "skin": "ui/button/SelectButton.png", "height": 100 }, "child": [{ "type": "Text", "props": { "y": 26, "x": 24, "width": 50, "text": "双", "overflow": "hidden", "height": 50, "fontSize": 40, "font": "Microsoft YaHei", "color": "#ffffff", "bold": true, "align": "center" } }] }, { "type": "Image", "props": { "y": 450, "x": 350, "width": 100, "var": "helpButton", "skin": "ui/button/SelectButton.png", "height": 100 }, "child": [{ "type": "Text", "props": { "y": 23, "x": 23, "width": 50, "text": "帮", "overflow": "hidden", "height": 50, "fontSize": 40, "font": "Microsoft YaHei", "color": "#ffffff", "bold": true, "align": "center" } }] }] }] }] };
         return StartViewUI;
     }(View));
     ui.StartViewUI = StartViewUI;
@@ -41478,6 +41510,7 @@ var __extends = (this && this.__extends) || (function () {
 var Game;
 (function (Game) {
     Game.score = 0; //玩家得分
+    Game.level = 0; //进入等级
 })(Game || (Game = {}));
 //游戏的结束界面
 var EndView = /** @class */ (function (_super) {
@@ -41488,8 +41521,9 @@ var EndView = /** @class */ (function (_super) {
     }
     //结束界面还原初始化设置
     EndView.prototype.init = function () {
-        //避免下次到结束界面时显示分数
+        //避免下次到结束界面时显示分数、等级
         this.scoreView.visible = false;
+        this.levelView.visible = false;
         //去掉已有的结束字样
         while (this.removeChildByName("endText"))
             ;
@@ -41508,7 +41542,7 @@ var EndView = /** @class */ (function (_super) {
             letterText.y = -300;
             if (i === len - 1) //最后一个字母之后调用回调函数
              {
-                Laya.Tween.to(letterText, { y: endY }, 400, Laya.Ease.elasticOut, Laya.Handler.create(this, this.showScore), i * 400);
+                Laya.Tween.to(letterText, { y: endY }, 400, Laya.Ease.elasticOut, Laya.Handler.create(this, this.showAll), i * 400);
             }
             Laya.Tween.to(letterText, { y: endY }, 400, Laya.Ease.elasticOut, null, i * 400);
         }
@@ -41523,6 +41557,23 @@ var EndView = /** @class */ (function (_super) {
         this.backgroundView.addChild(letter);
         return letter;
     };
+    //显示所有结果
+    EndView.prototype.showAll = function () {
+        this.showLevel();
+        this.showScore();
+    };
+    //显示等级
+    EndView.prototype.showLevel = function () {
+        var data = {};
+        var temp = Game.level;
+        for (var i = 3; i >= 1; i--) {
+            data["item" + i] = { index: Math.floor(temp % 10) };
+            temp /= 10;
+        }
+        this.levelView.dataSource = data;
+        this.levelView.visible = true;
+    };
+    //显示分数
     EndView.prototype.showScore = function () {
         var data = {};
         var temp = Game.score;
@@ -41596,6 +41647,9 @@ var GameView = /** @class */ (function (_super) {
         this._scoreIndicator = new ScoreIndicator(this.scoreView, 3, this.runningView.height, 0);
         //等级显示
         this.levelView.visible = true;
+        //游戏提示
+        this._tips = new Tips(this.tipsView);
+        this._hasShownTips = false;
         //音乐播放器
         this._musicManager = new MusicManager();
         this._musicManager.onPlayMusic(1); //播放等级1的音乐
@@ -41607,6 +41661,13 @@ var GameView = /** @class */ (function (_super) {
     GameView.prototype.enterLevel = function (level) {
         this._level = level;
         this.levelView.text = "level " + this._level;
+        if (this._level === 1) {
+            this._tips.setText("目标：升到最高处~");
+        }
+        else if (!this._hasShownTips) {
+            this._tips.setText("目标：点亮所有的星座~");
+            this._hasShownTips = true;
+        }
         this._scoreIndicator.clearHeight(); //计分器维护的高度归零
         this._scoreIndicator.getReward(Math.min(5 + 3 * (this._level - 1), 30)); //进入新的一级获得奖励
         this._bigBall.y = this._smallBall.y = Game.initialY; //让大球和小球都回到起点
@@ -41690,6 +41751,8 @@ var GameView = /** @class */ (function (_super) {
         }
         //不断更新游戏分数,最小值为0
         Game.score = Math.max(this._scoreIndicator.data, 0);
+        //不断更新游戏等级,最小值为1
+        Game.level = Math.max(this._level, 1);
         if (this._level > 1 && this.hasTouchedAllZodiacs()) { //除了第一关，如果触碰到了所有的星座
             this.enterNewLevel(); //则进入下一关
         }
@@ -41906,13 +41969,101 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-//游戏的开始界面,暂时没什么功能，有功能可直接添加
+//游戏的帮助界面
+var HelpView = /** @class */ (function (_super) {
+    __extends(HelpView, _super);
+    //构造函数
+    function HelpView() {
+        var _this = _super.call(this) || this;
+        _this.prevY = 0;
+        _this.init();
+        return _this;
+    }
+    HelpView.prototype.init = function () {
+        this.contentImage.y = 30;
+        this.contentImageMask.y = 0;
+        //设置拖动查看事件
+        this.contentImage.on(Laya.Event.MOUSE_DOWN, this, this.startScrollText);
+    };
+    //开始拖动图像
+    HelpView.prototype.startScrollText = function (e) {
+        this.prevY = this.contentImage.mouseY;
+        this.on(Laya.Event.MOUSE_MOVE, this, this.scrollText);
+        this.on(Laya.Event.MOUSE_UP, this, this.finishScrollText);
+    };
+    //停止拖动图像
+    HelpView.prototype.finishScrollText = function (e) {
+        this.off(Laya.Event.MOUSE_MOVE, this, this.scrollText);
+        this.off(Laya.Event.MOUSE_UP, this, this.finishScrollText);
+    };
+    //拖动图像
+    HelpView.prototype.scrollText = function (e) {
+        var nowY = this.contentImage.mouseY;
+        this.contentImage.y += nowY - this.prevY;
+        this.contentImageMask.y += this.prevY - nowY;
+        this.prevY = nowY;
+    };
+    return HelpView;
+}(ui.HelpViewUI));
+//# sourceMappingURL=HelpView.js.map
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+//游戏的开始界面
 var StartView = /** @class */ (function (_super) {
     __extends(StartView, _super);
     //构造函数
     function StartView() {
-        return _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.init();
+        return _this;
     }
+    //初始化开始界面
+    StartView.prototype.init = function () {
+        this.buttonsManagement.visible = true;
+        this.buttonsManagement.mouseEnabled = true;
+        this.levelSelectedBox.visible = false;
+        this.levelSelectedBox.mouseEnabled = false;
+        this.levelSelectedBox.selectedIndex = -1;
+        this.createEvents();
+    };
+    StartView.prototype.createEvents = function () {
+        //开始界面单人的开始按钮
+        this.onePlayerButton.on(Laya.Event.MOUSE_MOVE, this, function () {
+            this.onePlayerButton.scale(1.1, 1.1);
+        });
+        this.onePlayerButton.on(Laya.Event.MOUSE_OUT, this, function () {
+            this.onePlayerButton.scale(1, 1);
+        });
+        this.onePlayerButton.on(Laya.Event.CLICK, this, function () {
+            this.levelSelectedBox.visible = true;
+            this.levelSelectedBox.mouseEnabled = true;
+            this.buttonsManagement.visible = false;
+            this.buttonsManagement.mouseEnabled = false;
+            Game.playerNum = 1;
+        });
+        //开始界面双人的开始按钮
+        this.twoPlayersButton.on(Laya.Event.MOUSE_MOVE, this, function () {
+            this.twoPlayersButton.scale(1.1, 1.1);
+        });
+        this.twoPlayersButton.on(Laya.Event.MOUSE_OUT, this, function () {
+            this.twoPlayersButton.scale(1, 1);
+        });
+        this.twoPlayersButton.on(Laya.Event.CLICK, this, function () {
+            this.levelSelectedBox.visible = true;
+            this.levelSelectedBox.mouseEnabled = true;
+            this.buttonsManagement.visible = false;
+            this.buttonsManagement.mouseEnabled = false;
+            Game.playerNum = 2;
+        });
+    };
     return StartView;
 }(ui.StartViewUI));
 //# sourceMappingURL=StartView.js.map
@@ -41924,6 +42075,8 @@ var Game;
     Game.startBackGroundImage = "ui/background/StartBackGround.png"; //开始背景图
     Game.backgroundImage = "ui/background/BackGround .jpg"; //游戏背景图
     Game.endBackGroundImage = "ui/background/EndBackGround.jpg"; //结束背景图
+    Game.helpBackGroundImage = "ui/background/HelpBackGround.jpg"; //帮助界面图
+    Game.contentImage = "ui/background/ContentImage.png"; //帮助界面内容图
     Game.zodiacLightImage = "ui/else/light.png";
     Game.zodiacYellowImage = "ui/else/yellow.png";
     Game.stoneImage = "ui/else/stone.png";
@@ -41946,6 +42099,8 @@ var GameMain = /** @class */ (function () {
             { url: Game.backgroundImage, type: Laya.Loader.IMAGE },
             { url: Game.startBackGroundImage, type: Laya.Loader.IMAGE },
             { url: Game.endBackGroundImage, type: Laya.Loader.IMAGE },
+            { url: Game.helpBackGroundImage, type: Laya.Loader.IMAGE },
+            { url: Game.contentImage, type: Laya.Loader.IMAGE },
             { url: "res/atlas/ui/button.atlas", type: Laya.Loader.ATLAS },
             { url: "res/atlas/ui/button.png", type: Laya.Loader.IMAGE },
             { url: "res/atlas/ui/blackhole.atlas", type: Laya.Loader.ATLAS },
@@ -41966,6 +42121,7 @@ var GameMain = /** @class */ (function () {
         GameMain.gameView = new GameView();
         GameMain.startView = new StartView();
         GameMain.endView = new EndView();
+        GameMain.helpView = new HelpView();
         GameMain.viewStack.addItem(GameMain.startView);
         GameMain.viewStack.addItem(GameMain.gameView);
         GameMain.viewStack.addItem(GameMain.endView);
@@ -41973,29 +42129,18 @@ var GameMain = /** @class */ (function () {
     };
     //创建各种响应事件
     GameMain.prototype.createEvents = function () {
-        //开始界面单人的开始按钮
-        GameMain.startView.onePlayerButton.on(Laya.Event.MOUSE_MOVE, this, function () {
-            GameMain.startView.onePlayerButton.scale(1.1, 1.1);
+        //开始界面游戏说明查看按钮
+        GameMain.startView.helpButton.on(Laya.Event.MOUSE_MOVE, this, function () {
+            GameMain.startView.helpButton.scale(1.1, 1.1);
         });
-        GameMain.startView.onePlayerButton.on(Laya.Event.MOUSE_OUT, this, function () {
-            GameMain.startView.onePlayerButton.scale(1, 1);
+        GameMain.startView.helpButton.on(Laya.Event.MOUSE_OUT, this, function () {
+            GameMain.startView.helpButton.scale(1, 1);
         });
-        GameMain.startView.onePlayerButton.on(Laya.Event.CLICK, this, this.toOnePlayerGameView);
-        //开始界面双人的开始按钮
-        GameMain.startView.twoPlayersButton.on(Laya.Event.MOUSE_MOVE, this, function () {
-            GameMain.startView.twoPlayersButton.scale(1.1, 1.1);
-        });
-        GameMain.startView.twoPlayersButton.on(Laya.Event.MOUSE_OUT, this, function () {
-            GameMain.startView.twoPlayersButton.scale(1, 1);
-        });
-        GameMain.startView.twoPlayersButton.on(Laya.Event.CLICK, this, this.toTwoPlayersGameView);
-        //开始界面排行榜查看按钮
-        GameMain.startView.rankButton.on(Laya.Event.MOUSE_MOVE, this, function () {
-            GameMain.startView.rankButton.scale(1.1, 1.1);
-        });
-        GameMain.startView.rankButton.on(Laya.Event.MOUSE_OUT, this, function () {
-            GameMain.startView.rankButton.scale(1, 1);
-        });
+        GameMain.startView.helpButton.on(Laya.Event.CLICK, this, this.toHelpView);
+        //开始界面关卡选择
+        GameMain.startView.levelSelectedBox.selectHandler = new Laya.Handler(this, this.selectLevel, [GameMain.startView.levelSelectedBox]);
+        //帮助界面中返回开始界面按钮
+        GameMain.helpView.returnButton.on(Laya.Event.CLICK, this, this.outHelpView);
         //游戏界面结束按钮
         GameMain.gameView.endButton.on(Laya.Event.CLICK, this, this.toEndView);
         //结束界面回到开始界面的按钮
@@ -42006,26 +42151,13 @@ var GameMain = /** @class */ (function () {
             GameMain.endView.startButton.scale(1, 1);
         });
         GameMain.endView.startButton.on(Laya.Event.CLICK, this, this.toStartView);
-        //结束界面排行榜查看按钮
-        GameMain.endView.rankButton.on(Laya.Event.MOUSE_MOVE, this, function () {
-            GameMain.endView.rankButton.scale(1.1, 1.1);
-        });
-        GameMain.endView.rankButton.on(Laya.Event.MOUSE_OUT, this, function () {
-            GameMain.endView.rankButton.scale(1, 1);
-        });
     };
-    //到单人游戏界面
-    GameMain.prototype.toOnePlayerGameView = function () {
-        GameMain.viewStack.selectedIndex = 1;
-        Game.playerNum = 1;
+    //到游戏界面
+    GameMain.prototype.selectLevel = function (cb) {
+        var level = cb.selectedIndex * cb.selectedIndex + 1;
         GameMain.gameView.init();
-        GameMain.gameView.gameStart(); //开始游戏
-    };
-    //到双人游戏界面
-    GameMain.prototype.toTwoPlayersGameView = function () {
+        GameMain.gameView.enterLevel(level);
         GameMain.viewStack.selectedIndex = 1;
-        Game.playerNum = 2;
-        GameMain.gameView.init();
         GameMain.gameView.gameStart(); //开始游戏
     };
     //到结束界面
@@ -42037,7 +42169,20 @@ var GameMain = /** @class */ (function () {
     };
     //到开始界面
     GameMain.prototype.toStartView = function () {
+        GameMain.startView.init();
         GameMain.viewStack.selectedIndex = 0;
+    };
+    //到帮助界面
+    GameMain.prototype.toHelpView = function () {
+        Laya.stage.addChild(GameMain.helpView);
+        GameMain.helpView.init();
+        GameMain.helpView.popup();
+    };
+    //离开帮助界面
+    GameMain.prototype.outHelpView = function () {
+        GameMain.helpView.close();
+        Laya.stage.removeChild(GameMain.helpView);
+        this.toStartView();
     };
     return GameMain;
 }());

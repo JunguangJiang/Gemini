@@ -85,7 +85,7 @@ var GameMain = /** @class */ (function () {
     };
     //到游戏界面
     GameMain.prototype.selectLevel = function (cb) {
-        var level = cb.selectedIndex + 1;
+        var level = cb.selectedIndex * cb.selectedIndex + 1;
         GameMain.gameView.init();
         GameMain.gameView.enterLevel(level);
         GameMain.viewStack.selectedIndex = 1;

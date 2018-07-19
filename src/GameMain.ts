@@ -112,7 +112,7 @@ class GameMain{
     //到游戏界面
     selectLevel(cb:Laya.ComboBox):void
     {
-        let level=cb.selectedIndex+1;
+        let level=cb.selectedIndex*cb.selectedIndex+1;
         GameMain.gameView.init();
         GameMain.gameView.enterLevel(level);
         GameMain.viewStack.selectedIndex=1;
