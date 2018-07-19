@@ -96,13 +96,6 @@ var GameMain = /** @class */ (function () {
             GameMain.endView.startButton.scale(1, 1);
         });
         GameMain.endView.startButton.on(Laya.Event.CLICK, this, this.toStartView);
-        //结束界面排行榜查看按钮
-        GameMain.endView.rankButton.on(Laya.Event.MOUSE_MOVE, this, function () {
-            GameMain.endView.rankButton.scale(1.1, 1.1);
-        });
-        GameMain.endView.rankButton.on(Laya.Event.MOUSE_OUT, this, function () {
-            GameMain.endView.rankButton.scale(1, 1);
-        });
     };
     //到单人游戏界面
     GameMain.prototype.toOnePlayerGameView = function () {

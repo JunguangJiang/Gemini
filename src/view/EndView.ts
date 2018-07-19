@@ -1,6 +1,7 @@
 //游戏的一些参数
 namespace Game{
     export let score: number = 0;//玩家得分
+    export let level: number = 0;//进入等级
 }
 
 //游戏的结束界面
@@ -14,8 +15,9 @@ class EndView extends ui.EndViewUI{
     //结束界面还原初始化设置
     public init():void
     {
-        //避免下次到结束界面时显示分数
+        //避免下次到结束界面时显示分数、等级
         this.scoreView.visible=false;
+        this.levelView.visible=false;
         //去掉已有的结束字样
         while(this.removeChildByName("endText"));
     }
@@ -36,7 +38,7 @@ class EndView extends ui.EndViewUI{
             letterText.y=-300;
             if(i===len-1)//最后一个字母之后调用回调函数
             {
-                Laya.Tween.to(letterText, { y: endY }, 400, Laya.Ease.elasticOut, Laya.Handler.create(this, this.showScore), i * 400);
+                Laya.Tween.to(letterText, { y: endY }, 400, Laya.Ease.elasticOut, Laya.Handler.create(this, this.showAll), i * 400);
             }
             Laya.Tween.to(letterText, { y: endY }, 400, Laya.Ease.elasticOut, null, i * 400);
         }
@@ -54,6 +56,27 @@ class EndView extends ui.EndViewUI{
         return letter;
     }
 
+    //显示所有结果
+    private showAll():void
+    {
+        this.showLevel();
+        this.showScore();
+    }
+
+     //显示等级
+    private showLevel():void
+    {
+        let data:any = {}
+        let temp:number = Game.level;
+        for(let i:number=3; i>=1; i--){
+            data["item"+i] = {index:Math.floor(temp%10)};
+            temp /= 10;
+        }
+        this.levelView.dataSource = data;
+        this.levelView.visible=true;
+    }
+
+    //显示分数
     private showScore():void
     {
         let data:any = {}

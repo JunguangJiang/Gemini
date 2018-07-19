@@ -194,6 +194,8 @@ class GameView extends ui.GameViewUI{
         }
         //不断更新游戏分数,最小值为0
         Game.score=Math.max(this._scoreIndicator.data,0);
+        //不断更新游戏等级,最小值为1
+        Game.level=Math.max(this._level,1);
 
         if(this._level > 1 &&  this.hasTouchedAllZodiacs()){//除了第一关，如果触碰到了所有的星座
             this.enterNewLevel();//则进入下一关

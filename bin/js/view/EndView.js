@@ -12,6 +12,7 @@ var __extends = (this && this.__extends) || (function () {
 var Game;
 (function (Game) {
     Game.score = 0; //玩家得分
+    Game.level = 0; //进入等级
 })(Game || (Game = {}));
 //游戏的结束界面
 var EndView = /** @class */ (function (_super) {
@@ -22,8 +23,9 @@ var EndView = /** @class */ (function (_super) {
     }
     //结束界面还原初始化设置
     EndView.prototype.init = function () {
-        //避免下次到结束界面时显示分数
+        //避免下次到结束界面时显示分数、等级
         this.scoreView.visible = false;
+        this.levelView.visible = false;
         //去掉已有的结束字样
         while (this.removeChildByName("endText"))
             ;
@@ -42,7 +44,7 @@ var EndView = /** @class */ (function (_super) {
             letterText.y = -300;
             if (i === len - 1) //最后一个字母之后调用回调函数
              {
-                Laya.Tween.to(letterText, { y: endY }, 400, Laya.Ease.elasticOut, Laya.Handler.create(this, this.showScore), i * 400);
+                Laya.Tween.to(letterText, { y: endY }, 400, Laya.Ease.elasticOut, Laya.Handler.create(this, this.showAll), i * 400);
             }
             Laya.Tween.to(letterText, { y: endY }, 400, Laya.Ease.elasticOut, null, i * 400);
         }
@@ -57,6 +59,23 @@ var EndView = /** @class */ (function (_super) {
         this.backgroundView.addChild(letter);
         return letter;
     };
+    //显示所有结果
+    EndView.prototype.showAll = function () {
+        this.showLevel();
+        this.showScore();
+    };
+    //显示等级
+    EndView.prototype.showLevel = function () {
+        var data = {};
+        var temp = Game.level;
+        for (var i = 3; i >= 1; i--) {
+            data["item" + i] = { index: Math.floor(temp % 10) };
+            temp /= 10;
+        }
+        this.levelView.dataSource = data;
+        this.levelView.visible = true;
+    };
+    //显示分数
     EndView.prototype.showScore = function () {
         var data = {};
         var temp = Game.score;
