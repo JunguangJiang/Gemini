@@ -117,7 +117,6 @@ var GameMain = /** @class */ (function () {
         GameMain.viewStack.selectedIndex = 2;
         GameMain.endView.init();
         GameMain.endView.showEnd();
-        console.log("ok");
     };
     //到开始界面
     GameMain.prototype.toStartView = function () {
