@@ -54,6 +54,7 @@ P 69ADFBE2 7.png
 P F5ECD0D3 8.png
 P 28EF11DB 9.png
 D ui/button
+P A0E3B8F9 combobox.png
 P 43B8A16A ContinueButton.png
 P 23B8D463 EndButton.png
 P 29CA414F NoSoundButton.png
@@ -63,7 +64,6 @@ P 74E420E1 SettingButton.png
 P C395CBD6 SoundButton.png
 D ui/else
 P 60053BEA clip_number.png
-P A0E3B8F9 combobox.png
 P F7117F20 fallingStone.png
 P F631573A left.png
 P 95FBC197 light.png

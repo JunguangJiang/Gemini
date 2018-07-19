@@ -18,4 +18,5 @@
    <item name="ui/else/yellow.png" type="Image" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
    <item name="ui/background/HelpBackGround.png" type="Image" compress="0" pack="0" quality="80" props="" picType="0" scale="0"/>
    <item name="ui/background/HelpContext.jpg" type="Image" compress="0" pack="0" quality="80" props="" picType="0" scale="0"/>
+   <item name="ui/button/combobox.png" type="ComboBox" compress="0" pack="0" quality="80" props="" picType="0" scale="0"/>
 </res>
