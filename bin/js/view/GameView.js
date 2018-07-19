@@ -156,11 +156,15 @@ var GameView = /** @class */ (function (_super) {
         this._smallBall.update(); //更新小球的位置和速度
         this.updateBackground(); //根据当前球的位置更新背景
         this._loopCount++;
-        if (this._level === 1) { //第一关根据高度奖励
+        if (this._level === 1) { //第一关根据高度奖励
             this._scoreIndicator.updateHeight(-(this._bigBall.y - this.runningView.height + this._bigBall.radius));
         }
         //不断更新游戏分数,最小值为0
         Game.score = Math.max(this._scoreIndicator.data, 0);
+        if (Game.score <= 0) {
+            this.gameEnd();
+            return;
+        }
         //不断更新游戏等级,最小值为1
         Game.level = Math.max(this._level, 1);
         if (this._level > 1 && this.hasTouchedAllZodiacs()) { //除了第一关，如果触碰到了所有的星座
@@ -203,11 +207,6 @@ var GameView = /** @class */ (function (_super) {
                         }
                         //移除该陨石
                         this._barriersManagement.remove(item);
-                        //判断游戏是否结束
-                        if (this._scoreIndicator.data < 0) {
-                            this.gameEnd();
-                            return;
-                        }
                         //小球受到碰撞冲量
                         ball.collide(-0.8, -0.8);
                     }

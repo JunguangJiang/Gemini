@@ -41478,7 +41478,7 @@ var ui;
             _super.prototype.createChildren.call(this);
             this.createView(ui.HelpViewUI.uiView);
         };
-        HelpViewUI.uiView = { "type": "Dialog", "props": { "width": 800, "height": 600 }, "child": [{ "type": "Image", "props": { "y": 125, "x": 742, "var": "returnButton", "skin": "ui/button/EndButton.png", "hitTestPrior": true, "alpha": 0.5 } }, { "type": "Image", "props": { "y": 100, "x": 50, "width": 700, "skin": "ui/background/HelpBackGround.jpg", "height": 450 }, "child": [{ "type": "Image", "props": { "y": 30, "x": 40, "var": "contentImage", "skin": "ui/background/ContentImage.png", "scaleY": 1, "scaleX": 1, "mouseThrough": true, "hitTestPrior": false }, "child": [{ "type": "Sprite", "props": { "y": 0, "x": 0, "width": 620, "var": "contentImageMask", "renderType": "mask", "mouseEnabled": false, "height": 376 }, "child": [{ "type": "Rect", "props": { "y": 0, "x": 0, "width": 620, "lineWidth": 1, "height": 379, "fillColor": "#ff0000" } }] }] }] }] };
+        HelpViewUI.uiView = { "type": "Dialog", "props": { "width": 800, "height": 600 }, "child": [{ "type": "Image", "props": { "y": 125, "x": 742, "var": "returnButton", "skin": "ui/button/EndButton.png", "hitTestPrior": true, "alpha": 0.5 } }, { "type": "Image", "props": { "y": 100, "x": 50, "width": 700, "skin": "ui/background/HelpBackGround.jpg", "height": 450, "alpha": 1 }, "child": [{ "type": "Image", "props": { "y": 30, "x": 40, "width": 620, "var": "contentImage", "skin": "ui/background/ContentImage.png", "scaleY": 1, "scaleX": 1, "mouseThrough": true, "hitTestPrior": false } }] }] };
         return HelpViewUI;
     }(Dialog));
     ui.HelpViewUI = HelpViewUI;
@@ -41657,9 +41657,8 @@ var GameView = /** @class */ (function (_super) {
         //音乐播放器
         this._musicManager = new MusicManager();
         this._musicManager.onPlayMusic(1); //播放等级1的音乐
-        //创建按钮事件
+        //创建按钮事件与按钮初始化
         this.createButtonEvents();
-        this.enterLevel(1); //进入等级1
     };
     //直接进入某一级
     GameView.prototype.enterLevel = function (level) {
@@ -41892,6 +41891,11 @@ var GameView = /** @class */ (function (_super) {
     };
     //创建各种按钮响应事件
     GameView.prototype.createButtonEvents = function () {
+        //初始化按钮
+        this.pauseButton.skin = "ui/button/PauseButton.png";
+        this.soundButton.skin = "ui/button/NoSoundButton.png";
+        Game.sound = true;
+        Game.pause = false;
         //设置按钮
         this.settingButton.on(Laya.Event.CLICK, this, this.settingEvent);
         //暂停按钮
@@ -41980,12 +41984,13 @@ var HelpView = /** @class */ (function (_super) {
     function HelpView() {
         var _this = _super.call(this) || this;
         _this.prevY = 0;
+        _this.contentImage.scrollRect = new Laya.Rectangle(0, 0, 620, 380);
         _this.init();
         return _this;
     }
     HelpView.prototype.init = function () {
         this.contentImage.y = 30;
-        this.contentImageMask.y = 0;
+        this.contentImage.scrollRect.y = 0;
         //设置拖动查看事件
         this.contentImage.on(Laya.Event.MOUSE_DOWN, this, this.startScrollText);
     };
@@ -42003,8 +42008,10 @@ var HelpView = /** @class */ (function (_super) {
     //拖动图像
     HelpView.prototype.scrollText = function (e) {
         var nowY = this.contentImage.mouseY;
-        this.contentImage.y += nowY - this.prevY;
-        this.contentImageMask.y += this.prevY - nowY;
+        this.contentImage.scrollRect.y += this.prevY - nowY;
+        //设置拖动范围
+        this.contentImage.scrollRect.y = Math.max(-50, this.contentImage.scrollRect.y);
+        this.contentImage.scrollRect.y = Math.min(this.contentImage.height - 200, this.contentImage.scrollRect.y);
         this.prevY = nowY;
     };
     return HelpView;
@@ -42159,10 +42166,10 @@ var GameMain = /** @class */ (function () {
     //到游戏界面
     GameMain.prototype.selectLevel = function (cb) {
         var level = cb.selectedIndex * cb.selectedIndex + 1;
-        GameMain.gameView.init();
-        GameMain.gameView.enterLevel(level);
         GameMain.viewStack.selectedIndex = 1;
+        GameMain.gameView.init();
         GameMain.gameView.gameStart(); //开始游戏
+        GameMain.gameView.enterLevel(level);
     };
     //到结束界面
     GameMain.prototype.toEndView = function () {
