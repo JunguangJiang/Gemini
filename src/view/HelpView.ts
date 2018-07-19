@@ -18,7 +18,7 @@ class HelpView extends ui.HelpViewUI{
         this.contentImage.on(Laya.Event.MOUSE_DOWN,this,this.startScrollText);
     }
 
-    //开始滚动图像
+    //开始拖动图像
     private startScrollText(e:Event):void
     {
         this.prevY=this.contentImage.mouseY;

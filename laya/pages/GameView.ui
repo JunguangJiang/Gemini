@@ -322,7 +322,7 @@
                 {
                     "x":30,
                     "type":"Image",
-                    "props":{"y":-192,"x":135,"width":180,"visible":true,"skin":"ui/else/right.png","name":"right","height":330,"alpha":0},
+                    "props":{"y":-35,"x":135,"width":180,"visible":true,"skin":"ui/else/right.png","name":"right","height":180,"alpha":0},
                     "nodeParent":34,
                     "label":"Image(right)",
                     "isDirectory":false,
@@ -335,7 +335,7 @@
                 {
                     "x":30,
                     "type":"Image",
-                    "props":{"y":-192,"x":-74,"width":192,"visible":true,"skin":"ui/else/left.png","name":"left","height":330,"alpha":0},
+                    "props":{"y":-35,"x":-65,"width":180,"visible":true,"skin":"ui/else/left.png","name":"left","height":180,"alpha":0},
                     "nodeParent":34,
                     "label":"Image(left)",
                     "isDirectory":false,

@@ -24,7 +24,7 @@ var HelpView = /** @class */ (function (_super) {
         //设置拖动查看事件
         this.contentImage.on(Laya.Event.MOUSE_DOWN, this, this.startScrollText);
     };
-    //开始滚动图像
+    //开始拖动图像
     HelpView.prototype.startScrollText = function (e) {
         this.prevY = this.contentImage.mouseY;
         this.on(Laya.Event.MOUSE_MOVE, this, this.scrollText);
