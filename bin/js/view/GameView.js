@@ -64,7 +64,7 @@ var GameView = /** @class */ (function (_super) {
         //音乐播放器
         this._musicManager = new MusicManager();
         this._musicManager.onPlayMusic(1); //播放等级1的音乐
-        //创建按钮事件
+        //创建按钮事件与按钮初始化
         this.createButtonEvents();
         this.enterLevel(1); //进入等级1
     };
@@ -299,6 +299,11 @@ var GameView = /** @class */ (function (_super) {
     };
     //创建各种按钮响应事件
     GameView.prototype.createButtonEvents = function () {
+        //初始化按钮
+        this.pauseButton.skin = "ui/button/PauseButton.png";
+        this.soundButton.skin = "ui/button/NoSoundButton.png";
+        Game.sound = true;
+        Game.pause = false;
         //设置按钮
         this.settingButton.on(Laya.Event.CLICK, this, this.settingEvent);
         //暂停按钮

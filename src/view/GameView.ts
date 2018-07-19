@@ -94,7 +94,7 @@ class GameView extends ui.GameViewUI{
         this._musicManager = new MusicManager();
         this._musicManager.onPlayMusic(1);//播放等级1的音乐
 
-        //创建按钮事件
+        //创建按钮事件与按钮初始化
         this.createButtonEvents();
 
         this.enterLevel(1);//进入等级1
@@ -367,12 +367,18 @@ class GameView extends ui.GameViewUI{
     //创建各种按钮响应事件
     private createButtonEvents():void
     {
-       //设置按钮
-       this.settingButton.on(Laya.Event.CLICK,this,this.settingEvent);
+        //初始化按钮
+        this.pauseButton.skin="ui/button/PauseButton.png";
+        this.soundButton.skin="ui/button/NoSoundButton.png";
+        Game.sound=true;
+        Game.pause=false;
+
+        //设置按钮
+        this.settingButton.on(Laya.Event.CLICK,this,this.settingEvent);
         //暂停按钮
-       this.pauseButton.on(Laya.Event.CLICK,this,this.pauseEvent);
-       //静音按钮
-       this.soundButton.on(Laya.Event.CLICK,this,this.soundEvent);
+        this.pauseButton.on(Laya.Event.CLICK,this,this.pauseEvent);
+        //静音按钮
+        this.soundButton.on(Laya.Event.CLICK,this,this.soundEvent);
       
     }
 
