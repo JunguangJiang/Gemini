@@ -96,8 +96,6 @@ class GameView extends ui.GameViewUI{
 
         //创建按钮事件与按钮初始化
         this.createButtonEvents();
-
-        this.enterLevel(1);//进入等级1
     }
 
     //直接进入某一级

@@ -41085,6 +41085,10 @@ var MusicManager = /** @class */ (function () {
         console.log("重新打开音量");
         Laya.SoundManager.setMusicVolume(1);
     };
+    //关闭音乐
+    MusicManager.prototype.stopMusic = function () {
+        Laya.SoundManager.stopMusic();
+    };
     return MusicManager;
 }());
 //# sourceMappingURL=MusicManager.js.map
@@ -41722,11 +41726,11 @@ var GameView = /** @class */ (function (_super) {
     };
     //游戏结束
     GameView.prototype.gameEnd = function () {
+        this.gamePause();
         console.log("游戏结束");
         console.log("你的总分为" + this._scoreIndicator.data);
-        Laya.timer.clear(this, this.onLoop);
-        this._isRunning = false;
         this.endButton.event(Laya.Event.CLICK);
+        this._musicManager.stopMusic();
     };
     //需要每隔单位时间进行一次调用的函数请写入以下函数体
     GameView.prototype.onLoop = function () {
