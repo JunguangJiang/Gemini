@@ -66,7 +66,6 @@ var GameView = /** @class */ (function (_super) {
         this._musicManager.onPlayMusic(1); //播放等级1的音乐
         //创建按钮事件
         this.createButtonEvents();
-        this.enterLevel(1); //进入等级1
     };
     //直接进入某一级
     GameView.prototype.enterLevel = function (level) {
