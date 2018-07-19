@@ -60,22 +60,6 @@ var GameMain = /** @class */ (function () {
     };
     //创建各种响应事件
     GameMain.prototype.createEvents = function () {
-        //开始界面单人的开始按钮
-        GameMain.startView.onePlayerButton.on(Laya.Event.MOUSE_MOVE, this, function () {
-            GameMain.startView.onePlayerButton.scale(1.1, 1.1);
-        });
-        GameMain.startView.onePlayerButton.on(Laya.Event.MOUSE_OUT, this, function () {
-            GameMain.startView.onePlayerButton.scale(1, 1);
-        });
-        GameMain.startView.onePlayerButton.on(Laya.Event.CLICK, this, this.toOnePlayerGameView);
-        //开始界面双人的开始按钮
-        GameMain.startView.twoPlayersButton.on(Laya.Event.MOUSE_MOVE, this, function () {
-            GameMain.startView.twoPlayersButton.scale(1.1, 1.1);
-        });
-        GameMain.startView.twoPlayersButton.on(Laya.Event.MOUSE_OUT, this, function () {
-            GameMain.startView.twoPlayersButton.scale(1, 1);
-        });
-        GameMain.startView.twoPlayersButton.on(Laya.Event.CLICK, this, this.toTwoPlayersGameView);
         //开始界面游戏说明查看按钮
         GameMain.startView.helpButton.on(Laya.Event.MOUSE_MOVE, this, function () {
             GameMain.startView.helpButton.scale(1.1, 1.1);
@@ -84,6 +68,8 @@ var GameMain = /** @class */ (function () {
             GameMain.startView.helpButton.scale(1, 1);
         });
         GameMain.startView.helpButton.on(Laya.Event.CLICK, this, this.toHelpView);
+        //开始界面关卡选择
+        GameMain.startView.levelSelectedBox.selectHandler = new Laya.Handler(this, this.selectLevel, [GameMain.startView.levelSelectedBox]);
         //帮助界面中返回开始界面按钮
         GameMain.helpView.returnButton.on(Laya.Event.CLICK, this, this.outHelpView);
         //游戏界面结束按钮
@@ -97,18 +83,12 @@ var GameMain = /** @class */ (function () {
         });
         GameMain.endView.startButton.on(Laya.Event.CLICK, this, this.toStartView);
     };
-    //到单人游戏界面
-    GameMain.prototype.toOnePlayerGameView = function () {
-        GameMain.viewStack.selectedIndex = 1;
-        Game.playerNum = 1;
+    //到游戏界面
+    GameMain.prototype.selectLevel = function (cb) {
+        var level = cb.selectedIndex + 1;
         GameMain.gameView.init();
-        GameMain.gameView.gameStart(); //开始游戏
-    };
-    //到双人游戏界面
-    GameMain.prototype.toTwoPlayersGameView = function () {
+        GameMain.gameView.enterLevel(level);
         GameMain.viewStack.selectedIndex = 1;
-        Game.playerNum = 2;
-        GameMain.gameView.init();
         GameMain.gameView.gameStart(); //开始游戏
     };
     //到结束界面
@@ -120,6 +100,7 @@ var GameMain = /** @class */ (function () {
     };
     //到开始界面
     GameMain.prototype.toStartView = function () {
+        GameMain.startView.init();
         GameMain.viewStack.selectedIndex = 0;
     };
     //到帮助界面

@@ -81,24 +81,6 @@ class GameMain{
     //创建各种响应事件
     createEvents():void
     {
-        //开始界面单人的开始按钮
-        GameMain.startView.onePlayerButton.on(Laya.Event.MOUSE_MOVE,this,function(){
-            GameMain.startView.onePlayerButton.scale(1.1,1.1);
-        });
-        GameMain.startView.onePlayerButton.on(Laya.Event.MOUSE_OUT,this,function(){
-            GameMain.startView.onePlayerButton.scale(1,1);
-        });
-        GameMain.startView.onePlayerButton.on(Laya.Event.CLICK,this,this.toOnePlayerGameView);
-
-        //开始界面双人的开始按钮
-        GameMain.startView.twoPlayersButton.on(Laya.Event.MOUSE_MOVE,this,function(){
-            GameMain.startView.twoPlayersButton.scale(1.1,1.1);
-        });
-        GameMain.startView.twoPlayersButton.on(Laya.Event.MOUSE_OUT,this,function(){
-            GameMain.startView.twoPlayersButton.scale(1,1);
-        });
-        GameMain.startView.twoPlayersButton.on(Laya.Event.CLICK,this,this.toTwoPlayersGameView);
-
         //开始界面游戏说明查看按钮
         GameMain.startView.helpButton.on(Laya.Event.MOUSE_MOVE,this,function(){
             GameMain.startView.helpButton.scale(1.1,1.1);
@@ -106,7 +88,10 @@ class GameMain{
         GameMain.startView.helpButton.on(Laya.Event.MOUSE_OUT,this,function(){
             GameMain.startView.helpButton.scale(1,1);
         });
-        GameMain.startView.helpButton.on(Laya.Event.CLICK,this,this.toHelpView);  
+        GameMain.startView.helpButton.on(Laya.Event.CLICK,this,this.toHelpView);
+
+        //开始界面关卡选择
+        GameMain.startView.levelSelectedBox.selectHandler=new Laya.Handler(this,this.selectLevel,[GameMain.startView.levelSelectedBox]); 
 
         //帮助界面中返回开始界面按钮
         GameMain.helpView.returnButton.on(Laya.Event.CLICK,this,this.outHelpView); 
@@ -124,21 +109,13 @@ class GameMain{
         GameMain.endView.startButton.on(Laya.Event.CLICK,this,this.toStartView);              
     }
 
-    //到单人游戏界面
-    toOnePlayerGameView():void
+    //到游戏界面
+    selectLevel(cb:Laya.ComboBox):void
     {
-        GameMain.viewStack.selectedIndex=1;
-        Game.playerNum=1;
+        let level=cb.selectedIndex+1;
         GameMain.gameView.init();
-        GameMain.gameView.gameStart();//开始游戏
-    }
-
-    //到双人游戏界面
-     toTwoPlayersGameView():void
-    {
+        GameMain.gameView.enterLevel(level);
         GameMain.viewStack.selectedIndex=1;
-        Game.playerNum=2;
-        GameMain.gameView.init();
         GameMain.gameView.gameStart();//开始游戏
     }
 
@@ -154,6 +131,7 @@ class GameMain{
     //到开始界面
     toStartView():void
     {
+        GameMain.startView.init();
         GameMain.viewStack.selectedIndex=0;
     }
 
