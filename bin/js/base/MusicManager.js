@@ -42,6 +42,10 @@ var MusicManager = /** @class */ (function () {
         console.log("重新打开音量");
         Laya.SoundManager.setMusicVolume(1);
     };
+    //关闭音乐
+    MusicManager.prototype.stopMusic = function () {
+        Laya.SoundManager.stopMusic();
+    };
     return MusicManager;
 }());
 //# sourceMappingURL=MusicManager.js.map
