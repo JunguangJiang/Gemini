@@ -29,6 +29,8 @@ class GameView extends ui.GameViewUI{
     private _smallArrow: Arrow;//控制小球的箭头区域
     private _barriersManagement:BarriersManagement;//障碍物管理
     private _scoreIndicator: ScoreIndicator;//计分器
+    private _tips:Tips;//游戏提示
+    private _hasShownTips:boolean;//此前是否提示过第2关的提示
     private _musicManager: MusicManager;//音乐管理器
     
     private _loopCount: number;//记录刷新（循环）总次数
@@ -84,6 +86,10 @@ class GameView extends ui.GameViewUI{
         //等级显示
         this.levelView.visible = true;
 
+        //游戏提示
+        this._tips = new Tips(this.tipsView);
+        this._hasShownTips = false;
+
         //音乐播放器
         this._musicManager = new MusicManager();
         this._musicManager.onPlayMusic(1);//播放等级1的音乐
@@ -98,6 +104,12 @@ class GameView extends ui.GameViewUI{
     enterLevel(level:number):void{
         this._level = level;
         this.levelView.text = "level "+ this._level;
+        if(this._level === 1){
+            this._tips.setText("目标：升到最高处~");
+        }else if(!this._hasShownTips){
+            this._tips.setText("目标：点亮所有的星座~");
+            this._hasShownTips = true;
+        }
 
         this._scoreIndicator.clearHeight();//计分器维护的高度归零
         this._scoreIndicator.getReward(Math.min(5+3*(this._level-1),30));//进入新的一级获得奖励

@@ -1,5 +1,4 @@
 D .
-R ECAAAE59 .DS_Store
 D music
 R E1CBD1BE BlackHoleCollisionSound.mp3
 R DB3D3763 level1.mp3
@@ -7,13 +6,11 @@ R 1AF18A33 NewLevelSound.mp3
 R 938F9822 RewardSound.mp3
 R 7026E97A StoneCollisionSound.mp3
 D ui
-R CDA001BA .DS_Store
 D ui/background
-R 6D88006A .DS_Store
-P 59C528A4 BackGround .jpg
+R 59C528A4 BackGround .jpg
 R E4CF4BB0 ContentImage.png
-P 06FE7B39 EndBackGround.jpg
-R FEDAE6AC HelpBackGround .jpg
+R 06FE7B39 EndBackGround.jpg
+P FEDAE6AC HelpBackGround .jpg
 P C7796F22 StartBackGround.png
 D ui/blackhole
 P 3D05EAC5 1.png
