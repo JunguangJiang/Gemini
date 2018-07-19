@@ -48,4 +48,9 @@ class MusicManager{
         console.log("重新打开音量");
         Laya.SoundManager.setMusicVolume(1);
     }
+
+    //关闭音乐
+    stopMusic():void{
+        Laya.SoundManager.stopMusic();
+    }
 }
