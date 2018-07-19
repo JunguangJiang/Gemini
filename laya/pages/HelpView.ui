@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"Dialog",
-    "selectedBox":1,
-    "selecteID":14,
+    "selectedBox":14,
+    "selecteID":12,
     "props":{"width":800,"height":600},
     "nodeParent":-1,
     "label":"Dialog",
@@ -28,7 +28,7 @@
         {
             "x":15,
             "type":"Image",
-            "props":{"y":100,"x":50,"width":700,"skin":"ui/background/HelpBackGround.jpg","height":450},
+            "props":{"y":100,"x":50,"width":700,"skin":"ui/background/HelpBackGround.jpg","height":450,"alpha":1},
             "nodeParent":1,
             "label":"Image",
             "isOpen":true,
@@ -40,41 +40,17 @@
                 {
                     "x":30,
                     "type":"Image",
-                    "props":{"y":30,"x":40,"var":"contentImage","skin":"ui/background/ContentImage.png","scaleY":1,"scaleX":1,"mouseThrough":true,"hitTestPrior":false},
+                    "props":{"y":30,"x":40,"width":620,"var":"contentImage","skin":"ui/background/ContentImage.png","scaleY":1,"scaleX":1,"mouseThrough":true,"hitTestPrior":false},
                     "nodeParent":14,
                     "label":"Image(contentImage)",
                     "isOpen":true,
-                    "isDirectory":true,
+                    "isDirectory":false,
                     "isAniNode":true,
-                    "hasChild":true,
+                    "hasChild":false,
                     "compId":12,
                     "child":[
-                        {
-                            "x":45,
-                            "type":"Sprite",
-                            "props":{"y":0,"x":0,"width":620,"var":"contentImageMask","renderType":"mask","mouseEnabled":false,"height":376},
-                            "nodeParent":12,
-                            "label":"Sprite(contentImageMask)",
-                            "isOpen":true,
-                            "isDirectory":true,
-                            "isAniNode":true,
-                            "hasChild":true,
-                            "compId":13,
-                            "child":[
-                                {
-                                    "x":60,
-                                    "type":"Rect",
-                                    "props":{"y":0,"x":0,"width":620,"lineWidth":1,"height":379,"fillColor":"#ff0000"},
-                                    "nodeParent":13,
-                                    "label":"Rect",
-                                    "isDirectory":false,
-                                    "isAniNode":true,
-                                    "hasChild":false,
-                                    "compId":15,
-                                    "child":[
-                                        ]
-                                }]
-                        }]
+                        ],
+                    "$HIDDEN":false
                 }]
         }],
     "animations":[
