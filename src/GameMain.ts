@@ -126,7 +126,8 @@ class GameMain{
     //到结束界面
     toEndView():void
     {
-        Laya.timer.clear(GameMain.gameView, GameMain.gameView.onLoop);
+        //Laya.timer.clear(GameMain.gameView, GameMain.gameView.onLoop);
+        GameMain.gameView.gameEnd();
         GameMain.viewStack.selectedIndex=2;
         GameMain.endView.init();
         GameMain.endView.showEnd();

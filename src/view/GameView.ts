@@ -175,7 +175,6 @@ class GameView extends ui.GameViewUI{
         this.gamePause();
         console.log("游戏结束");
         console.log("你的总分为"+this._scoreIndicator.data);
-        this.endButton.event(Laya.Event.CLICK);
         this._musicManager.stopMusic();
     }
 
@@ -206,7 +205,7 @@ class GameView extends ui.GameViewUI{
         Game.score=Math.max(this._scoreIndicator.data,0);
         if(Game.score<=0)
         {
-            this.gameEnd();
+            this.endButton.event(Laya.Event.CLICK);
             return;
         }
         //不断更新游戏等级,最小值为1
@@ -234,7 +233,7 @@ class GameView extends ui.GameViewUI{
                     if(item.detectCollisions(ball))
                     {
                         this._musicManager.onPlaySound(Game.BlackHoleCollisionSound);
-                        this.gameEnd();
+                        this.endButton.event(Laya.Event.CLICK);
                     }
                 }
                 break;

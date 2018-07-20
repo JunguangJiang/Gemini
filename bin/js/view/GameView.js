@@ -135,7 +135,6 @@ var GameView = /** @class */ (function (_super) {
         this.gamePause();
         console.log("游戏结束");
         console.log("你的总分为" + this._scoreIndicator.data);
-        this.endButton.event(Laya.Event.CLICK);
         this._musicManager.stopMusic();
     };
     //需要每隔单位时间进行一次调用的函数请写入以下函数体
@@ -162,7 +161,8 @@ var GameView = /** @class */ (function (_super) {
         //不断更新游戏分数,最小值为0
         Game.score = Math.max(this._scoreIndicator.data, 0);
         if (Game.score <= 0) {
-            this.gameEnd();
+            //this.gameEnd();
+            this.endButton.event(Laya.Event.CLICK);
             return;
         }
         //不断更新游戏等级,最小值为1
@@ -188,7 +188,8 @@ var GameView = /** @class */ (function (_super) {
                     var item = _a[_i];
                     if (item.detectCollisions(ball)) {
                         this._musicManager.onPlaySound(Game.BlackHoleCollisionSound);
-                        this.gameEnd();
+                        //this.gameEnd();
+                        this.endButton.event(Laya.Event.CLICK);
                     }
                 }
                 break;
