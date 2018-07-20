@@ -85,11 +85,14 @@ var GameMain = /** @class */ (function () {
     };
     //到游戏界面
     GameMain.prototype.selectLevel = function (cb) {
+        if (cb.selectedLabel === null) {
+            return;
+        }
         var level = cb.selectedIndex * cb.selectedIndex + 1;
         GameMain.viewStack.selectedIndex = 1;
         GameMain.gameView.init();
-        GameMain.gameView.gameStart(); //开始游戏
         GameMain.gameView.enterLevel(level);
+        GameMain.gameView.gameStart(); //开始游戏
     };
     //到结束界面
     GameMain.prototype.toEndView = function () {

@@ -1,7 +1,7 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":2,
+    "selectedBox":1,
     "selecteID":13,
     "props":{"y":0,"x":0,"width":800,"sceneColor":"#000000","height":600},
     "nodeParent":-1,
@@ -27,7 +27,7 @@
                 {
                     "x":30,
                     "type":"ComboBox",
-                    "props":{"y":170,"x":250,"width":300,"visibleNum":6,"visible":false,"var":"levelSelectedBox","stateNum":3,"skin":"ui/button/combobox.png","selectedIndex":0,"mouseEnabled":false,"labels":"容易,普通,困难,令人发狂,地狱","labelSize":40,"labelFont":"SimSun","labelBold":true,"itemSize":40,"height":60,"alpha":0.7},
+                    "props":{"y":170,"x":250,"width":300,"visibleNum":6,"visible":false,"var":"levelSelectedBox","stateNum":3,"skin":"ui/button/combobox.png","selectedIndex":-1,"mouseEnabled":false,"labels":"容易,普通,困难,令人发狂,地狱","labelSize":40,"labelFont":"SimSun","labelBold":true,"itemSize":40,"height":60,"alpha":0.7},
                     "nodeParent":2,
                     "label":"ComboBox(levelSelectedBox)",
                     "isDirectory":false,
