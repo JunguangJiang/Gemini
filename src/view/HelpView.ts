@@ -6,13 +6,13 @@ class HelpView extends ui.HelpViewUI{
     constructor()
     {
         super();
-        this.contentImage.scrollRect=new Laya.Rectangle(0,0,620,380);   
+        this.contentImage.scrollRect=new Laya.Rectangle(0,0,600,330);   
         this.init();
     }
 
     public init():void
     {
-        this.contentImage.y=30;
+        this.contentImage.y=50;
         this.contentImage.scrollRect.y=0;
         //设置拖动查看事件
         this.contentImage.on(Laya.Event.MOUSE_DOWN,this,this.startScrollText);

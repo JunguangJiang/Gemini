@@ -5,7 +5,7 @@ namespace Game{
     export const startBackGroundImage = "ui/background/StartBackGround.png";//开始背景图
     export const backgroundImage = "ui/background/BackGround .jpg";//游戏背景图
     export const endBackGroundImage = "ui/background/EndBackGround.jpg";//结束背景图
-    export const helpBackGroundImage="ui/background/HelpBackGround.jpg";//帮助界面图
+    export const helpBackGroundImage="ui/background/HelpBackGround.png";//帮助界面图
     export const contentImage="ui/background/ContentImage.png";//帮助界面内容图
     export const zodiacLightImage:string= "ui/else/light.png";
     export const zodiacYellowImage: string= "ui/else/yellow.png";

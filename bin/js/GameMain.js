@@ -6,7 +6,7 @@ var Game;
     Game.startBackGroundImage = "ui/background/StartBackGround.png"; //开始背景图
     Game.backgroundImage = "ui/background/BackGround .jpg"; //游戏背景图
     Game.endBackGroundImage = "ui/background/EndBackGround.jpg"; //结束背景图
-    Game.helpBackGroundImage = "ui/background/HelpBackGround.jpg"; //帮助界面图
+    Game.helpBackGroundImage = "ui/background/HelpBackGround.png"; //帮助界面图
     Game.contentImage = "ui/background/ContentImage.png"; //帮助界面内容图
     Game.zodiacLightImage = "ui/else/light.png";
     Game.zodiacYellowImage = "ui/else/yellow.png";

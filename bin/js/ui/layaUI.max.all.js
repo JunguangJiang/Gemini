@@ -53,7 +53,7 @@ var ui;
             _super.prototype.createChildren.call(this);
             this.createView(ui.HelpViewUI.uiView);
         };
-        HelpViewUI.uiView = { "type": "Dialog", "props": { "width": 800, "height": 600 }, "child": [{ "type": "Image", "props": { "y": 125, "x": 742, "var": "returnButton", "skin": "ui/button/EndButton.png", "hitTestPrior": true, "alpha": 0.5 } }, { "type": "Image", "props": { "y": 100, "x": 50, "width": 700, "skin": "ui/background/HelpBackGround.jpg", "height": 450, "alpha": 1 }, "child": [{ "type": "Image", "props": { "y": 30, "x": 40, "width": 620, "var": "contentImage", "skin": "ui/background/ContentImage.png", "scaleY": 1, "scaleX": 1, "mouseThrough": true, "hitTestPrior": false } }] }] };
+        HelpViewUI.uiView = { "type": "Dialog", "props": { "width": 800, "height": 600 }, "child": [{ "type": "Image", "props": { "y": 125, "x": 742, "var": "returnButton", "skin": "ui/button/EndButton.png", "hitTestPrior": true, "alpha": 0.5 } }, { "type": "Image", "props": { "y": 100, "x": 50, "width": 700, "skin": "ui/background/HelpBackGround.png", "height": 450, "alpha": 1 }, "child": [{ "type": "Image", "props": { "y": 50, "x": 40, "width": 600, "var": "contentImage", "skin": "ui/background/ContentImage.png", "scaleY": 1, "scaleX": 1, "mouseThrough": true, "hitTestPrior": false } }] }] };
         return HelpViewUI;
     }(Dialog));
     ui.HelpViewUI = HelpViewUI;

@@ -15,12 +15,12 @@ var HelpView = /** @class */ (function (_super) {
     function HelpView() {
         var _this = _super.call(this) || this;
         _this.prevY = 0;
-        _this.contentImage.scrollRect = new Laya.Rectangle(0, 0, 620, 380);
+        _this.contentImage.scrollRect = new Laya.Rectangle(0, 0, 600, 330);
         _this.init();
         return _this;
     }
     HelpView.prototype.init = function () {
-        this.contentImage.y = 30;
+        this.contentImage.y = 50;
         this.contentImage.scrollRect.y = 0;
         //设置拖动查看事件
         this.contentImage.on(Laya.Event.MOUSE_DOWN, this, this.startScrollText);
