@@ -96,6 +96,8 @@ class GameView extends ui.GameViewUI{
 
         //创建按钮事件与按钮初始化
         this.createButtonEvents();
+
+        Game.pause = false;//初始时游戏未暂停
     }
 
     //直接进入某一级

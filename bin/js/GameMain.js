@@ -85,6 +85,7 @@ var GameMain = /** @class */ (function () {
     };
     //到游戏界面
     GameMain.prototype.selectLevel = function (cb) {
+        console.log("Select" + cb.selectedIndex);
         var level = cb.selectedIndex * cb.selectedIndex + 1;
         GameMain.viewStack.selectedIndex = 1;
         GameMain.gameView.init();
@@ -93,7 +94,7 @@ var GameMain = /** @class */ (function () {
     };
     //到结束界面
     GameMain.prototype.toEndView = function () {
-        Laya.timer.clear(GameMain.gameView, GameMain.gameView.onLoop);
+        // Laya.timer.clear(GameMain.gameView, GameMain.gameView.onLoop);
         GameMain.viewStack.selectedIndex = 2;
         GameMain.endView.init();
         GameMain.endView.showEnd();
