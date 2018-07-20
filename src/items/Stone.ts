@@ -52,7 +52,7 @@ class Stone extends Barrier<Laya.Image>{
      //不断更新陨石的位置，只有当_isFalling为真时，位置才会改变
      public update(){
          if(this.isFalling){
-            if(!this._hasInit){//保证陨石的初始化高度不会太低
+            if(!this._hasInit){//保证陨石的初始化高度不会太低
                 if(this.item.y > (this._down * 0.8))
                     this.item.y = this._up;
                 this._hasInit = true;

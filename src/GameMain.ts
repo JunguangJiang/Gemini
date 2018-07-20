@@ -112,12 +112,15 @@ class GameMain{
     //到游戏界面
     selectLevel(cb:Laya.ComboBox):void
     {
-        console.log("Select"+cb.selectedIndex);
+        if(cb.selectedLabel===null)
+        {
+            return;
+        }
         let level=cb.selectedIndex*cb.selectedIndex+1;
         GameMain.viewStack.selectedIndex=1;
         GameMain.gameView.init();
-        GameMain.gameView.gameStart();//开始游戏
         GameMain.gameView.enterLevel(level);
+        GameMain.gameView.gameStart();//开始游戏
     }
 
     //到结束界面
