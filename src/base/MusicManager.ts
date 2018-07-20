@@ -53,4 +53,9 @@ class MusicManager{
     stopMusic():void{
         Laya.SoundManager.stopMusic();
     }
+
+    //关闭所有声音
+    stopAll():void{
+        Laya.SoundManager.stopAll();
+    }
 }

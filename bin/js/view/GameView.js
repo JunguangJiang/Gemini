@@ -66,6 +66,7 @@ var GameView = /** @class */ (function (_super) {
         this._musicManager.onPlayMusic(1); //播放等级1的音乐
         //创建按钮事件与按钮初始化
         this.createButtonEvents();
+        Game.pause = false; //初始时游戏未暂停
     };
     //直接进入某一级
     GameView.prototype.enterLevel = function (level) {
@@ -161,7 +162,6 @@ var GameView = /** @class */ (function (_super) {
         //不断更新游戏分数,最小值为0
         Game.score = Math.max(this._scoreIndicator.data, 0);
         if (Game.score <= 0) {
-            //this.gameEnd();
             this.endButton.event(Laya.Event.CLICK);
             return;
         }
@@ -188,7 +188,6 @@ var GameView = /** @class */ (function (_super) {
                     var item = _a[_i];
                     if (item.detectCollisions(ball)) {
                         this._musicManager.onPlaySound(Game.BlackHoleCollisionSound);
-                        //this.gameEnd();
                         this.endButton.event(Laya.Event.CLICK);
                     }
                 }
